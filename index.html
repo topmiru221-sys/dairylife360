@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DairyLife 360 v10｜現場工具箱操作版</title>
+  <title>DairyLife 360 v11｜30+問題庫與AI顧問升級版</title>
   <style>
     :root {
       --green-900:#133a27;
@@ -2427,6 +2427,122 @@
       }
     }
 
+
+    .problem-upgrade-note {
+      margin:0 0 18px;
+      padding:16px 18px;
+      border-radius:22px;
+      background:linear-gradient(135deg,var(--green-100),#fff);
+      border:1px solid rgba(47,125,80,.18);
+      color:var(--green-900);
+      font-weight:900;
+      line-height:1.65;
+    }
+
+    .problem-category-row {
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-bottom:12px;
+    }
+
+    .problem-chip {
+      border:1px solid var(--line);
+      background:white;
+      color:var(--green-900);
+      border-radius:999px;
+      padding:8px 11px;
+      font-weight:950;
+      cursor:pointer;
+      font-size:13px;
+    }
+
+    .problem-chip.active {
+      background:var(--green-700);
+      color:white;
+      border-color:var(--green-700);
+    }
+
+    .problem-meta {
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:10px;
+    }
+
+    .problem-count {
+      display:inline-flex;
+      align-items:center;
+      border-radius:999px;
+      padding:7px 10px;
+      background:var(--green-100);
+      color:var(--green-800);
+      font-weight:950;
+      font-size:13px;
+    }
+
+    .ai-helper-grid {
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:12px;
+      margin-top:14px;
+    }
+
+    .ai-helper-card {
+      border:1px solid var(--line);
+      background:#fbfefb;
+      border-radius:18px;
+      padding:14px;
+    }
+
+    .ai-helper-card b {
+      display:block;
+      color:var(--green-900);
+      margin-bottom:6px;
+    }
+
+    .ai-helper-card span,
+    .ai-helper-card li {
+      color:var(--muted);
+      line-height:1.55;
+      font-weight:850;
+      font-size:14px;
+    }
+
+    .ai-helper-card ul {
+      margin:0;
+      padding-left:18px;
+    }
+
+    .ai-example-row {
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:12px;
+    }
+
+    .ai-example-btn {
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(255,255,255,.10);
+      color:white;
+      border-radius:999px;
+      padding:8px 10px;
+      font-weight:950;
+      cursor:pointer;
+      font-size:13px;
+    }
+
+    .ai-example-btn:hover {
+      background:white;
+      color:var(--green-900);
+    }
+
+    @media (max-width:900px) {
+      .ai-helper-grid {
+        grid-template-columns:1fr;
+      }
+    }
+
     .modal-overlay {
       position:fixed;
       inset:0;
@@ -2861,20 +2977,30 @@
         </div>
       </section>
 
+      
       <section id="problems" class="container">
         <div class="section-title">
           <div>
             <span class="badge">問題解決中心</span>
-            <h2>現場問題，用分級流程處理</h2>
-            <p>先判斷嚴重度，再決定資料蒐集、立即處置與追蹤指標，避免靠感覺處理。</p>
+            <h2>30+ 現場常見問題，用分級流程處理</h2>
+            <p>從乳質、犢牛、繁殖、圍產、營養、環境到防疫，先判斷嚴重度，再決定資料蒐集、立即處置與追蹤指標。</p>
           </div>
         </div>
+
+        <div class="problem-upgrade-note">
+          v11 升級：問題解決中心不再只有少數範例，而是擴充成「現場常見問題庫」。每一題都用五層架構呈現：初判 → 資料蒐集 → 立即處理 → 追蹤指標 → 回查源頭。
+        </div>
+
+        <div class="problem-category-row" id="problemCategoryRow"></div>
 
         <div class="problem-center">
           <div class="problem-menu">
             <div class="problem-search">
-              <input id="problemSearch" placeholder="搜尋：乳房炎、犢牛腹瀉、乳脂下降..." oninput="filterProblems()" />
+              <input id="problemSearch" placeholder="搜尋：乳房炎、犢牛腹瀉、乳脂下降、熱緊迫、酮症..." oninput="filterProblems()" />
               <button class="btn btn-primary" onclick="filterProblems()">搜尋</button>
+            </div>
+            <div class="problem-meta">
+              <span class="problem-count" id="problemCount">常見問題載入中</span>
             </div>
             <div class="problem-btns" id="problemButtons"></div>
           </div>
@@ -2884,6 +3010,10 @@
               <div>
                 <h3 id="problemTitle"></h3>
                 <p id="problemIntro" style="margin:6px 0 0;color:var(--muted);"></p>
+                <div class="problem-meta">
+                  <span class="problem-count" id="problemStage"></span>
+                  <span class="problem-count" id="problemKeywords"></span>
+                </div>
               </div>
               <span class="risk-tag" id="problemRisk"></span>
             </div>
@@ -3437,26 +3567,52 @@
       </section>
 
 
+      
       <section id="assistant" class="container">
         <div class="section-title">
           <div>
             <span class="badge">AI牛隻顧問雛形</span>
-            <h2>讓使用者用自然語言描述問題</h2>
-            <p>正式版可設計為輔助判斷工具，提供資料蒐集方向與處理流程，但不取代獸醫診斷。</p>
+            <h2>自然語言描述問題，自動對應問題庫與 SOP</h2>
+            <p>v11 已改成會依輸入內容比對 30+ 常見問題，提供資料蒐集方向、立即處理流程、追蹤指標與關聯工具；仍不取代獸醫診斷。</p>
           </div>
         </div>
 
         <div class="assistant-box">
           <div class="chat-panel">
             <h3>輸入現場狀況</h3>
-            <p>範例：產後10天、採食下降、乳量掉、尿酮偏高、體溫正常。</p>
+            <p>可以直接輸入：犢牛拉肚子、乳脂下降、熱緊迫、配種率低、酒精陽性、產後不吃、體細胞偏高等。</p>
             <textarea id="aiInput" placeholder="請描述牛隻階段、症狀、乳量、採食、體溫、檢測數據...">產後10天，採食下降，乳量掉，尿酮偏高，體溫正常，糞便偏乾。</textarea>
-            <button class="btn btn-primary" onclick="mockAiAnswer()">產生輔助建議</button>
+            <div class="actions" style="margin-bottom:0;">
+              <button class="btn btn-primary" onclick="mockAiAnswer()">產生輔助建議</button>
+              <button class="btn btn-secondary" onclick="clearAiAdvisor()">清空</button>
+            </div>
+            <div class="ai-example-row">
+              <button class="ai-example-btn" onclick="fillAiAdvisor('犢牛12日齡水樣腹瀉，精神稍差，眼窩有點凹，同欄還有2頭拉肚子')">犢牛腹瀉</button>
+              <button class="ai-example-btn" onclick="fillAiAdvisor('全場乳脂從3.8降到3.45，最近換TMR批次，剩料有挑食')">乳脂下降</button>
+              <button class="ai-example-btn" onclick="fillAiAdvisor('今天32度濕度78%，高產牛呼吸很快，乳量下降，噴霧不穩')">熱緊迫</button>
+              <button class="ai-example-btn" onclick="fillAiAdvisor('配種率低，產後60天很多牛看不到發情，BCS有些偏瘦')">繁殖問題</button>
+              <button class="ai-example-btn" onclick="fillAiAdvisor('產後20天牛酒精陽性，酸度不高，尿酮弱陽性，採食比較差')">酒精陽性</button>
+              <button class="ai-example-btn" onclick="fillAiAdvisor('牛號128右後乳區CMT 3級，乳樣有凝塊，體溫39.4')">乳房炎</button>
+            </div>
           </div>
 
           <div class="ai-answer">
             <h3>輔助判斷結果</h3>
             <div id="aiAnswerBlocks"></div>
+            <div class="ai-helper-grid">
+              <div class="ai-helper-card">
+                <b>可能對應問題</b>
+                <span id="aiMatchedProblem">尚未判斷</span>
+              </div>
+              <div class="ai-helper-card">
+                <b>關聯 SOP / 工具</b>
+                <ul id="aiRelatedTools"><li>尚未判斷</li></ul>
+              </div>
+              <div class="ai-helper-card">
+                <b>下一步資料</b>
+                <ul id="aiNextData"><li>尚未判斷</li></ul>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -3718,114 +3874,1128 @@ function selectStage(id) {
 
 const problems = [
   {
-    id:"mastitis", title:"乳房炎", risk:"高風險", riskClass:"risk-high",
-    intro:"優先判斷是否有全身症狀，並建立牛號、乳區、分級、用藥與棄乳紀錄。",
-    flow:[
-      ["先分級","確認乳樣外觀、CMT、乳房熱痛腫脹、食慾、體溫與精神。"],
-      ["立即處置","問題乳分開，重症先處理全身狀態，必要時採樣。"],
-      ["紀錄資料","牛號、乳區、發生日、藥物、停藥期、棄乳天數。"],
-      ["追蹤指標","體細胞、復發率、治癒率、同乳區重複感染。"],
-      ["改善源頭","檢查擠乳流程、牛床乾燥度、後藥浴與乾乳策略。"]
+    "id": "mastitis",
+    "title": "乳房炎",
+    "stage": "乳質",
+    "risk": "高風險",
+    "riskClass": "risk-high",
+    "keywords": "乳房炎 CMT 體細胞 SCC 乳樣 凝塊 乳區 發燒 棄乳 復發",
+    "intro": "優先判斷是否有全身症狀，並建立牛號、乳區、分級、用藥與棄乳紀錄。",
+    "flow": [
+      [
+        "初判",
+        "確認乳樣外觀、CMT、乳房熱痛腫脹、食慾、體溫與精神。"
+      ],
+      [
+        "資料蒐集",
+        "牛號、乳區、胎次、泌乳天數、體溫、乳樣、是否復發、SCC。"
+      ],
+      [
+        "立即處理",
+        "問題乳分開；若發燒、精神差或不吃，優先通報獸醫或主管。"
+      ],
+      [
+        "追蹤指標",
+        "乳房炎件數、重症比例、復發率、棄乳天數、治癒後 SCC。"
+      ],
+      [
+        "回查源頭",
+        "擠乳流程、後藥浴、牛床乾燥度、乾乳策略與產房環境。"
+      ]
     ]
   },
   {
-    id:"calf-diarrhea", title:"犢牛腹瀉", risk:"高風險", riskClass:"risk-high",
-    intro:"犢牛腹瀉重點不是只看糞便，而是判斷脫水、精神、日齡與初乳管理。",
-    flow:[
-      ["判斷嚴重度","看精神、眼窩凹陷、皮膚彈性、吸乳意願與體溫。"],
-      ["維持補液","補電解質但不要直接停止餵奶，避免能量不足。"],
-      ["回查初乳","確認 Brix、餵飼時間、餵飼量與初乳來源。"],
-      ["環境檢查","檢查牛舍乾燥度、墊料、奶瓶清潔與交叉感染。"],
-      ["追蹤結果","記錄腹瀉天數、治療、日增重與死亡率。"]
+    "id": "high-scc",
+    "title": "體細胞偏高",
+    "stage": "乳質",
+    "risk": "高風險",
+    "riskClass": "risk-high",
+    "keywords": "體細胞 高SCC SCC 乳質 CMT 慢性乳房炎 高體細胞",
+    "intro": "體細胞偏高要拆成個別高 SCC 牛、群體衛生與擠乳流程問題。",
+    "flow": [
+      [
+        "初判",
+        "確認是全場平均升高、特定群升高，還是少數高 SCC 牛拉高。"
+      ],
+      [
+        "資料蒐集",
+        "高 SCC 牛清單、近期乳房炎、CMT 乳區、胎次、泌乳天數。"
+      ],
+      [
+        "立即處理",
+        "列出高 SCC 與復發牛，安排乳區複測與必要採樣。"
+      ],
+      [
+        "追蹤指標",
+        "高 SCC 牛比例、CMT 陽性率、臨床乳房炎、復發率。"
+      ],
+      [
+        "回查源頭",
+        "擠乳衛生、牛床、後藥浴、乾乳治療與慢性感染牛處理。"
+      ]
     ]
   },
   {
-    id:"low-fat", title:"乳脂下降", risk:"中高風險", riskClass:"risk-mid",
-    intro:"先確認是全場性還是個別牛，再檢查有效纖維、挑食、熱緊迫與瘤胃酸化風險。",
-    flow:[
-      ["確認範圍","判斷全場、同批、同泌乳階段或個別牛。"],
-      ["檢查飼糧","看有效纖維、澱粉比例、油脂來源與 TMR 均勻度。"],
-      ["看牛反應","觀察反芻、糞便、挑食、採食量與乳量變化。"],
-      ["排除環境","熱緊迫會降低採食與乳脂，夏季要優先確認。"],
-      ["追蹤指標","乳脂、乳蛋白、MUN、糞便篩、反芻時間。"]
+    "id": "milk-drop",
+    "title": "乳量突然下降",
+    "stage": "泌乳",
+    "risk": "高風險",
+    "riskClass": "risk-high",
+    "keywords": "乳量下降 掉奶 乳量掉 採食 熱緊迫 配方 飲水 疾病",
+    "intro": "乳量突然下降要同時看採食、熱緊迫、疾病、配方、擠乳與飲水。",
+    "flow": [
+      [
+        "初判",
+        "判斷是全場、單群、同批牛或個別牛下降。"
+      ],
+      [
+        "資料蒐集",
+        "乳量曲線、採食量、剩料、THI、換料、疾病事件、設備異常。"
+      ],
+      [
+        "立即處理",
+        "檢查採食、飲水、體溫、反芻、糞便、乳房炎與熱緊迫。"
+      ],
+      [
+        "追蹤指標",
+        "乳量、DMI、THI、反芻、乳脂乳蛋白、疾病件數。"
+      ],
+      [
+        "回查源頭",
+        "若群體下降，優先查飼料、水、熱緊迫、擠乳設備與作業變動。"
+      ]
     ]
   },
   {
-    id:"heat-stress", title:"熱緊迫", risk:"高風險", riskClass:"risk-high",
-    intro:"夏季高 THI 會影響採食、乳量、乳成分與繁殖，是牧場最容易被低估的隱形殺手。",
-    flow:[
-      ["計算 THI","輸入溫度與濕度，判斷風險等級。"],
-      ["優先分群","高產牛、圍產牛、病弱牛優先保護。"],
-      ["檢查設備","風扇角度、風速、噴霧粒徑、飲水槽數量與清潔。"],
-      ["調整作業","避開高溫時段移動牛隻，調整餵料時間。"],
-      ["追蹤效果","乳量、採食、呼吸速率、直腸溫、繁殖表現。"]
+    "id": "low-fat",
+    "title": "乳脂下降",
+    "stage": "營養",
+    "risk": "中風險",
+    "riskClass": "risk-mid",
+    "keywords": "乳脂下降 乳脂率 MFD TMR 挑食 瘤胃 纖維 澱粉 油脂",
+    "intro": "乳脂下降常與有效纖維不足、TMR 挑食、澱粉過高、油脂來源或熱緊迫有關。",
+    "flow": [
+      [
+        "初判",
+        "確認是全場、某群、某批飼料後發生，還是個別牛。"
+      ],
+      [
+        "資料蒐集",
+        "乳脂乳蛋白、配方、TMR 均勻度、剩料、糞便、反芻、THI。"
+      ],
+      [
+        "立即處理",
+        "檢查 TMR 均勻度、挑食、有效纖維、熱緊迫與近期換料。"
+      ],
+      [
+        "追蹤指標",
+        "乳脂率、乳蛋白、MUN、糞便篩、反芻、採食量。"
+      ],
+      [
+        "回查源頭",
+        "配方結構、TMR 製程、推料頻率、熱緊迫與油脂來源。"
+      ]
     ]
   },
   {
-    id:"repro", title:"配種率低", risk:"中風險", riskClass:"risk-mid",
-    intro:"要先拆解是發情偵測率低，還是受胎率低，兩者解法完全不同。",
-    flow:[
-      ["拆解問題","區分發情偵測率、配種時機、精液品質、牛隻健康。"],
-      ["回查產後","產後疾病、BCS、能量負平衡會影響繁殖恢復。"],
-      ["檢查紀錄","看空胎天數、配種次數、妊檢結果與流產紀錄。"],
-      ["優化流程","建立發情觀察時段、配種 SOP 與妊檢節奏。"],
-      ["追蹤指標","受胎率、懷孕率、空胎天數、淘汰原因。"]
+    "id": "alcohol-positive",
+    "title": "酒精陽性奶",
+    "stage": "乳質",
+    "risk": "中風險",
+    "riskClass": "risk-mid",
+    "keywords": "酒精陽性 酒精試驗 低酸 凝固 乳不穩定 酮症 礦物質",
+    "intro": "酒精陽性奶要拆成乳房炎、代謝壓力、礦物質平衡、乳成分與飼料因素。",
+    "flow": [
+      [
+        "初判",
+        "判斷是個別牛、同群、同批乳，還是短期大量出現。"
+      ],
+      [
+        "資料蒐集",
+        "牛號、產後天數、CMT、SCC、酮體、乳成分、配方與礦物質。"
+      ],
+      [
+        "立即處理",
+        "先排除乳房炎與產後採食下降；個別陽性牛分開追蹤。"
+      ],
+      [
+        "追蹤指標",
+        "酒精陽性率、SCC、乳成分、酮體、採食量。"
+      ],
+      [
+        "回查源頭",
+        "產後健康、能量負平衡、飼料穩定性與礦物質補充。"
+      ]
     ]
   },
   {
-    id:"alcohol-positive", title:"酒精陽性奶", risk:"中高風險", riskClass:"risk-mid",
-    intro:"酒精陽性要從乳房炎、礦物質平衡、代謝壓力與飼料配方一起排查。",
-    flow:[
-      ["先排除乳房炎","確認 CMT、體細胞、乳房狀態與乳樣外觀。"],
-      ["看代謝壓力","檢查產後天數、採食、尿酮或乳酮、乳量變化。"],
-      ["查礦物質","鈣、磷、鎂、DCAD 與飼料陰陽離子平衡。"],
-      ["分辨範圍","是個別牛、同批牛，還是全場性問題。"],
-      ["建立追蹤","酒精測試、乳成分、血液生化、飼料紀錄同步看。"]
+    "id": "calf-diarrhea",
+    "title": "犢牛腹瀉",
+    "stage": "犢牛",
+    "risk": "高風險",
+    "riskClass": "risk-high",
+    "keywords": "犢牛腹瀉 拉肚子 脫水 初乳 電解質 血便",
+    "intro": "犢牛腹瀉重點不是只看糞便，而是判斷脫水、精神、日齡與初乳管理。",
+    "flow": [
+      [
+        "初判",
+        "看精神、吸乳意願、眼窩、皮膚彈性、體溫與糞便型態。"
+      ],
+      [
+        "資料蒐集",
+        "日齡、初乳 Brix、第一餐時間、餵奶濃度、同批發生率。"
+      ],
+      [
+        "立即處理",
+        "補充水分與電解質；血便、不喝奶或嚴重脫水需通報。"
+      ],
+      [
+        "追蹤指標",
+        "腹瀉率、死亡率、治療天數、離乳前日增重。"
+      ],
+      [
+        "回查源頭",
+        "初乳、奶具清潔、奶溫、奶粉濃度、墊料與通風。"
+      ]
     ]
   },
   {
-    id:"ketosis", title:"酮症 / 採食下降", risk:"高風險", riskClass:"risk-high",
-    intro:"產後採食下降、乳量掉、尿酮偏高時，要優先視為移行期代謝風險。",
-    flow:[
-      ["確認產後天數","產後 3–21 天是酮症與能量負平衡高風險區。"],
-      ["檢測酮體","使用 BHB、尿酮或乳酮輔助判斷。"],
-      ["排除併發症","低血鈣、胎衣不下、子宮炎、第四胃變位可能同時存在。"],
-      ["立即處理","通知獸醫或營養師，並追蹤採食與反芻。"],
-      ["回頭改善","檢查乾乳期 BCS、圍產牛舒適度與產前採食。"]
+    "id": "calf-pneumonia",
+    "title": "犢牛肺炎 / 呼吸道問題",
+    "stage": "犢牛",
+    "risk": "高風險",
+    "riskClass": "risk-high",
+    "keywords": "犢牛肺炎 咳嗽 鼻水 呼吸道 發燒 弱仔",
+    "intro": "犢牛咳嗽、鼻水與呼吸變快要提早分級，避免拖成慢性弱仔。",
+    "flow": [
+      [
+        "初判",
+        "看體溫、咳嗽、鼻水、呼吸速率、耳朵下垂與精神食慾。"
+      ],
+      [
+        "資料蒐集",
+        "欄舍濕度、通風、密度、初乳紀錄、同欄發生數。"
+      ],
+      [
+        "立即處理",
+        "發燒或精神差應隔離並通報獸醫或依牧場流程處理。"
+      ],
+      [
+        "追蹤指標",
+        "肺炎率、治療天數、復發率、離乳體重與日增重。"
+      ],
+      [
+        "回查源頭",
+        "通風、賊風、濕度、墊料、密度與初乳免疫。"
+      ]
+    ]
+  },
+  {
+    "id": "calf-slow-growth",
+    "title": "犢牛日增重不足",
+    "stage": "犢牛",
+    "risk": "中風險",
+    "riskClass": "risk-mid",
+    "keywords": "日增重 體重不足 生長慢 犢牛 離乳 開口料",
+    "intro": "日增重不足代表育成效率問題，要看初乳、疾病、餵奶、開口料與離乳策略。",
+    "flow": [
+      [
+        "初判",
+        "確認出生重、量測頻率、每月體重與日增重計算是否一致。"
+      ],
+      [
+        "資料蒐集",
+        "初乳、腹瀉、肺炎、奶量、奶粉濃度、開口料與飲水。"
+      ],
+      [
+        "立即處理",
+        "找出落後犢牛清單，檢查餵飼與疾病紀錄。"
+      ],
+      [
+        "追蹤指標",
+        "日增重、離乳日齡、離乳體重、腹瀉率、肺炎率。"
+      ],
+      [
+        "回查源頭",
+        "營養供給、疾病負擔、欄舍舒適度與離乳轉換。"
+      ]
+    ]
+  },
+  {
+    "id": "navel-infection",
+    "title": "犢牛臍帶炎",
+    "stage": "犢牛",
+    "risk": "中風險",
+    "riskClass": "risk-mid",
+    "keywords": "臍帶炎 犢牛 臍帶腫 膿 初乳 消毒 感染",
+    "intro": "臍帶炎常反映出生環境、臍帶消毒與初乳免疫管理不足。",
+    "flow": [
+      [
+        "初判",
+        "檢查臍部腫脹、熱痛、濕潤、膿樣分泌物與體溫。"
+      ],
+      [
+        "資料蒐集",
+        "產房清潔、臍帶消毒時間、消毒液、初乳紀錄。"
+      ],
+      [
+        "立即處理",
+        "若發燒、跛行、關節腫或精神差，需通報獸醫。"
+      ],
+      [
+        "追蹤指標",
+        "臍帶炎率、初乳紀錄完整率、產房清潔檢核率。"
+      ],
+      [
+        "回查源頭",
+        "出生後 SOP、產房墊料、臍帶消毒與人員訓練。"
+      ]
+    ]
+  },
+  {
+    "id": "weaning-slump",
+    "title": "離乳後掉膘 / 採食下降",
+    "stage": "育成",
+    "risk": "中風險",
+    "riskClass": "risk-mid",
+    "keywords": "離乳 掉膘 採食下降 開口料 轉群 育成",
+    "intro": "離乳後掉膘常是開口料、飲水、轉群壓力與離乳節奏沒有銜接好。",
+    "flow": [
+      [
+        "初判",
+        "不要只看日齡，要看開口料採食、體重與健康狀態。"
+      ],
+      [
+        "資料蒐集",
+        "離乳前體重、開口料量、飲水、轉群日期與疾病紀錄。"
+      ],
+      [
+        "立即處理",
+        "確保飲水、飼料新鮮度、可接近性與弱小牛照護。"
+      ],
+      [
+        "追蹤指標",
+        "離乳前後體重、開口料、腹瀉率、肺炎率。"
+      ],
+      [
+        "回查源頭",
+        "離乳前準備、轉群壓力、欄位密度與環境變化。"
+      ]
+    ]
+  },
+  {
+    "id": "heat-stress",
+    "title": "熱緊迫",
+    "stage": "環境",
+    "risk": "高風險",
+    "riskClass": "risk-high",
+    "keywords": "熱緊迫 THI 高溫 濕度 呼吸 風扇 噴霧 飲水 夏季",
+    "intro": "熱緊迫會影響採食、乳量、繁殖與健康，需用 THI、呼吸速率和設備檢核判斷。",
+    "flow": [
+      [
+        "初判",
+        "記錄溫度、濕度、THI、呼吸速率、採食與乳量變化。"
+      ],
+      [
+        "資料蒐集",
+        "風扇角度、風速、噴霧、飲水槽、待擠區與牛群密度。"
+      ],
+      [
+        "立即處理",
+        "優先保護高產牛、圍產牛與待擠區牛隻。"
+      ],
+      [
+        "追蹤指標",
+        "THI 高風險日數、乳量、採食、受胎率、乳脂率。"
+      ],
+      [
+        "回查源頭",
+        "夏季作業時間、推料、飲水、降溫設備與待擠區。"
+      ]
+    ]
+  },
+  {
+    "id": "low-conception",
+    "title": "配種率 / 受胎率低",
+    "stage": "繁殖",
+    "risk": "中風險",
+    "riskClass": "risk-mid",
+    "keywords": "配種 受胎率 懷孕率 發情 空胎 繁殖 妊檢",
+    "intro": "繁殖效率低要拆成發情偵測率、配種時機、產後健康與營養體況。",
+    "flow": [
+      [
+        "初判",
+        "分清楚是發情偵測率低、配種率低，還是受胎率低。"
+      ],
+      [
+        "資料蒐集",
+        "產後天數、發情紀錄、配種次數、妊檢、BCS、產後疾病。"
+      ],
+      [
+        "立即處理",
+        "建立未孕牛清單，分群看原因而非只重複配種。"
+      ],
+      [
+        "追蹤指標",
+        "受胎率、懷孕率、空胎天數、配種次數、產後疾病率。"
+      ],
+      [
+        "回查源頭",
+        "發情觀察、配種時機、熱緊迫、蹄病與產後健康。"
+      ]
+    ]
+  },
+  {
+    "id": "weak-heat",
+    "title": "發情不明顯",
+    "stage": "繁殖",
+    "risk": "中風險",
+    "riskClass": "risk-mid",
+    "keywords": "發情不明顯 站立發情 活動量 繁殖 蹄病 熱緊迫",
+    "intro": "發情不明顯可能與觀察不足、蹄病、熱緊迫、體況或產後代謝問題有關。",
+    "flow": [
+      [
+        "初判",
+        "檢查每天觀察次數、觀察時間與是否記錄活動行為。"
+      ],
+      [
+        "資料蒐集",
+        "產後天數、BCS、蹄病、熱緊迫、產後疾病與活動量。"
+      ],
+      [
+        "立即處理",
+        "列出產後已到期但未見發情牛，安排複查與分群。"
+      ],
+      [
+        "追蹤指標",
+        "發情偵測率、首次發情日、配種率、空胎天數。"
+      ],
+      [
+        "回查源頭",
+        "發情觀察 SOP、活動紀錄、蹄病與產後健康。"
+      ]
+    ]
+  },
+  {
+    "id": "retained-placenta",
+    "title": "胎衣不下",
+    "stage": "圍產",
+    "risk": "高風險",
+    "riskClass": "risk-high",
+    "keywords": "胎衣不下 產後 子宮炎 惡露 發燒 採食下降",
+    "intro": "胎衣不下會增加子宮炎與產後採食下降風險，需追蹤全身狀態與後續繁殖。",
+    "flow": [
+      [
+        "初判",
+        "記錄產後時間、胎衣排出狀態、惡露、體溫、精神與採食。"
+      ],
+      [
+        "資料蒐集",
+        "難產、雙胎、低血鈣、BCS、乾乳期營養與產房衛生。"
+      ],
+      [
+        "立即處理",
+        "避免粗暴拉扯；發燒或精神差需依獸醫流程處理。"
+      ],
+      [
+        "追蹤指標",
+        "胎衣不下率、子宮炎率、採食異常率、空胎天數。"
+      ],
+      [
+        "回查源頭",
+        "乾乳期營養、BCS、難產管理、低血鈣與圍產流程。"
+      ]
+    ]
+  },
+  {
+    "id": "metritis",
+    "title": "子宮炎 / 惡露異常",
+    "stage": "圍產",
+    "risk": "高風險",
+    "riskClass": "risk-high",
+    "keywords": "子宮炎 惡露 臭味 產後 發燒 採食 繁殖",
+    "intro": "子宮炎常伴隨發燒、採食下降與繁殖延遲，要納入產後追蹤。",
+    "flow": [
+      [
+        "初判",
+        "確認體溫、精神、採食、乳量、惡露顏色與氣味。"
+      ],
+      [
+        "資料蒐集",
+        "難產、胎衣不下、雙胎、產房環境與產後天數。"
+      ],
+      [
+        "立即處理",
+        "發燒或精神差需依獸醫流程處理，不宜只觀察不紀錄。"
+      ],
+      [
+        "追蹤指標",
+        "子宮炎率、胎衣不下率、產後採食異常率、受胎率。"
+      ],
+      [
+        "回查源頭",
+        "產房衛生、難產管理、圍產營養與乾乳期體況。"
+      ]
+    ]
+  },
+  {
+    "id": "ketosis",
+    "title": "酮症 / 產後採食下降",
+    "stage": "圍產",
+    "risk": "高風險",
+    "riskClass": "risk-high",
+    "keywords": "酮症 BHB 尿酮 乳酮 產後 採食下降 乳量掉 能量負平衡",
+    "intro": "產後採食下降、乳量掉與酮體陽性要同時排除低血鈣、子宮炎與第四胃變位。",
+    "flow": [
+      [
+        "初判",
+        "採食下降通常早於嚴重症狀，需記錄剩料、反芻、糞便與精神。"
+      ],
+      [
+        "資料蒐集",
+        "BHB、尿酮、乳酮、產後天數、乳量、體溫、惡露與胎衣。"
+      ],
+      [
+        "立即處理",
+        "採食明顯下降或精神差需通報，並排除併發疾病。"
+      ],
+      [
+        "追蹤指標",
+        "產後 10 日採食、酮體陽性率、產後疾病率、乳量啟動。"
+      ],
+      [
+        "回查源頭",
+        "乾乳期 BCS、近迫牛採食、轉群壓力與產後照護。"
+      ]
+    ]
+  },
+  {
+    "id": "milk-fever",
+    "title": "低血鈣 / 乳熱風險",
+    "stage": "圍產",
+    "risk": "高風險",
+    "riskClass": "risk-high",
+    "keywords": "低血鈣 乳熱 倒地 產後 採食 胎衣不下 子宮炎",
+    "intro": "低血鈣不一定都是倒地才算，亞臨床低血鈣也會影響採食與產後疾病。",
+    "flow": [
+      [
+        "初判",
+        "確認倒地、站立困難、耳朵冷、精神差或採食下降。"
+      ],
+      [
+        "資料蒐集",
+        "胎次、BCS、產後時間、胎衣、採食、血鈣或牧場檢測。"
+      ],
+      [
+        "立即處理",
+        "倒地或無法站立需立即通報獸醫或啟動緊急流程。"
+      ],
+      [
+        "追蹤指標",
+        "乳熱率、胎衣不下率、子宮炎率、產後採食與淘汰率。"
+      ],
+      [
+        "回查源頭",
+        "乾乳期 DCAD、鈣策略、過肥牛與近迫牛管理。"
+      ]
+    ]
+  },
+  {
+    "id": "lda",
+    "title": "第四胃變位疑慮",
+    "stage": "圍產",
+    "risk": "高風險",
+    "riskClass": "risk-high",
+    "keywords": "第四胃變位 LDA 產後 採食下降 糞便少 乳量掉",
+    "intro": "產後採食下降、乳量掉、糞便少或酮體異常時，要把第四胃變位列入排除。",
+    "flow": [
+      [
+        "初判",
+        "觀察採食、乳量、糞便量、精神、酮體與產後天數。"
+      ],
+      [
+        "資料蒐集",
+        "近期產後疾病、低血鈣、酮症、TMR 採食與轉群壓力。"
+      ],
+      [
+        "立即處理",
+        "若疑似第四胃變位，需獸醫檢查，不建議自行判斷結案。"
+      ],
+      [
+        "追蹤指標",
+        "產後採食異常、LDA 發生率、酮症率、乳量啟動。"
+      ],
+      [
+        "回查源頭",
+        "乾乳期採食、產後舒適度、轉群、有效纖維與低血鈣。"
+      ]
+    ]
+  },
+  {
+    "id": "lameness",
+    "title": "跛行 / 蹄病",
+    "stage": "健康",
+    "risk": "中風險",
+    "riskClass": "risk-mid",
+    "keywords": "跛行 蹄病 蹄葉炎 蹄底 潰瘍 走路 不敢站",
+    "intro": "跛行會影響採食、繁殖與產奶，不只是腳的問題。",
+    "flow": [
+      [
+        "初判",
+        "評估跛行分數、步態、站立、躺臥時間與蹄部病灶。"
+      ],
+      [
+        "資料蒐集",
+        "牛號、胎次、泌乳天數、欄舍地面、修蹄紀錄與疾病史。"
+      ],
+      [
+        "立即處理",
+        "嚴重跛行需隔離舒適欄位並安排修蹄或獸醫處理。"
+      ],
+      [
+        "追蹤指標",
+        "跛行率、修蹄件數、復發率、採食量、受胎率。"
+      ],
+      [
+        "回查源頭",
+        "地面濕滑、牛床舒適度、站立時間、營養與修蹄制度。"
+      ]
+    ]
+  },
+  {
+    "id": "feed-sorting",
+    "title": "TMR 挑食 / 剩料異常",
+    "stage": "營養",
+    "risk": "中風險",
+    "riskClass": "risk-mid",
+    "keywords": "TMR 挑食 剩料 均勻度 採食 乾物 分離",
+    "intro": "TMR 挑食會造成每頭牛吃到的配方不同，影響乳脂、採食與瘤胃穩定。",
+    "flow": [
+      [
+        "初判",
+        "觀察剩料是否長纖、粉料或特定原料被挑出。"
+      ],
+      [
+        "資料蒐集",
+        "TMR 水分、混合時間、投料順序、推料頻率與剩料比例。"
+      ],
+      [
+        "立即處理",
+        "檢查混合均勻度、切長、水分、推料與飼槽空槽時間。"
+      ],
+      [
+        "追蹤指標",
+        "剩料率、乳脂率、採食量、糞便篩、反芻時間。"
+      ],
+      [
+        "回查源頭",
+        "混合車操作、原料水分、粒徑、飼槽管理與熱緊迫。"
+      ]
+    ]
+  },
+  {
+    "id": "low-dmi",
+    "title": "採食量不足",
+    "stage": "營養",
+    "risk": "高風險",
+    "riskClass": "risk-high",
+    "keywords": "採食量不足 DMI 剩料 不吃 採食下降 反芻",
+    "intro": "採食量不足是很多疾病與產能問題的前兆，尤其產後與夏季要優先追蹤。",
+    "flow": [
+      [
+        "初判",
+        "確認是全群採食下降還是個別牛下降。"
+      ],
+      [
+        "資料蒐集",
+        "剩料、餵料時間、TMR 品質、水、熱緊迫、疾病與轉群。"
+      ],
+      [
+        "立即處理",
+        "檢查飼料新鮮度、飲水、熱緊迫、舒適度與疾病牛。"
+      ],
+      [
+        "追蹤指標",
+        "DMI、剩料率、反芻、乳量、糞便與產後疾病。"
+      ],
+      [
+        "回查源頭",
+        "配方適口性、飼槽空間、推料、熱緊迫與產後流程。"
+      ]
+    ]
+  },
+  {
+    "id": "loose-manure",
+    "title": "糞便過稀 / 未消化顆粒多",
+    "stage": "營養",
+    "risk": "中風險",
+    "riskClass": "risk-mid",
+    "keywords": "糞便過稀 未消化 顆粒 酸中毒 瘤胃 糞便篩",
+    "intro": "糞便異常是瘤胃、消化率、配方與採食穩定性的現場訊號。",
+    "flow": [
+      [
+        "初判",
+        "觀察糞便稀度、氣泡、未消化顆粒與同群比例。"
+      ],
+      [
+        "資料蒐集",
+        "配方、TMR、採食、乳脂、MUN、糞便篩與換料紀錄。"
+      ],
+      [
+        "立即處理",
+        "檢查澱粉、有效纖維、TMR 均勻度與挑食。"
+      ],
+      [
+        "追蹤指標",
+        "糞便評分、乳脂率、採食量、反芻、糞便篩。"
+      ],
+      [
+        "回查源頭",
+        "配方變動、原料品質、粉碎粒度、TMR 製程與水分。"
+      ]
+    ]
+  },
+  {
+    "id": "moldy-feed",
+    "title": "飼料發霉 / 適口性變差",
+    "stage": "營養",
+    "risk": "高風險",
+    "riskClass": "risk-high",
+    "keywords": "發霉 飼料 酸敗 適口性 黴菌毒素 青貯",
+    "intro": "飼料發霉或適口性變差會影響採食、乳量、健康與繁殖。",
+    "flow": [
+      [
+        "初判",
+        "檢查氣味、顏色、溫度、結塊、霉斑與牛隻拒食。"
+      ],
+      [
+        "資料蒐集",
+        "原料批次、保存狀態、青貯開封面、進貨日期與採食變化。"
+      ],
+      [
+        "立即處理",
+        "移除明顯發霉原料或可疑批次，避免持續餵飼。"
+      ],
+      [
+        "追蹤指標",
+        "採食量、乳量、疾病件數、繁殖表現與原料退貨紀錄。"
+      ],
+      [
+        "回查源頭",
+        "倉儲、防潮、先進先出、青貯管理與供應商品質。"
+      ]
+    ]
+  },
+  {
+    "id": "water-intake",
+    "title": "飲水不足 / 水槽問題",
+    "stage": "環境",
+    "risk": "中風險",
+    "riskClass": "risk-mid",
+    "keywords": "飲水 水槽 水流 水質 採食 熱緊迫",
+    "intro": "水是最容易被忽略的營養，飲水不足會直接影響採食、乳量與熱緊迫。",
+    "flow": [
+      [
+        "初判",
+        "觀察水槽是否乾淨、水流是否足、牛是否排隊喝水。"
+      ],
+      [
+        "資料蒐集",
+        "水槽數量、位置、水流速、水質、清洗頻率與高溫時段使用。"
+      ],
+      [
+        "立即處理",
+        "清洗水槽、確認水流與補足高風險區飲水。"
+      ],
+      [
+        "追蹤指標",
+        "採食量、乳量、THI、飲水槽清潔率與水流檢核。"
+      ],
+      [
+        "回查源頭",
+        "牛舍動線、待擠區、密度、夏季飲水需求與水管壓力。"
+      ]
+    ]
+  },
+  {
+    "id": "cow-comfort",
+    "title": "牛床舒適度不足",
+    "stage": "環境",
+    "risk": "中風險",
+    "riskClass": "risk-mid",
+    "keywords": "牛床 舒適度 躺臥 站立 跛行 乳房炎 墊料",
+    "intro": "牛床舒適度會影響躺臥、蹄病、乳房炎、採食與乳量。",
+    "flow": [
+      [
+        "初判",
+        "觀察躺臥比例、站立牛、牛床濕度、墊料與牛體髒污。"
+      ],
+      [
+        "資料蒐集",
+        "牛床尺寸、墊料厚度、清潔頻率、跛行與乳房炎紀錄。"
+      ],
+      [
+        "立即處理",
+        "改善濕滑、硬床、髒污墊料與擁擠問題。"
+      ],
+      [
+        "追蹤指標",
+        "躺臥時間、牛體清潔分數、跛行率、乳房炎率。"
+      ],
+      [
+        "回查源頭",
+        "牛床設計、墊料管理、通風、密度與清糞頻率。"
+      ]
+    ]
+  },
+  {
+    "id": "milk-protein-low",
+    "title": "乳蛋白偏低",
+    "stage": "營養",
+    "risk": "中風險",
+    "riskClass": "risk-mid",
+    "keywords": "乳蛋白 偏低 蛋白 能量 MUN 採食",
+    "intro": "乳蛋白偏低常反映能量供給、採食量、瘤胃發酵或泌乳階段問題。",
+    "flow": [
+      [
+        "初判",
+        "確認是全群偏低、特定泌乳階段偏低，還是採樣波動。"
+      ],
+      [
+        "資料蒐集",
+        "乳蛋白、乳脂、MUN、採食量、配方、DIM 與體況。"
+      ],
+      [
+        "立即處理",
+        "檢查能量供給、採食、澱粉來源、瘤胃健康與熱緊迫。"
+      ],
+      [
+        "追蹤指標",
+        "乳蛋白、MUN、乳量、採食量、BCS 與糞便。"
+      ],
+      [
+        "回查源頭",
+        "配方能量、蛋白同步性、採食穩定與產後能量負平衡。"
+      ]
+    ]
+  },
+  {
+    "id": "bcscore",
+    "title": "體況過肥 / 過瘦",
+    "stage": "營養",
+    "risk": "中風險",
+    "riskClass": "risk-mid",
+    "keywords": "BCS 體況 過肥 過瘦 乾乳 產後 繁殖",
+    "intro": "體況是乾乳、產後疾病、繁殖與採食風險的重要前置指標。",
+    "flow": [
+      [
+        "初判",
+        "依泌乳階段與乾乳期評估 BCS 是否過高或過低。"
+      ],
+      [
+        "資料蒐集",
+        "牛號、胎次、DIM、BCS、乳量、繁殖與產後疾病。"
+      ],
+      [
+        "立即處理",
+        "列出過肥乾乳牛、過瘦高產牛與體況快速下降牛。"
+      ],
+      [
+        "追蹤指標",
+        "BCS 分布、產後疾病、受胎率、乳量與淘汰率。"
+      ],
+      [
+        "回查源頭",
+        "乾乳期分群、能量供給、採食空間與產後營養。"
+      ]
+    ]
+  },
+  {
+    "id": "dry-cow-management",
+    "title": "乾乳期管理異常",
+    "stage": "乾乳",
+    "risk": "高風險",
+    "riskClass": "risk-high",
+    "keywords": "乾乳期 乾乳牛 近迫牛 圍產 BCS 低血鈣 酮症",
+    "intro": "乾乳期管理會影響產後採食、低血鈣、酮症、乳房炎與繁殖。",
+    "flow": [
+      [
+        "初判",
+        "檢查乾乳牛與近迫牛分群、體況、採食與舒適度。"
+      ],
+      [
+        "資料蒐集",
+        "乾乳天數、BCS、配方、DCAD、產房、轉群與產後疾病。"
+      ],
+      [
+        "立即處理",
+        "列出過肥、採食差、近迫擁擠與產後問題多的牛群。"
+      ],
+      [
+        "追蹤指標",
+        "乳熱率、胎衣不下率、酮症率、產後乳房炎、乳量啟動。"
+      ],
+      [
+        "回查源頭",
+        "分群、採食空間、配方、轉群壓力與產房衛生。"
+      ]
+    ]
+  },
+  {
+    "id": "transition-cow-risk",
+    "title": "圍產牛高風險清單",
+    "stage": "圍產",
+    "risk": "高風險",
+    "riskClass": "risk-high",
+    "keywords": "圍產牛 高風險 產後10日 近迫牛 採食 酮症 乳熱",
+    "intro": "圍產牛不是等生病才處理，而是要先建立高風險清單與每日追蹤。",
+    "flow": [
+      [
+        "初判",
+        "列出高胎次、過肥、難產、雙胎、產前採食差與產後異常牛。"
+      ],
+      [
+        "資料蒐集",
+        "BCS、產犢日期、採食、體溫、酮體、惡露、胎衣與乳量。"
+      ],
+      [
+        "立即處理",
+        "產後前 10 日固定追蹤採食、精神、糞便與疾病警訊。"
+      ],
+      [
+        "追蹤指標",
+        "產後疾病率、酮症、乳熱、子宮炎、淘汰率與乳量啟動。"
+      ],
+      [
+        "回查源頭",
+        "近迫牛舒適度、轉群、乾乳營養與產房流程。"
+      ]
+    ]
+  },
+  {
+    "id": "repro-abortion",
+    "title": "流產 / 早產事件",
+    "stage": "繁殖",
+    "risk": "高風險",
+    "riskClass": "risk-high",
+    "keywords": "流產 早產 死胎 妊娠 繁殖 疫病",
+    "intro": "流產事件需要紀錄胎齡、牛隻狀態、批次發生與可能感染或管理因素。",
+    "flow": [
+      [
+        "初判",
+        "確認胎齡、是否單一事件或群體增加，以及母牛精神體溫。"
+      ],
+      [
+        "資料蒐集",
+        "牛號、配種日期、妊檢、疫苗、飼料、熱緊迫與同群事件。"
+      ],
+      [
+        "立即處理",
+        "保留必要資訊並通報獸醫或主管，避免忽略群體風險。"
+      ],
+      [
+        "追蹤指標",
+        "流產率、死胎率、月份分布、同群集中度與繁殖損失。"
+      ],
+      [
+        "回查源頭",
+        "感染風險、飼料品質、熱緊迫、疫苗計畫與環境壓力。"
+      ]
+    ]
+  },
+  {
+    "id": "dead-calf",
+    "title": "死產 / 弱仔比例偏高",
+    "stage": "繁殖",
+    "risk": "高風險",
+    "riskClass": "risk-high",
+    "keywords": "死產 弱仔 難產 初乳 產房 繁殖",
+    "intro": "死產與弱仔偏高要從難產、母牛體況、產房監控與初乳照護回查。",
+    "flow": [
+      [
+        "初判",
+        "確認死產、弱仔、難產與助產比例是否升高。"
+      ],
+      [
+        "資料蒐集",
+        "胎次、配種品種、胎兒大小、產房觀察、助產紀錄與 BCS。"
+      ],
+      [
+        "立即處理",
+        "弱仔需保溫、初乳與呼吸評估；難產事件需完整紀錄。"
+      ],
+      [
+        "追蹤指標",
+        "死產率、弱仔率、難產率、初乳完成率與早期死亡率。"
+      ],
+      [
+        "回查源頭",
+        "配種策略、乾乳期體況、產房巡視頻率與助產 SOP。"
+      ]
+    ]
+  },
+  {
+    "id": "fly-control",
+    "title": "蒼蠅 / 環境衛生問題",
+    "stage": "環境",
+    "risk": "中風險",
+    "riskClass": "risk-mid",
+    "keywords": "蒼蠅 環境 衛生 糞便 牛床 乳房炎 犢牛",
+    "intro": "蒼蠅與環境衛生會影響乳房炎、犢牛疾病與牧場整體舒適度。",
+    "flow": [
+      [
+        "初判",
+        "確認蒼蠅密度、繁殖點、糞便堆積、潮濕區與飼槽周圍。"
+      ],
+      [
+        "資料蒐集",
+        "清糞頻率、墊料濕度、死角、犢牛區與病牛區環境。"
+      ],
+      [
+        "立即處理",
+        "移除孳生源、改善排水、清理潮濕墊料與飼料殘渣。"
+      ],
+      [
+        "追蹤指標",
+        "蒼蠅密度、乳房炎率、犢牛腹瀉率、牛體清潔分數。"
+      ],
+      [
+        "回查源頭",
+        "糞污管理、排水、墊料、飼料殘渣與季節性防治計畫。"
+      ]
+    ]
+  },
+  {
+    "id": "biosecurity",
+    "title": "防疫 / 新牛引入風險",
+    "stage": "防疫",
+    "risk": "高風險",
+    "riskClass": "risk-high",
+    "keywords": "防疫 新牛 引入 隔離 疫病 外來牛 生物安全",
+    "intro": "新牛引入與訪客車輛是牧場防疫風險核心，需要隔離、檢查與紀錄。",
+    "flow": [
+      [
+        "初判",
+        "確認是否有新牛、外來車輛、人員、器具或鄰場接觸風險。"
+      ],
+      [
+        "資料蒐集",
+        "來源牧場、檢疫資料、隔離天數、健康檢查與疫苗紀錄。"
+      ],
+      [
+        "立即處理",
+        "新牛隔離觀察，限制共用器具與動線交叉。"
+      ],
+      [
+        "追蹤指標",
+        "隔離完成率、新牛發病率、訪客紀錄、防疫稽核完成率。"
+      ],
+      [
+        "回查源頭",
+        "引牛流程、車輛動線、人員消毒與隔離欄管理。"
+      ]
+    ]
+  },
+  {
+    "id": "bulk-tank-bacteria",
+    "title": "生菌數 / 乳質微生物偏高",
+    "stage": "乳質",
+    "risk": "高風險",
+    "riskClass": "risk-high",
+    "keywords": "生菌數 細菌數 乳質 微生物 清洗 冷卻 CIP",
+    "intro": "生菌數偏高要從擠乳衛生、設備清洗、冷卻速度與貯乳桶管理一起查。",
+    "flow": [
+      [
+        "初判",
+        "確認是單日異常、連續偏高，還是特定批次異常。"
+      ],
+      [
+        "資料蒐集",
+        "擠乳時間、冷卻曲線、清洗流程、藥劑濃度、水溫與設備死角。"
+      ],
+      [
+        "立即處理",
+        "檢查貯乳桶溫度、清洗藥劑、熱水、管線與橡膠耗材。"
+      ],
+      [
+        "追蹤指標",
+        "生菌數、冷卻時間、清洗紀錄、水溫、設備保養。"
+      ],
+      [
+        "回查源頭",
+        "CIP、設備衛生、擠乳前乳頭清潔與貯乳桶管理。"
+      ]
     ]
   }
 ];
 
-function renderProblemButtons(list = problems) {
+
+let activeProblemStage = "全部";
+
+function renderProblemCategories() {
+  const row = document.getElementById("problemCategoryRow");
+  if (!row) return;
+  const stages = ["全部", ...Array.from(new Set(problems.map(p => p.stage)))];
+  row.innerHTML = stages.map(s => `
+    <button class="problem-chip ${s===activeProblemStage ? "active":""}" onclick="setProblemStage('${s}')">${s}</button>
+  `).join("");
+}
+
+function setProblemStage(stage) {
+  activeProblemStage = stage;
+  renderProblemCategories();
+  filterProblems();
+}
+
+function getFilteredProblems() {
+  const keyword = (document.getElementById("problemSearch")?.value || "").trim().toLowerCase();
+  return problems.filter(p => {
+    const matchStage = activeProblemStage === "全部" || p.stage === activeProblemStage;
+    const hay = `${p.title} ${p.stage} ${p.intro} ${p.keywords || ""} ${p.flow.map(x => x.join(" ")).join(" ")}`.toLowerCase();
+    const matchKeyword = !keyword || hay.includes(keyword);
+    return matchStage && matchKeyword;
+  });
+}
+
+function renderProblemButtons(list = getFilteredProblems()) {
   const box = document.getElementById("problemButtons");
+  if (!box) return;
+  document.getElementById("problemCount").textContent = `目前顯示 ${list.length} / ${problems.length} 題`;
   box.innerHTML = list.map((p, idx) => `
     <button class="problem-btn ${idx===0 ? "active":""}" onclick="selectProblem('${p.id}')">
-      <span>${p.title}</span><span>→</span>
+      <span>${p.title}</span><span>${p.stage} →</span>
     </button>
   `).join("");
   if (list.length) selectProblem(list[0].id);
+  else {
+    document.getElementById("problemTitle").textContent = "找不到符合的問題";
+    document.getElementById("problemIntro").textContent = "請改用其他關鍵字，例如：乳房炎、採食、犢牛、繁殖、熱緊迫。";
+    document.getElementById("problemRisk").textContent = "無結果";
+    document.getElementById("problemFlow").innerHTML = "";
+  }
 }
 
 function filterProblems() {
-  const keyword = document.getElementById("problemSearch").value.trim();
-  const list = problems.filter(p => p.title.includes(keyword) || p.intro.includes(keyword));
-  renderProblemButtons(list.length ? list : problems);
+  renderProblemButtons(getFilteredProblems());
 }
 
 function selectProblem(id) {
   const p = problems.find(x => x.id === id);
+  if (!p) return;
   document.querySelectorAll(".problem-btn").forEach(btn => {
     btn.classList.toggle("active", btn.textContent.includes(p.title));
   });
   document.getElementById("problemTitle").textContent = p.title;
   document.getElementById("problemIntro").textContent = p.intro;
+  document.getElementById("problemStage").textContent = `分類：${p.stage}`;
+  document.getElementById("problemKeywords").textContent = `關鍵字：${(p.keywords || "").split(" ").slice(0,5).join("、")}`;
   const risk = document.getElementById("problemRisk");
   risk.textContent = p.risk;
   risk.className = `risk-tag ${p.riskClass}`;
-  document.getElementById("problemFlow").innerHTML = p.flow.map(step => `
+  document.getElementById("problemFlow").innerHTML = p.flow.map((step, idx) => `
     <div class="flow-step">
       <div>
-        <b>${step[0]}</b>
+        <b>${idx+1}. ${step[0]}</b>
         <span>${step[1]}</span>
       </div>
     </div>
@@ -4821,25 +5991,49 @@ function downloadDashboardReport() {
 window.addEventListener("resize", function() {
   if (document.getElementById("trendCanvas")) renderFarmDashboard();
 });
-function mockAiAnswer() {
-  const text = document.getElementById("aiInput").value.trim();
-  let blocks = [
-    ["可能方向","此情境偏向產後能量負平衡或酮症風險，也要排除低血鈣、子宮炎、第四胃變位等併發問題。"],
-    ["需要補充資料","建議補充產後天數、體溫、BHB或尿酮、採食量、反芻、乳量變化、糞便與胎衣/子宮狀況。"],
-    ["立即處理","若採食明顯下降或精神變差，應通知獸醫或營養師，不建議只靠單一症狀自行判斷。"],
-    ["追蹤指標","連續追蹤採食、乳量、酮體、體溫與糞便狀態，並回查乾乳期 BCS 與產前採食。"],
-    ["系統提醒","AI 僅作輔助判斷，不取代獸醫診斷。這句很重要，網站上要放，不然法務會先熱緊迫。"]
-  ];
 
-  if (text.includes("乳房炎") || text.includes("CMT")) {
-    blocks = [
-      ["可能方向","疑似乳房炎事件，應先分級並判斷是否有全身症狀。"],
-      ["需要補充資料","牛號、乳區、CMT 分級、乳樣外觀、體溫、食慾、是否復發。"],
-      ["立即處理","問題乳分開，重症優先通知獸醫，必要時採樣培養。"],
-      ["追蹤指標","體細胞、復發率、治癒率、棄乳天數與用藥紀錄。"],
-      ["系統提醒","回查擠乳流程、牛床衛生、後藥浴與乾乳策略。"]
-    ];
-  }
+const aiRelationMap = {
+  "乳質": {tools:["CMT 四乳區紀錄表","乳房炎分級判斷器","SOP：CMT 操作與判讀表","SOP：乳房炎分級 SOP"], data:["牛號與乳區","CMT / SCC","乳樣外觀","體溫與食慾","是否復發"]},
+  "犢牛": {tools:["犢牛腹瀉脫水評分表","初乳餵飼紀錄判斷器","SOP：初乳餵飼 SOP","SOP：犢牛腹瀉處理流程"], data:["日齡","初乳 Brix","第一餐時間","糞便與脫水","同批發生數"]},
+  "營養": {tools:["TMR 均勻度檢核表","牧場儀表板","乳脂 / 採食追蹤"], data:["配方與TMR","採食量","剩料","糞便","乳脂乳蛋白"]},
+  "環境": {tools:["熱緊迫設備檢核與 THI 判斷","牛床衛生稽核","飲水檢核"], data:["溫度濕度THI","呼吸速率","飲水槽","風扇噴霧","躺臥與採食"]},
+  "繁殖": {tools:["配種紀錄表","發情觀察 SOP","圍產牛10日追蹤表"], data:["產後天數","發情紀錄","配種次數","BCS","產後疾病"]},
+  "圍產": {tools:["圍產牛10日追蹤表","酮症 / 低血鈣風險追蹤","SOP：圍產牛10日觀察表"], data:["產後天數","採食與乳量","體溫","酮體","胎衣與惡露"]},
+  "乾乳": {tools:["乾乳牛分群檢核表","圍產牛10日追蹤表"], data:["乾乳天數","BCS","分群","近迫採食","產後疾病"]},
+  "健康": {tools:["跛行評分","疾病事件紀錄","牧場月報"], data:["牛號","嚴重度","採食","體溫","復發紀錄"]},
+  "防疫": {tools:["新牛引入檢核表","訪客車輛紀錄","隔離觀察表"], data:["來源牧場","隔離天數","健康檢查","疫苗紀錄","動線"]}
+};
+
+function scoreProblem(text, p) {
+  const lower = (text || "").toLowerCase();
+  let score = 0;
+  if (lower.includes(p.title.toLowerCase())) score += 8;
+  (p.keywords || "").split(/\s+/).forEach(k => {
+    if (k && lower.includes(k.toLowerCase())) score += 3;
+  });
+  p.title.split(/[ /／]+/).forEach(k => {
+    if (k && lower.includes(k.toLowerCase())) score += 2;
+  });
+  if (lower.includes(p.stage.toLowerCase())) score += 1;
+  return score;
+}
+
+function findAiProblem(text) {
+  const ranked = problems.map(p => ({p, score:scoreProblem(text, p)})).sort((a,b)=>b.score-a.score);
+  return ranked[0].score > 0 ? ranked[0].p : problems.find(p => p.id === "ketosis");
+}
+
+function renderAiAdvisor(problem, text) {
+  const rel = aiRelationMap[problem.stage] || aiRelationMap["健康"];
+  const blocks = [
+    ["可能方向", `你描述的狀況最接近「${problem.title}」。${problem.intro}`],
+    ["初步判斷", problem.flow[0][1]],
+    ["需要補充資料", problem.flow[1][1]],
+    ["立即處理", problem.flow[2][1]],
+    ["追蹤指標", problem.flow[3][1]],
+    ["回查源頭", problem.flow[4][1]],
+    ["安全提醒", "AI 只做輔助判斷與流程導引，不取代獸醫診斷、用藥決策或現場專業判斷。"]
+  ];
 
   document.getElementById("aiAnswerBlocks").innerHTML = blocks.map(b => `
     <div class="answer-block">
@@ -4847,6 +6041,38 @@ function mockAiAnswer() {
       <span>${b[1]}</span>
     </div>
   `).join("");
+
+  document.getElementById("aiMatchedProblem").innerHTML = `${problem.title}<br><span style="color:var(--muted);font-weight:850;">分類：${problem.stage}｜風險：${problem.risk}</span>`;
+  document.getElementById("aiRelatedTools").innerHTML = rel.tools.map(x => `<li>${x}</li>`).join("");
+  document.getElementById("aiNextData").innerHTML = rel.data.map(x => `<li>${x}</li>`).join("");
+}
+
+function mockAiAnswer() {
+  const text = document.getElementById("aiInput").value.trim();
+  if (!text) {
+    clearAiAdvisor();
+    return;
+  }
+  const problem = findAiProblem(text);
+  renderAiAdvisor(problem, text);
+}
+
+function fillAiAdvisor(text) {
+  document.getElementById("aiInput").value = text;
+  mockAiAnswer();
+}
+
+function clearAiAdvisor() {
+  document.getElementById("aiInput").value = "";
+  document.getElementById("aiAnswerBlocks").innerHTML = `
+    <div class="answer-block">
+      <b>等待輸入</b>
+      <span>請輸入現場狀況，例如：犢牛腹瀉、乳脂下降、熱緊迫、體細胞偏高、產後採食下降。</span>
+    </div>
+  `;
+  document.getElementById("aiMatchedProblem").textContent = "尚未判斷";
+  document.getElementById("aiRelatedTools").innerHTML = "<li>尚未判斷</li>";
+  document.getElementById("aiNextData").innerHTML = "<li>尚未判斷</li>";
 }
 
 function highlightNav() {
