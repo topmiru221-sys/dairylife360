@@ -3571,6 +3571,50 @@
     }
 
 
+  
+
+    /* V18.5.1：修正分類收合清單文字反白看不到問題
+       原因：.problem-btn 預設給深色側欄用，文字是白色；
+       疾病知識庫 / 問題中心的收合清單背景是白色，需覆蓋為深色文字。 */
+    .category-items .problem-btn.compact {
+      color:var(--green-900) !important;
+      background:#ffffff !important;
+      border-color:var(--line) !important;
+      box-shadow:0 6px 14px rgba(21,72,45,.035);
+    }
+    .category-items .problem-btn.compact span:first-child {
+      color:var(--green-900) !important;
+      font-weight:950;
+    }
+    .category-items .problem-btn.compact span:last-child {
+      color:var(--green-800) !important;
+      background:var(--green-50);
+      border:1px solid rgba(47,125,80,.12);
+      border-radius:999px;
+      padding:4px 8px;
+      font-size:12px;
+      white-space:nowrap;
+    }
+    .category-items .problem-btn.compact:hover,
+    .category-items .problem-btn.compact.active {
+      color:var(--green-900) !important;
+      background:var(--green-100) !important;
+      border-color:var(--green-700) !important;
+      transform:translateX(2px);
+    }
+    .category-items .problem-btn.compact:hover span:first-child,
+    .category-items .problem-btn.compact.active span:first-child {
+      color:var(--green-900) !important;
+    }
+    .category-items .problem-btn.compact:hover span:last-child,
+    .category-items .problem-btn.compact.active span:last-child {
+      color:var(--green-800) !important;
+      background:#ffffff;
+    }
+    .category-group.open .category-items {
+      background:#fbfefb;
+    }
+
   </style>
 </head>
 <body>
