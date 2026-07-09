@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DairyLife 360 v11｜30+問題庫與AI顧問升級版</title>
+  <title>DairyLife 360｜疾病知識庫與收合問題中心版</title>
   <style>
     :root {
       --green-900:#133a27;
@@ -2542,6 +2542,42 @@
         grid-template-columns:1fr;
       }
     }
+}
+
+
+    /* V12 revised: collapsible problem center + disease knowledge base */
+    .accordion-note{margin:0 0 18px;padding:16px 18px;border-radius:22px;background:linear-gradient(135deg,var(--green-100),#fff);border:1px solid rgba(47,125,80,.18);color:var(--green-900);font-weight:900;line-height:1.65;}
+    .category-accordion{display:grid;gap:10px;max-height:720px;overflow:auto;padding-right:4px;}
+    .category-group{border:1px solid var(--line);background:white;border-radius:18px;overflow:hidden;box-shadow:0 8px 20px rgba(27,67,50,.04);}
+    .category-summary{width:100%;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:13px 14px;border:0;background:#fbfefb;color:var(--green-900);font-weight:950;cursor:pointer;text-align:left;}
+    .category-summary span:last-child{color:var(--muted);font-size:13px;font-weight:850;}
+    .category-summary.active{background:var(--green-700);color:white;}
+    .category-summary.active span:last-child{color:white;opacity:.92;}
+    .category-items{display:none;padding:10px;gap:8px;}
+    .category-group.open .category-items{display:grid;}
+    .problem-btn.compact{width:100%;padding:10px 12px;border-radius:14px;font-size:13px;box-shadow:none;border:1px solid var(--line);background:#fff;}
+    .problem-btn.compact.active{border-color:var(--green-700);background:var(--green-100);}
+    .disease-center{display:grid;grid-template-columns:.92fr 1.08fr;gap:18px;align-items:start;}
+    .disease-menu,.disease-detail{border:1px solid var(--line);background:white;border-radius:28px;padding:22px;box-shadow:var(--soft-shadow);}
+    .disease-search{display:grid;grid-template-columns:1fr auto;gap:10px;margin-bottom:12px;}
+    .disease-search input{border:1px solid var(--line);border-radius:16px;padding:12px 14px;outline:0;}
+    .disease-disclaimer{border:1px solid rgba(217,93,85,.22);background:var(--red-100);color:#9d312b;padding:13px 15px;border-radius:18px;font-weight:900;line-height:1.6;margin-bottom:14px;}
+    .disease-detail-header{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin-bottom:14px;}
+    .disease-detail-header h3{margin:0 0 6px;color:var(--green-900);font-size:26px;}
+    .disease-detail-header p{margin:0;color:var(--muted);line-height:1.6;font-weight:850;}
+    .disease-risk{display:inline-flex;border-radius:999px;padding:8px 11px;font-size:13px;font-weight:950;white-space:nowrap;}
+    .disease-risk.high{background:var(--red-100);color:#9d312b;}
+    .disease-risk.mid{background:var(--orange-100);color:#8c560d;}
+    .disease-risk.low{background:var(--green-100);color:var(--green-800);}
+    .disease-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+    .disease-card{border:1px solid var(--line);background:#fbfefb;border-radius:20px;padding:16px;}
+    .disease-card h4{margin:0 0 9px;color:var(--green-900);font-size:17px;}
+    .disease-card ul{margin:0;padding-left:19px;color:var(--muted);line-height:1.6;font-weight:850;}
+    .disease-card li{margin:5px 0;}.disease-card.wide{grid-column:1/-1;}
+    .disease-empty{padding:18px;border-radius:18px;background:#fbfefb;color:var(--muted);font-weight:850;line-height:1.6;}
+    .disease-count{display:inline-flex;border-radius:999px;padding:7px 10px;background:var(--green-100);color:var(--green-800);font-weight:950;font-size:13px;margin-bottom:10px;}
+    @media(max-width:1100px){.disease-center{grid-template-columns:1fr;}}
+    @media(max-width:760px){.disease-search{grid-template-columns:1fr;}.disease-detail-header{display:block;}.disease-risk{margin-top:10px;}.disease-grid{grid-template-columns:1fr;}}
 
     .modal-overlay {
       position:fixed;
@@ -2862,7 +2898,13 @@
           <div class="floating-kpi kpi-2"><b>180k</b><span>平均體細胞</span></div>
           <div class="floating-kpi kpi-3"><b>高風險提醒</b><span>THI 偏高，建議優先檢查風扇、噴霧與飲水槽</span></div>
         </div>
-      </section>
+
+        <div class="pwa-install-card" style="border:1px solid rgba(47,125,80,.22);background:linear-gradient(135deg,#ffffff,#f0f8f2);border-radius:24px;padding:18px;box-shadow:0 16px 36px rgba(27,67,50,.09);margin-top:18px;">
+          <h3 style="margin:0 0 8px;color:var(--green-900);font-size:20px;">✅ 一般網站版</h3>
+          <p style="margin:0;color:var(--muted);line-height:1.65;font-weight:850;">本版不使用 PWA App 架構，僅需上傳 index.html 到 GitHub Pages。已保留疾病知識庫與分類收合式問題中心。</p>
+        </div>
+
+</section>
 
       <section id="strategy" class="container">
         <div class="section-title">
@@ -2978,47 +3020,23 @@
       </section>
 
       
+      
       <section id="problems" class="container">
-        <div class="section-title">
-          <div>
-            <span class="badge">問題解決中心</span>
-            <h2>30+ 現場常見問題，用分級流程處理</h2>
-            <p>從乳質、犢牛、繁殖、圍產、營養、環境到防疫，先判斷嚴重度，再決定資料蒐集、立即處置與追蹤指標。</p>
-          </div>
-        </div>
-
-        <div class="problem-upgrade-note">
-          v11 升級：問題解決中心不再只有少數範例，而是擴充成「現場常見問題庫」。每一題都用五層架構呈現：初判 → 資料蒐集 → 立即處理 → 追蹤指標 → 回查源頭。
-        </div>
-
-        <div class="problem-category-row" id="problemCategoryRow"></div>
-
+        <div class="section-title"><div><span class="badge">問題解決中心</span><h2>分類收合式問題庫，避免未來越長越難找</h2><p>每個分類可展開 / 收合，適合未來持續新增 Solution，不會讓左側清單變成一整串。</p></div></div>
+        <div class="accordion-note">v12 修正版：問題中心改為「分類收合架構」。未來即使擴充到 50 題、100 題，也可以依乳質、犢牛、營養、環境、繁殖、圍產、疾病等分類快速定位。</div>
         <div class="problem-center">
-          <div class="problem-menu">
-            <div class="problem-search">
-              <input id="problemSearch" placeholder="搜尋：乳房炎、犢牛腹瀉、乳脂下降、熱緊迫、酮症..." oninput="filterProblems()" />
-              <button class="btn btn-primary" onclick="filterProblems()">搜尋</button>
-            </div>
-            <div class="problem-meta">
-              <span class="problem-count" id="problemCount">常見問題載入中</span>
-            </div>
-            <div class="problem-btns" id="problemButtons"></div>
-          </div>
+          <div class="problem-menu"><div class="problem-search"><input id="problemSearch" placeholder="搜尋：乳房炎、犢牛腹瀉、乳脂下降、熱緊迫、酮症..." oninput="filterProblems()" /><button class="btn btn-primary" onclick="filterProblems()">搜尋</button></div><div class="problem-meta"><span class="problem-count" id="problemCount">常見問題載入中</span></div><div class="category-accordion" id="problemAccordion"></div></div>
+          <div class="triage"><div class="triage-header"><div><h3 id="problemTitle"></h3><p id="problemIntro" style="margin:6px 0 0;color:var(--muted);"></p><div class="problem-meta"><span class="problem-count" id="problemStage"></span><span class="problem-count" id="problemKeywords"></span></div></div><span class="risk-tag" id="problemRisk"></span></div><div class="flow-steps" id="problemFlow"></div></div>
+        </div>
+      </section>
 
-          <div class="triage">
-            <div class="triage-header">
-              <div>
-                <h3 id="problemTitle"></h3>
-                <p id="problemIntro" style="margin:6px 0 0;color:var(--muted);"></p>
-                <div class="problem-meta">
-                  <span class="problem-count" id="problemStage"></span>
-                  <span class="problem-count" id="problemKeywords"></span>
-                </div>
-              </div>
-              <span class="risk-tag" id="problemRisk"></span>
-            </div>
-            <div class="flow-steps" id="problemFlow"></div>
-          </div>
+      
+      <section id="disease" class="container">
+        <div class="section-title"><div><span class="badge">疾病知識庫</span><h2>疾病知識庫與輔導判斷模組</h2><p>本模組將既有疾病資料轉成輔導團隊可用的判斷入口，聚焦症狀辨識、資料蒐集、非用藥處置、通報警訊與關聯 SOP。</p></div></div>
+        <div class="disease-disclaimer">重要聲明：本區不提供藥品、劑量、抗生素、注射或停藥期建議。所有治療與用藥均須由獸醫或公司核准流程判斷。本區僅作為輔導團隊的症狀辨識、資料蒐集與通報流程工具。</div>
+        <div class="disease-center">
+          <div class="disease-menu"><div class="disease-search"><input id="diseaseSearch" placeholder="搜尋：酮症、低血鈣、乳房炎、肺炎、下痢、流產..." oninput="filterDiseases()" /><button class="btn btn-primary" onclick="filterDiseases()">搜尋</button></div><span class="disease-count" id="diseaseCount">疾病資料載入中</span><div class="category-accordion" id="diseaseAccordion"></div></div>
+          <div class="disease-detail"><div class="disease-detail-header"><div><h3 id="diseaseTitle"></h3><p id="diseaseIntro"></p></div><span id="diseaseRisk" class="disease-risk mid"></span></div><div class="disease-grid"><div class="disease-card"><h4>常見症狀 / 現場線索</h4><ul id="diseaseSymptoms"></ul></div><div class="disease-card"><h4>輔導員應蒐集資料</h4><ul id="diseaseCollect"></ul></div><div class="disease-card"><h4>非用藥現場處置</h4><ul id="diseaseSupport"></ul></div><div class="disease-card"><h4>獸醫 / 主管通報警訊</h4><ul id="diseaseVetAlert"></ul></div><div class="disease-card wide"><h4>關聯 SOP / 工具</h4><ul id="diseaseRelated"></ul></div></div></div>
         </div>
       </section>
 
@@ -3712,6 +3730,7 @@
             <div class="footer-links">
               <a href="#lifecycle">生命週期管理</a>
               <a href="#problems">問題解決中心</a>
+      <a href="#disease">疾病知識庫</a>
               <a href="#sop">SOP資料庫</a>
       <a href="#fieldtools">現場工具箱</a>
               <a href="#tools">管理工具</a>
@@ -4957,50 +4976,14 @@ function getFilteredProblems() {
   });
 }
 
-function renderProblemButtons(list = getFilteredProblems()) {
-  const box = document.getElementById("problemButtons");
-  if (!box) return;
-  document.getElementById("problemCount").textContent = `目前顯示 ${list.length} / ${problems.length} 題`;
-  box.innerHTML = list.map((p, idx) => `
-    <button class="problem-btn ${idx===0 ? "active":""}" onclick="selectProblem('${p.id}')">
-      <span>${p.title}</span><span>${p.stage} →</span>
-    </button>
-  `).join("");
-  if (list.length) selectProblem(list[0].id);
-  else {
-    document.getElementById("problemTitle").textContent = "找不到符合的問題";
-    document.getElementById("problemIntro").textContent = "請改用其他關鍵字，例如：乳房炎、採食、犢牛、繁殖、熱緊迫。";
-    document.getElementById("problemRisk").textContent = "無結果";
-    document.getElementById("problemFlow").innerHTML = "";
-  }
-}
 
-function filterProblems() {
-  renderProblemButtons(getFilteredProblems());
-}
-
-function selectProblem(id) {
-  const p = problems.find(x => x.id === id);
-  if (!p) return;
-  document.querySelectorAll(".problem-btn").forEach(btn => {
-    btn.classList.toggle("active", btn.textContent.includes(p.title));
-  });
-  document.getElementById("problemTitle").textContent = p.title;
-  document.getElementById("problemIntro").textContent = p.intro;
-  document.getElementById("problemStage").textContent = `分類：${p.stage}`;
-  document.getElementById("problemKeywords").textContent = `關鍵字：${(p.keywords || "").split(" ").slice(0,5).join("、")}`;
-  const risk = document.getElementById("problemRisk");
-  risk.textContent = p.risk;
-  risk.className = `risk-tag ${p.riskClass}`;
-  document.getElementById("problemFlow").innerHTML = p.flow.map((step, idx) => `
-    <div class="flow-step">
-      <div>
-        <b>${idx+1}. ${step[0]}</b>
-        <span>${step[1]}</span>
-      </div>
-    </div>
-  `).join("");
-}
+let openProblemStage = "乳質";
+function groupByField(list, field){return list.reduce((acc,item)=>{const key=item[field]||"其他"; if(!acc[key]) acc[key]=[]; acc[key].push(item); return acc;},{});}
+function getFilteredProblems(){const keyword=(document.getElementById("problemSearch")?.value||"").trim().toLowerCase(); return problems.filter(p=>{const hay=`${p.title} ${p.stage} ${p.intro} ${p.keywords||""} ${p.flow.map(x=>x.join(" ")).join(" ")}`.toLowerCase(); return !keyword||hay.includes(keyword);});}
+function toggleProblemStage(stage){openProblemStage=openProblemStage===stage?"":stage; renderProblemButtons(getFilteredProblems(),false);}
+function renderProblemButtons(list=getFilteredProblems(), autoSelect=true){const box=document.getElementById("problemAccordion"); if(!box) return; const countEl=document.getElementById("problemCount"); if(countEl) countEl.textContent=`目前顯示 ${list.length} / ${problems.length} 題`; const grouped=groupByField(list,"stage"); const order=["乳質","犢牛","育成","泌乳","營養","環境","繁殖","圍產","乾乳","健康","防疫"]; const stages=[...order.filter(s=>grouped[s]),...Object.keys(grouped).filter(s=>!order.includes(s))]; if(!stages.length){box.innerHTML=`<div class="disease-empty">找不到符合的問題，請改用其他關鍵字。</div>`; return;} if(!openProblemStage||!grouped[openProblemStage]) openProblemStage=stages[0]; box.innerHTML=stages.map(stage=>{const items=grouped[stage]; const isOpen=stage===openProblemStage; return `<div class="category-group ${isOpen?"open":""}"><button class="category-summary ${isOpen?"active":""}" onclick="toggleProblemStage('${stage}')"><span>${stage}</span><span>${items.length} 題 ${isOpen?"▴":"▾"}</span></button><div class="category-items">${items.map((p,idx)=>`<button class="problem-btn compact ${idx===0&&isOpen?"active":""}" onclick="selectProblem('${p.id}')"><span>${p.title}</span><span>${p.risk}</span></button>`).join("")}</div></div>`;}).join(""); if(autoSelect){const first=grouped[openProblemStage]?.[0]||list[0]; if(first) selectProblem(first.id);}}
+function filterProblems(){renderProblemButtons(getFilteredProblems(),true);}
+function selectProblem(id){const p=problems.find(x=>x.id===id); if(!p) return; openProblemStage=p.stage; document.querySelectorAll(".problem-btn").forEach(btn=>{btn.classList.toggle("active",btn.textContent.includes(p.title));}); document.getElementById("problemTitle").textContent=p.title; document.getElementById("problemIntro").textContent=p.intro; document.getElementById("problemStage").textContent=`分類：${p.stage}`; document.getElementById("problemKeywords").textContent=`關鍵字：${(p.keywords||"").split(" ").slice(0,5).join("、")}`; const risk=document.getElementById("problemRisk"); risk.textContent=p.risk; risk.className=`risk-tag ${p.riskClass}`; document.getElementById("problemFlow").innerHTML=p.flow.map((step,idx)=>`<div class="flow-step"><div><b>${idx+1}. ${step[0]}</b><span>${step[1]}</span></div></div>`).join("");}
 
 const sops = [
   ["初乳餵飼 SOP","犢牛","SOP","出生後免疫建立與初乳管理","v1.2"],
@@ -6721,8 +6704,946 @@ setTimeout(function() {
   }
 }, 350);
 
+const diseaseKnowledge = [
+  {
+    "id": "ketosis",
+    "category": "代謝性疾病",
+    "name": "酮症 / 產後能量負平衡",
+    "risk": "高",
+    "riskClass": "high",
+    "intro": "常見於產後早期、高產牛或採食下降牛。輔導重點是及早辨識採食下降、乳量下滑、酮體異常與可能併發疾病。",
+    "symptoms": [
+      "食慾下降或拒食",
+      "乳量急劇下降",
+      "反芻與腸胃蠕動減少",
+      "消瘦、精神不濟",
+      "可能出現神經症狀或與乳熱併發"
+    ],
+    "collect": [
+      "產後天數與胎次",
+      "乳量變化曲線",
+      "採食量與剩料",
+      "BHB / 尿酮 / 乳酮結果",
+      "體溫、糞便、反芻",
+      "是否合併低血鈣、子宮炎或第四胃變位"
+    ],
+    "support": [
+      "列入產後高風險牛追蹤清單",
+      "確認飲水、採食、舒適度與轉群壓力",
+      "回查乾乳期 BCS 與近迫牛採食",
+      "搭配圍產牛 10 日觀察表追蹤"
+    ],
+    "vetAlert": [
+      "採食廢絕",
+      "起立困難",
+      "神經症狀",
+      "疑似合併乳熱或第四胃變位",
+      "酮體高且精神明顯變差"
+    ],
+    "related": [
+      "圍產牛10日追蹤表",
+      "問題中心：酮症 / 產後採食下降"
+    ]
+  },
+  {
+    "id": "milk-fever",
+    "category": "代謝性疾病",
+    "name": "低血鈣 / 乳熱 / 產後起立不能",
+    "risk": "高",
+    "riskClass": "high",
+    "intro": "產後起立不能、耳朵冰冷、精神差或採食下降時，需把低血鈣列為優先排除項目。",
+    "symptoms": [
+      "產後數日內起立困難",
+      "耳朵冰冷",
+      "精神沉鬱",
+      "採食下降",
+      "可能併發胎衣不下、子宮炎或酮症"
+    ],
+    "collect": [
+      "產後時間",
+      "體溫與精神",
+      "是否倒地或站立困難",
+      "血鈣或牧場檢測資料",
+      "BCS 與乾乳期日糧",
+      "是否合併胎衣不下或採食下降"
+    ],
+    "support": [
+      "保持牛隻安全與舒適，避免滑倒與壓迫",
+      "立即標記為紅色通報事件",
+      "回查乾乳期 DCAD、鈣磷鎂與近迫牛管理"
+    ],
+    "vetAlert": [
+      "倒地不起",
+      "呼吸或心跳異常",
+      "無法吞嚥或明顯虛弱",
+      "疑似併發酮症、子宮炎或第四胃變位"
+    ],
+    "related": [
+      "圍產牛10日追蹤表",
+      "乾乳牛分群檢核表"
+    ]
+  },
+  {
+    "id": "hypomag",
+    "category": "代謝性疾病",
+    "name": "低鎂症 / 青草搐搦風險",
+    "risk": "高",
+    "riskClass": "high",
+    "intro": "低鎂會影響神經肌肉與鈣調節，若出現抽搐、興奮、倒地或起立困難，需立即通報。",
+    "symptoms": [
+      "興奮或不安",
+      "肌肉震顫或抽搐",
+      "起立困難",
+      "採食下降",
+      "可能與低血鈣混合發生"
+    ],
+    "collect": [
+      "放牧或青料變化",
+      "鎂攝取來源",
+      "血鎂或相關檢測",
+      "是否高鉀日糧",
+      "體溫、精神與倒地時間"
+    ],
+    "support": [
+      "將個體列為緊急事件",
+      "降低環境刺激，避免驚嚇",
+      "回查乾乳期與泌乳牛礦物質策略"
+    ],
+    "vetAlert": [
+      "抽搐",
+      "倒地不起",
+      "神經症狀",
+      "與產後低血鈣併發疑慮"
+    ],
+    "related": [
+      "乾乳期管理異常",
+      "圍產牛高風險清單"
+    ]
+  },
+  {
+    "id": "acute-mastitis",
+    "category": "乳房炎",
+    "name": "急性乳房炎",
+    "risk": "高",
+    "riskClass": "high",
+    "intro": "急性乳房炎不是只看乳樣，若有高燒、食慾不振或起立困難，需列為緊急處理事件。",
+    "symptoms": [
+      "乳房腫脹、熱痛或異常",
+      "乳汁凝塊、水樣或血樣",
+      "高燒",
+      "食慾不振",
+      "精神差或起立困難"
+    ],
+    "collect": [
+      "牛號、乳區、胎次與泌乳天數",
+      "體溫、食慾與精神",
+      "CMT / SCC",
+      "乳樣外觀",
+      "是否復發與過去治療史"
+    ],
+    "support": [
+      "問題乳分開處理並避免混入正常乳",
+      "記錄乳區與嚴重度",
+      "加強牛床乾燥與擠乳流程檢核"
+    ],
+    "vetAlert": [
+      "發燒",
+      "不吃",
+      "精神沉鬱",
+      "乳房急劇腫脹或疼痛",
+      "疑似毒血症或起立不能"
+    ],
+    "related": [
+      "乳房炎分級判斷器",
+      "CMT 四乳區紀錄表"
+    ]
+  },
+  {
+    "id": "subclinical-mastitis",
+    "category": "乳房炎",
+    "name": "非臨床性乳房炎 / 高體細胞",
+    "risk": "中",
+    "riskClass": "mid",
+    "intro": "沒有明顯症狀但 SCC 或 CMT 異常，常是乳質改善的核心問題。",
+    "symptoms": [
+      "外觀無明顯症狀",
+      "SCC 偏高",
+      "CMT 陽性",
+      "可能反覆高體細胞",
+      "乳質獎金或收乳品質受影響"
+    ],
+    "collect": [
+      "高 SCC 牛清單",
+      "CMT 四乳區結果",
+      "乳房炎歷史",
+      "胎次與泌乳天數",
+      "乾乳期治療與產後新感染"
+    ],
+    "support": [
+      "建立高 SCC 牛與復發牛名單",
+      "進行四乳區 CMT 定位",
+      "回查擠乳流程與牛床衛生"
+    ],
+    "vetAlert": [
+      "CMT 強陽性合併乳樣異常",
+      "同牛反覆發生",
+      "全場 SCC 持續升高"
+    ],
+    "related": [
+      "CMT 操作與判讀表",
+      "乳房炎分級 SOP"
+    ]
+  },
+  {
+    "id": "blood-milk",
+    "category": "乳房炎",
+    "name": "血乳",
+    "risk": "中",
+    "riskClass": "mid",
+    "intro": "乳中有血需評估創傷、急性發炎、產後狀態或乳房組織損傷，不宜單純視為正常波動。",
+    "symptoms": [
+      "乳汁可見血絲或大量血漬",
+      "可能伴隨乳房腫脹",
+      "可能產後初期出現",
+      "可能合併乳房炎或外傷"
+    ],
+    "collect": [
+      "牛號、乳區與產後天數",
+      "乳房觸診與乳樣外觀",
+      "體溫與食慾",
+      "是否受到撞擊或擠乳傷害",
+      "CMT / SCC"
+    ],
+    "support": [
+      "問題乳分開並記錄乳區",
+      "檢查擠乳機與乳頭端狀態",
+      "觀察是否合併腫熱痛或全身症狀"
+    ],
+    "vetAlert": [
+      "大量血乳",
+      "乳房明顯腫痛",
+      "發燒或精神差",
+      "疑似急性乳房炎"
+    ],
+    "related": [
+      "CMT 四乳區紀錄表",
+      "乳房炎分級判斷器"
+    ]
+  },
+  {
+    "id": "pneumonia",
+    "category": "呼吸道",
+    "name": "肺炎 / 急性呼吸道疾病",
+    "risk": "高",
+    "riskClass": "high",
+    "intro": "肺炎可能快速影響採食、增重與死亡率，犢牛與高風險牛需早期分級。",
+    "symptoms": [
+      "呼吸急促",
+      "高燒",
+      "咳嗽、鼻水",
+      "食慾下降",
+      "精神差"
+    ],
+    "collect": [
+      "體溫、呼吸速率與咳嗽",
+      "鼻水與眼分泌物",
+      "日齡或泌乳階段",
+      "同群發生率",
+      "通風、濕度、密度與墊料"
+    ],
+    "support": [
+      "將疑似個體隔離觀察",
+      "降低濕冷與通風不良壓力",
+      "記錄症狀並追蹤日增重"
+    ],
+    "vetAlert": [
+      "高燒不退",
+      "呼吸困難",
+      "不吃或精神沉鬱",
+      "同群多頭發生"
+    ],
+    "related": [
+      "犢牛肺炎 / 呼吸道問題",
+      "犢牛日增重追蹤"
+    ]
+  },
+  {
+    "id": "fever",
+    "category": "炎症 / 全身症狀",
+    "name": "發燒 39.5℃ 以上",
+    "risk": "高",
+    "riskClass": "high",
+    "intro": "發燒是症狀不是診斷，需找出乳房炎、肺炎、子宮炎、腸炎或其他感染來源。",
+    "symptoms": [
+      "體溫 39.5℃ 以上",
+      "食慾不振",
+      "精神差",
+      "可能伴隨乳房、呼吸道、消化道或產後症狀"
+    ],
+    "collect": [
+      "體溫、心跳、呼吸",
+      "採食與乳量",
+      "乳樣、糞便、鼻水、惡露",
+      "近期分娩、轉群或疾病史",
+      "同群是否多頭發生"
+    ],
+    "support": [
+      "標記為需追蹤個體",
+      "補充環境資訊與症狀定位",
+      "避免只處理發燒而忽略病因"
+    ],
+    "vetAlert": [
+      "高燒合併不吃",
+      "呼吸困難",
+      "起立不能",
+      "血便",
+      "產後惡露異常"
+    ],
+    "related": [
+      "AI 牛隻顧問",
+      "疾病知識庫"
+    ]
+  },
+  {
+    "id": "calf-diarrhea-disease",
+    "category": "消化道",
+    "name": "犢牛下痢 / 犢牛腹瀉",
+    "risk": "高",
+    "riskClass": "high",
+    "intro": "犢牛腹瀉需同時評估脫水、日齡、初乳、餵奶、環境與同批發生率。",
+    "symptoms": [
+      "糞便偏稀或水樣",
+      "脫水、眼窩凹陷",
+      "吸乳意願下降",
+      "精神變差",
+      "可能血便或發燒"
+    ],
+    "collect": [
+      "日齡、體溫與精神",
+      "糞便型態與脫水程度",
+      "初乳 Brix 與第一餐時間",
+      "餵奶濃度、奶溫與奶具清潔",
+      "同批發生數"
+    ],
+    "support": [
+      "補水與電解質管理需優先",
+      "檢查奶具與墊料乾燥",
+      "建立同批群體風險追蹤"
+    ],
+    "vetAlert": [
+      "血便",
+      "不喝奶",
+      "明顯脫水",
+      "站立困難",
+      "同批快速擴大"
+    ],
+    "related": [
+      "犢牛腹瀉脫水評分表",
+      "初乳餵飼紀錄判斷器"
+    ]
+  },
+  {
+    "id": "adult-diarrhea",
+    "category": "消化道",
+    "name": "成牛下痢 / 消化道異常",
+    "risk": "中",
+    "riskClass": "mid",
+    "intro": "成牛下痢需分辨營養性、感染性、寄生蟲性、群體性與酸中毒相關問題。",
+    "symptoms": [
+      "下痢或糞便過稀",
+      "食慾下降或產奶量下降",
+      "可能發燒",
+      "可能血痢或惡臭",
+      "群體發生時需警覺"
+    ],
+    "collect": [
+      "發燒與否",
+      "糞便型態與血便",
+      "同群發生率",
+      "近期換料或TMR變化",
+      "寄生蟲檢驗與飼料品質"
+    ],
+    "support": [
+      "補充飲水與電解質管理",
+      "檢查飼料、TMR與水源",
+      "隔離嚴重個體並強化環境清潔"
+    ],
+    "vetAlert": [
+      "血便",
+      "脫水",
+      "高燒",
+      "全群快速發生",
+      "乳量明顯下降"
+    ],
+    "related": [
+      "問題中心：糞便過稀",
+      "TMR 挑食 / 剩料異常"
+    ]
+  },
+  {
+    "id": "bloat",
+    "category": "消化道",
+    "name": "瘤胃膨脹 / 鼓脹",
+    "risk": "高",
+    "riskClass": "high",
+    "intro": "瘤胃膨脹可能快速造成呼吸壓迫與死亡風險，是現場緊急事件。",
+    "symptoms": [
+      "左腹明顯膨大",
+      "張口呼吸",
+      "心跳加速",
+      "站立困難",
+      "嚴重時抽搐或休克"
+    ],
+    "collect": [
+      "發生時間與飼料變化",
+      "呼吸與精神狀態",
+      "同群是否多頭",
+      "近期精料或青料變動"
+    ],
+    "support": [
+      "立即降低風險並通報",
+      "停止可疑飼料批次",
+      "檢查TMR、精料與牧草比例"
+    ],
+    "vetAlert": [
+      "呼吸困難",
+      "站立困難",
+      "快速惡化",
+      "同群多頭發生"
+    ],
+    "related": [
+      "TMR 均勻度檢核",
+      "採食量不足"
+    ]
+  },
+  {
+    "id": "acidosis",
+    "category": "消化道",
+    "name": "急性瘤胃酸中毒",
+    "risk": "高",
+    "riskClass": "high",
+    "intro": "急性瘤胃酸中毒多與高精料、換料或採食異常有關，需立即回查飼餵流程。",
+    "symptoms": [
+      "停止反芻",
+      "腹脹或下痢",
+      "脫水",
+      "精神變差",
+      "乳脂下降或糞便異常"
+    ],
+    "collect": [
+      "近期配方與精料變化",
+      "TMR 均勻度與挑食",
+      "糞便與反芻",
+      "乳脂率",
+      "同群發生率"
+    ],
+    "support": [
+      "暫停可疑批次或流程變動",
+      "回查有效纖維與TMR混合",
+      "加強採食與糞便監控"
+    ],
+    "vetAlert": [
+      "嚴重脫水",
+      "站立困難",
+      "腹脹快速加重",
+      "多頭同時發生"
+    ],
+    "related": [
+      "TMR 挑食 / 剩料異常",
+      "乳脂下降"
+    ]
+  },
+  {
+    "id": "lda",
+    "category": "外科 / 圍產",
+    "name": "第四胃異位疑慮",
+    "risk": "高",
+    "riskClass": "high",
+    "intro": "產後採食下降、乳量掉、糞便少或叩診異常時，要把第四胃異位列入排除。",
+    "symptoms": [
+      "厭食或採食明顯下降",
+      "乳量下降",
+      "下痢或便祕",
+      "左側或右側腹部叩診異常",
+      "常見於產後"
+    ],
+    "collect": [
+      "產後天數",
+      "採食、乳量與糞便",
+      "酮體與低血鈣風險",
+      "轉群與配方變化",
+      "獸醫檢查結果"
+    ],
+    "support": [
+      "列為產後紅色通報事件",
+      "避免只以酮症或採食差結案",
+      "回查乾乳期與產後採食管理"
+    ],
+    "vetAlert": [
+      "疑似叩診金屬音",
+      "採食廢絕",
+      "乳量急降",
+      "合併酮症或低血鈣"
+    ],
+    "related": [
+      "圍產牛10日追蹤表",
+      "酮症 / 產後採食下降"
+    ]
+  },
+  {
+    "id": "hardware",
+    "category": "外傷 / 外科",
+    "name": "創傷性第二胃炎 / 腹膜炎 / 心包炎疑慮",
+    "risk": "高",
+    "riskClass": "high",
+    "intro": "異物造成的創傷性疾病可能出現食慾下降、瘤胃異常、發燒、水腫或姿勢異常，需要獸醫評估。",
+    "symptoms": [
+      "食慾下降",
+      "發燒或精神差",
+      "瘤胃鼓脹",
+      "站立姿勢異常",
+      "嚴重可見水腫或心肺症狀"
+    ],
+    "collect": [
+      "體溫、採食與糞便",
+      "是否瘤胃鼓脹",
+      "姿勢與疼痛反應",
+      "飼料或環境異物風險"
+    ],
+    "support": [
+      "檢查飼料與環境金屬異物風險",
+      "紀錄個體與症狀進展",
+      "建立異物風險改善任務"
+    ],
+    "vetAlert": [
+      "高燒",
+      "精神沉鬱",
+      "水腫",
+      "呼吸或心跳異常",
+      "持續不吃"
+    ],
+    "related": [
+      "疾病事件紀錄",
+      "牧場環境稽核"
+    ]
+  },
+  {
+    "id": "retained-placenta",
+    "category": "繁殖 / 產後",
+    "name": "胎衣滯留",
+    "risk": "高",
+    "riskClass": "high",
+    "intro": "胎衣滯留會增加子宮炎、採食下降、繁殖延遲與產後疾病風險。",
+    "symptoms": [
+      "產後胎衣未排出",
+      "外陰有不潔液體",
+      "可能發燒",
+      "採食下降",
+      "子宮恢復不佳"
+    ],
+    "collect": [
+      "產後時間",
+      "體溫、採食與精神",
+      "惡露狀態",
+      "難產、雙胎、低血鈣與BCS",
+      "後續子宮炎與配種紀錄"
+    ],
+    "support": [
+      "避免粗暴拉扯",
+      "納入產後高風險清單",
+      "追蹤體溫、採食與惡露"
+    ],
+    "vetAlert": [
+      "發燒",
+      "惡露惡臭",
+      "精神差或不吃",
+      "疑似子宮炎"
+    ],
+    "related": [
+      "圍產牛10日追蹤表",
+      "問題中心：胎衣不下"
+    ]
+  },
+  {
+    "id": "metritis",
+    "category": "繁殖 / 產後",
+    "name": "子宮炎 / 子宮內膜炎",
+    "risk": "高",
+    "riskClass": "high",
+    "intro": "產後發燒、惡露異常、採食下降或子宮恢復不佳時，需納入子宮炎追蹤。",
+    "symptoms": [
+      "外陰有不潔或惡臭液體",
+      "體溫正常或發燒",
+      "採食下降",
+      "乳量下降",
+      "後續繁殖延遲"
+    ],
+    "collect": [
+      "產後天數",
+      "體溫、採食與乳量",
+      "惡露顏色與氣味",
+      "胎衣不下、難產或雙胎",
+      "配種與妊檢紀錄"
+    ],
+    "support": [
+      "建立產後疾病事件紀錄",
+      "追蹤採食與體溫",
+      "回查產房衛生與難產管理"
+    ],
+    "vetAlert": [
+      "發燒",
+      "惡露惡臭",
+      "不吃或精神差",
+      "子宮炎群體偏高"
+    ],
+    "related": [
+      "問題中心：子宮炎 / 惡露異常",
+      "配種紀錄表"
+    ]
+  },
+  {
+    "id": "resp-fever",
+    "category": "病毒 / 呼吸道",
+    "name": "流行熱 / 高熱呼吸道症狀",
+    "risk": "高",
+    "riskClass": "high",
+    "intro": "出現高熱、流鼻水、流涎、跛行或起立不能時，需區分個體病與群體性風險。",
+    "symptoms": [
+      "高燒",
+      "流鼻水或流涎",
+      "食慾不振",
+      "跛行或起立不能",
+      "可能群體發生"
+    ],
+    "collect": [
+      "體溫與呼吸狀態",
+      "同群發生數",
+      "流涎、鼻水與跛行情形",
+      "近期氣候與蚊蟲風險"
+    ],
+    "support": [
+      "強化隔離與觀察",
+      "記錄群體發生曲線",
+      "回查防疫與環境壓力"
+    ],
+    "vetAlert": [
+      "高燒伴起立不能",
+      "呼吸困難",
+      "群體快速擴大",
+      "嚴重流涎或精神沉鬱"
+    ],
+    "related": [
+      "疾病知識庫：發燒",
+      "防疫 / 新牛引入風險"
+    ]
+  },
+  {
+    "id": "parasite",
+    "category": "寄生蟲",
+    "name": "寄生蟲性下痢 / 球蟲風險",
+    "risk": "中",
+    "riskClass": "mid",
+    "intro": "沒有發燒但下痢、食慾逐漸變差或犢牛群體腹瀉時，需考慮寄生蟲與球蟲風險。",
+    "symptoms": [
+      "下痢",
+      "可能無發燒",
+      "食慾逐漸變差",
+      "生長落後",
+      "嚴重可能脫水或血便"
+    ],
+    "collect": [
+      "日齡與分群",
+      "糞便型態與血便",
+      "糞便檢查結果",
+      "欄舍濕度與密度",
+      "同批發生率與日增重"
+    ],
+    "support": [
+      "安排糞便檢驗或依公司流程確認",
+      "改善墊料乾燥與清糞",
+      "分群追蹤日增重"
+    ],
+    "vetAlert": [
+      "血便",
+      "明顯脫水",
+      "群體快速擴大",
+      "日增重嚴重落後"
+    ],
+    "related": [
+      "犢牛腹瀉脫水評分表",
+      "犢牛日增重追蹤表"
+    ]
+  },
+  {
+    "id": "navel",
+    "category": "感染性 / 犢牛",
+    "name": "臍帶炎",
+    "risk": "中",
+    "riskClass": "mid",
+    "intro": "臍帶炎常反映出生環境、臍帶消毒與初乳免疫管理不足。",
+    "symptoms": [
+      "臍部腫脹或熱痛",
+      "可能化膿或潮濕",
+      "精神變差",
+      "可能發燒",
+      "可能併發關節炎"
+    ],
+    "collect": [
+      "出生時間與產房清潔",
+      "臍帶消毒時間與方式",
+      "初乳 Brix 與餵飼時間",
+      "臍部外觀與體溫"
+    ],
+    "support": [
+      "保持臍部乾燥清潔",
+      "強化出生後臍帶消毒 SOP",
+      "追蹤同批犢牛感染率"
+    ],
+    "vetAlert": [
+      "發燒",
+      "化膿明顯",
+      "關節腫脹",
+      "精神差或不喝奶"
+    ],
+    "related": [
+      "臍帶消毒紀錄表",
+      "初乳餵飼 SOP"
+    ]
+  },
+  {
+    "id": "arthritis-calf",
+    "category": "感染性 / 犢牛",
+    "name": "犢牛關節炎",
+    "risk": "中",
+    "riskClass": "mid",
+    "intro": "犢牛關節炎常與初乳不足、臍帶感染、環境濕髒或外傷有關。",
+    "symptoms": [
+      "關節腫脹",
+      "跛行或不願站立",
+      "精神或食慾下降",
+      "可能發燒",
+      "生長落後"
+    ],
+    "collect": [
+      "初乳紀錄",
+      "臍帶狀況",
+      "關節腫脹位置",
+      "體溫與採食",
+      "欄舍地面與墊料"
+    ],
+    "support": [
+      "將個體列入疾病追蹤",
+      "改善地面磨損風險",
+      "回查初乳與臍帶消毒"
+    ],
+    "vetAlert": [
+      "發燒",
+      "無法站立",
+      "多關節腫脹",
+      "臍帶炎合併症狀"
+    ],
+    "related": [
+      "初乳紀錄判斷器",
+      "犢牛日增重追蹤表"
+    ]
+  },
+  {
+    "id": "dd",
+    "category": "蹄病",
+    "name": "毛髮疣 / 蹄部皮膚病變",
+    "risk": "中",
+    "riskClass": "mid",
+    "intro": "蹄部皮膚病變會造成跛行、採食下降與繁殖表現受影響，需要環境與蹄浴制度管理。",
+    "symptoms": [
+      "蹄部皮膚病灶",
+      "疼痛或跛行",
+      "不願行走或站立",
+      "可能群體傳播",
+      "牛舍潮濕時惡化"
+    ],
+    "collect": [
+      "跛行分數",
+      "病灶位置與數量",
+      "牛舍濕度與清糞",
+      "蹄浴頻率",
+      "同群發生率"
+    ],
+    "support": [
+      "早期發現與隔離管理",
+      "改善地面乾燥與清潔",
+      "建立蹄浴與修蹄紀錄"
+    ],
+    "vetAlert": [
+      "嚴重跛行",
+      "病灶擴大",
+      "多頭快速發生",
+      "採食下降明顯"
+    ],
+    "related": [
+      "問題中心：跛行 / 蹄病",
+      "牛床舒適度不足"
+    ]
+  },
+  {
+    "id": "abortion",
+    "category": "繁殖 / 感染性",
+    "name": "流產相關感染風險",
+    "risk": "高",
+    "riskClass": "high",
+    "intro": "流產、早產、死胎或重複流產需視為繁殖與防疫事件，而不只是單一牛問題。",
+    "symptoms": [
+      "懷孕中後期流產",
+      "早產或死胎",
+      "重複發生",
+      "可能伴隨胎盤或惡露異常",
+      "部分感染無明顯症狀"
+    ],
+    "collect": [
+      "牛號、胎齡與配種紀錄",
+      "同群是否多頭",
+      "胎兒與胎盤資訊",
+      "犬貓或野生動物接觸",
+      "疫苗、防疫與飼料紀錄"
+    ],
+    "support": [
+      "保存必要資訊並通報",
+      "建立流產事件清單",
+      "回查防疫、飼料與環境暴露"
+    ],
+    "vetAlert": [
+      "群體流產增加",
+      "連續月份異常",
+      "有死胎、木乃伊胎或胎盤異常",
+      "疑似人畜共通感染風險"
+    ],
+    "related": [
+      "問題中心：流產 / 早產事件",
+      "配種紀錄表"
+    ]
+  },
+  {
+    "id": "qfever",
+    "category": "感染性 / 防疫",
+    "name": "Q熱等人畜共通感染風險",
+    "risk": "高",
+    "riskClass": "high",
+    "intro": "部分感染可能症狀不明顯，但與流產、繁殖障礙或環境病原量有關，需以防疫和消毒為核心。",
+    "symptoms": [
+      "多數可能無明顯症狀",
+      "懷孕末期流產",
+      "可能繁殖障礙",
+      "可能成為保毒或排菌風險"
+    ],
+    "collect": [
+      "流產與死胎紀錄",
+      "環境與分娩污染物處理",
+      "人員防護",
+      "消毒紀錄",
+      "獸醫與檢驗資料"
+    ],
+    "support": [
+      "強化分娩污染物處理",
+      "建立人員防護與消毒流程",
+      "避免未經殺菌乳品飲用",
+      "納入防疫通報流程"
+    ],
+    "vetAlert": [
+      "群體流產",
+      "疑似人畜共通風險",
+      "檢驗陽性或主管機關需通報事項"
+    ],
+    "related": [
+      "防疫 / 新牛引入風險",
+      "流產 / 早產事件"
+    ]
+  },
+  {
+    "id": "heatstroke",
+    "category": "環境 / 急症",
+    "name": "熱射病 / 中暑",
+    "risk": "高",
+    "riskClass": "high",
+    "intro": "高溫下若出現喘、站立不穩、精神差或乳量急降，需立即降溫並通報。",
+    "symptoms": [
+      "高溫環境下喘氣",
+      "呼吸急促",
+      "精神差",
+      "站立困難",
+      "乳量與採食急降"
+    ],
+    "collect": [
+      "溫度、濕度與THI",
+      "呼吸速率",
+      "飲水與風扇噴霧狀態",
+      "待擠區停留時間",
+      "高產牛與圍產牛狀態"
+    ],
+    "support": [
+      "立即移至陰涼通風區",
+      "加強降溫與飲水",
+      "檢查待擠區與風扇噴霧"
+    ],
+    "vetAlert": [
+      "站立困難",
+      "呼吸極度急促",
+      "意識異常",
+      "多頭同時中暑"
+    ],
+    "related": [
+      "熱緊迫設備檢核與 THI 判斷",
+      "問題中心：熱緊迫"
+    ]
+  },
+  {
+    "id": "high-bacteria",
+    "category": "乳質 / 食安",
+    "name": "生菌數 / 微生物偏高",
+    "risk": "高",
+    "riskClass": "high",
+    "intro": "生菌數偏高關係到乳品質與食安風險，需從擠乳衛生、冷卻與設備清洗查起。",
+    "symptoms": [
+      "生菌數或乳質檢驗異常",
+      "可能無牛隻明顯症狀",
+      "批次異常或連續偏高",
+      "冷卻或清洗紀錄異常"
+    ],
+    "collect": [
+      "生菌數趨勢",
+      "貯乳桶冷卻曲線",
+      "CIP 清洗紀錄",
+      "水溫與藥劑濃度",
+      "擠乳前乳頭清潔與設備耗材"
+    ],
+    "support": [
+      "立即檢查貯乳桶與清洗流程",
+      "建立設備清洗稽核",
+      "回查擠乳流程與人員操作"
+    ],
+    "vetAlert": [
+      "連續偏高",
+      "疑似設備污染",
+      "同批乳品質異常",
+      "乳房炎件數同步升高"
+    ],
+    "related": [
+      "擠乳流程檢核表",
+      "乳房炎問題中心"
+    ]
+  }
+];
+
+
+let openDiseaseCategory="代謝性疾病";
+function getFilteredDiseases(){const keyword=(document.getElementById("diseaseSearch")?.value||"").trim().toLowerCase(); return diseaseKnowledge.filter(d=>{const hay=`${d.name} ${d.category} ${d.intro} ${d.symptoms.join(" ")} ${d.collect.join(" ")} ${d.support.join(" ")} ${d.vetAlert.join(" ")} ${d.related.join(" ")}`.toLowerCase(); return !keyword||hay.includes(keyword);});}
+function toggleDiseaseCategory(category){openDiseaseCategory=openDiseaseCategory===category?"":category; renderDiseaseAccordion(getFilteredDiseases(),false);}
+function renderDiseaseAccordion(list=getFilteredDiseases(), autoSelect=true){const box=document.getElementById("diseaseAccordion"); if(!box) return; const countEl=document.getElementById("diseaseCount"); if(countEl) countEl.textContent=`目前顯示 ${list.length} / ${diseaseKnowledge.length} 筆`; const grouped=groupByField(list,"category"); const order=["代謝性疾病","乳房炎","乳質 / 食安","呼吸道","炎症 / 全身症狀","消化道","外科 / 圍產","外傷 / 外科","繁殖 / 產後","繁殖 / 感染性","病毒 / 呼吸道","寄生蟲","感染性 / 犢牛","感染性 / 防疫","蹄病","環境 / 急症"]; const cats=[...order.filter(c=>grouped[c]),...Object.keys(grouped).filter(c=>!order.includes(c))]; if(!cats.length){box.innerHTML=`<div class="disease-empty">找不到符合的疾病資料，請改用症狀或疾病名稱搜尋。</div>`; return;} if(!openDiseaseCategory||!grouped[openDiseaseCategory]) openDiseaseCategory=cats[0]; box.innerHTML=cats.map(cat=>{const items=grouped[cat]; const isOpen=cat===openDiseaseCategory; return `<div class="category-group ${isOpen?"open":""}"><button class="category-summary ${isOpen?"active":""}" onclick="toggleDiseaseCategory('${cat}')"><span>${cat}</span><span>${items.length} 筆 ${isOpen?"▴":"▾"}</span></button><div class="category-items">${items.map((d,idx)=>`<button class="problem-btn compact ${idx===0&&isOpen?"active":""}" onclick="selectDisease('${d.id}')"><span>${d.name}</span><span>${d.risk}</span></button>`).join("")}</div></div>`;}).join(""); if(autoSelect){const first=grouped[openDiseaseCategory]?.[0]||list[0]; if(first) selectDisease(first.id);}}
+function filterDiseases(){renderDiseaseAccordion(getFilteredDiseases(),true);}
+function renderListTo(id,items){const el=document.getElementById(id); if(!el) return; el.innerHTML=items.map(x=>`<li>${x}</li>`).join("");}
+function selectDisease(id){const d=diseaseKnowledge.find(x=>x.id===id); if(!d) return; openDiseaseCategory=d.category; document.querySelectorAll("#diseaseAccordion .problem-btn").forEach(btn=>{btn.classList.toggle("active",btn.textContent.includes(d.name));}); document.getElementById("diseaseTitle").textContent=d.name; document.getElementById("diseaseIntro").textContent=d.intro; const risk=document.getElementById("diseaseRisk"); risk.textContent=`${d.risk}風險`; risk.className=`disease-risk ${d.riskClass}`; renderListTo("diseaseSymptoms",d.symptoms); renderListTo("diseaseCollect",d.collect); renderListTo("diseaseSupport",d.support); renderListTo("diseaseVetAlert",d.vetAlert); renderListTo("diseaseRelated",d.related);}
+
 renderStageTabs();
 renderProblemButtons();
+renderDiseaseAccordion();
 renderSops();
 renderToolTabs();
 selectTool("brix");
@@ -6730,5 +7651,7 @@ renderFarmDashboard();
 mockAiAnswer();
 highlightNav();
 </script>
+
+
 </body>
 </html>
