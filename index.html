@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DairyLife 360｜V16｜知識庫擴充版</title>
+  <title>DairyLife 360｜V17｜搜尋與緊急輔導入口整合版</title>
   <style>
     :root {
       --green-900:#133a27;
@@ -33,6 +33,61 @@
     }
     .emergency-btn { display:flex; align-items:center; gap:10px; padding:14px 16px; margin:12px 0; border-radius:18px; background:var(--red-100); color:var(--danger); font-weight:900; border:2px solid var(--danger); animation:pulse 2s infinite; cursor:pointer; transition:.2s; }
     .emergency-btn:hover { background:var(--danger); color:white; }
+    .side-quick-actions {
+      display:grid;
+      gap:10px;
+      margin:10px 0 16px;
+    }
+    .side-search-btn {
+      width:100%;
+      border:0;
+      border-radius:18px;
+      justify-content:flex-start;
+      padding:13px 16px;
+      background:var(--green-900);
+      color:white;
+      box-shadow:0 12px 24px rgba(21,72,45,.12);
+    }
+    .hero-quick-tools {
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:-12px;
+      margin-bottom:26px;
+    }
+    .quick-tool-btn {
+      border:1px solid rgba(47,125,80,.18);
+      background:white;
+      color:var(--green-900);
+      border-radius:999px;
+      padding:10px 14px;
+      font-weight:950;
+      cursor:pointer;
+      box-shadow:0 10px 22px rgba(21,72,45,.06);
+    }
+    .quick-tool-btn.danger {
+      color:#9d312b;
+      border-color:rgba(217,93,85,.25);
+      background:var(--red-100);
+    }
+    .search-hint-grid {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:10px;
+      margin-bottom:14px;
+    }
+    .search-hint {
+      border:1px solid var(--line);
+      background:#fbfefb;
+      border-radius:16px;
+      padding:10px 12px;
+      cursor:pointer;
+      font-weight:900;
+      color:var(--green-900);
+      text-align:left;
+    }
+    @media (max-width:760px){ .search-hint-grid{grid-template-columns:1fr;} }
+
     @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(217, 93, 85, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(217, 93, 85, 0); } 100% { box-shadow: 0 0 0 0 rgba(217, 93, 85, 0); } }
     .search-overlay { position:fixed; inset:0; background:rgba(19, 58, 39, 0.85); backdrop-filter:blur(8px); z-index:100; display:none; place-items:center; padding:20px; }
     .search-modal { background:white; width:min(600px, 95%); border-radius:30px; padding:32px; box-shadow:var(--hard-shadow); }
@@ -2761,7 +2816,7 @@
 
 
 
-    /* V15 content deepening: critical days and management-triggered problems */
+    /* V17 content deepening: critical days and management-triggered problems */
     .critical-days-panel { margin-top:22px; border:1px solid rgba(47,125,80,.20); background:linear-gradient(135deg,#ffffff,#f4fbf6 70%,#fff8ea); border-radius:32px; padding:24px; box-shadow:var(--soft-shadow); }
     .critical-days-head { display:flex; align-items:flex-end; justify-content:space-between; gap:18px; margin-bottom:16px; }
     .critical-days-head h3 { margin:0 0 6px; color:var(--green-900); font-size:28px; line-height:1.18; letter-spacing:-.5px; }
@@ -3033,15 +3088,9 @@
       h1 { letter-spacing:-1px; }
     }
   </style>
-
-  <!-- Link-only / internal pilot settings: ask search engines not to index or cache this page -->
-  <meta name="robots" content="noindex, nofollow, noarchive, noimageindex, nosnippet">
-  <meta name="googlebot" content="noindex, nofollow, noarchive, noimageindex, nosnippet">
-  <meta name="bingbot" content="noindex, nofollow, noarchive, noimageindex, nosnippet">
-
 </head>
 <body>
-  <!-- V14 Clean: generated from uploaded V13 baseline; no architecture rewrite. -->
+  <!-- V17: search, emergency guidance entry, and SOP content completion. -->
   <div class="topbar">
     <div class="brand" style="margin:0;padding:0;">
       <span class="brand-logo brand-logo-image" style="width:42px;height:42px;border-radius:15px;"><img src="data:image/webp;base64,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" alt="DairyLife 360 logo"></span>
@@ -3073,6 +3122,10 @@
       </div>
 
       <div class="side-label">產品導覽</div>
+      <div class="side-quick-actions">
+        <button class="btn side-search-btn" onclick="openGlobalSearch()">🔎 全站搜尋</button>
+        <button class="emergency-btn" onclick="openEmergencySearch()">🚨 緊急輔導入口</button>
+      </div>
       <nav id="desktopNav">
         <a class="nav-link active" href="#home"><span class="emoji">🏠</span>首頁總覽</a>
         <a class="nav-link" href="#lifecycle"><span class="emoji">🐮</span>生命週期</a>
@@ -3104,6 +3157,11 @@
           <div class="actions">
             <a class="btn btn-primary" href="#lifecycle">依牛隻階段進入 →</a>
             <a class="btn btn-secondary" href="#problems">依現場問題查詢</a>
+          </div>
+
+          <div class="hero-quick-tools">
+            <button class="quick-tool-btn" onclick="openGlobalSearch()">🔎 全站搜尋</button>
+            <button class="quick-tool-btn danger" onclick="openEmergencySearch()">🚨 緊急輔導入口</button>
           </div>
 
           <div class="hero-stats">
@@ -3196,7 +3254,7 @@
         <div class="critical-days-panel">
           <div class="critical-days-head">
             <div>
-              <span class="badge">V15 內容深化</span>
+              <span class="badge">V17 內容深化</span>
               <h3>Critical Days 關鍵天數管理</h3>
               <p>把現場真正容易出事的窗口拆得更細：不是只知道「圍產期很重要」，而是知道產前 21 天、產後 21 天、初配前後與季節壓力該看哪些指標。</p>
             </div>
@@ -3942,6 +4000,12 @@
       <div class="search-input-group">
         <input type="text" id="globalSearchInput" placeholder="全站搜尋：生命階段、疾病、SOP、工具..." oninput="handleGlobalSearch()">
         <button class="btn btn-dark" onclick="closeSearch()">關閉</button>
+      </div>
+      <div class="search-hint-grid">
+        <button class="search-hint" onclick="quickSearch('犢牛 腹瀉 初乳')">犢牛腹瀉 / 初乳</button>
+        <button class="search-hint" onclick="quickSearch('產後 不吃 酮症 低血鈣')">產後不吃 / 代謝</button>
+        <button class="search-hint" onclick="quickSearch('乳房炎 體細胞 CMT')">乳房炎 / 體細胞</button>
+        <button class="search-hint" onclick="quickSearch('跛行 蹄病 蹄浴')">跛行 / 蹄病</button>
       </div>
       <div id="searchResults" class="search-results">
         <!-- 搜尋結果將顯示在此 -->
@@ -6997,7 +7061,1266 @@ const deepSopPreviewData = {
     tracking:["產後 10 日採食異常率","產後疾病率","酮症陽性率","胎衣不下率","子宮炎率","乳量啟動曲線","產後淘汰率","乾乳期 BCS 分布"],
     warning:["完全不吃","精神沉鬱","發燒或低溫","酮體強陽性","胎衣不下","惡露惡臭","疑似第四胃變位","乳量突然下降"],
     example:"案例：如果產後牛連續幾頭採食下降，不能只逐頭治療，應回頭查近迫牛欄位舒適度、乾乳期 BCS、產前採食與餵料變動。"
-  }
+  },
+  "出生24小時犢牛檢查流程": {
+  "subtitle": "新生犢牛 0–24 小時健康、初乳與環境檢查 SOP",
+  "purpose": "把出生後第一天拆成可執行的檢查點，確保犢牛呼吸、體溫、臍帶、初乳、保溫與風險標示都有被完成，而不是只確認『有出生』。",
+  "applies": "所有新生犢牛，尤其難產、雙胎、早產、低出生重、母牛產後異常或天候寒冷時出生的犢牛。",
+  "why": "出生後 24 小時是犢牛存活與後續健康的關鍵窗口。這段若漏掉初乳、保溫、臍帶消毒或高風險標示，後續腹瀉、肺炎、敗血症與生長落後風險會明顯升高。",
+  "levels": [
+    [
+      "正常",
+      "呼吸穩定、體溫正常、吸乳反射佳、初乳已完成、臍帶乾淨且欄位乾燥。"
+    ],
+    [
+      "需追蹤",
+      "吸乳稍弱、體溫邊緣、出生環境較髒或初乳餵飼時間延後。"
+    ],
+    [
+      "高風險",
+      "難產、低體溫、無吸乳反射、臍帶污染出血、精神沉鬱或初乳未完成。"
+    ]
+  ],
+  "steps": [
+    [
+      "0–30 分鐘：生命徵象",
+      "確認呼吸是否順暢、鼻口是否清潔、是否能抬頭與嘗試站立；弱仔先保溫並標示。"
+    ],
+    [
+      "30–60 分鐘：臍帶與環境",
+      "臍帶完整浸泡消毒，確認產房墊料乾燥、犢牛身體擦乾或保溫，避免躺在濕冷區。"
+    ],
+    [
+      "2 小時內：初乳第一餐",
+      "使用高品質初乳，記錄來源、Brix、餵飼量、餵飼方式與時間；吸乳差由受訓人員協助。"
+    ],
+    [
+      "6–12 小時：複查",
+      "確認精神、體溫、腹部飽滿度、臍帶狀態、排便排尿與是否願意起身。"
+    ],
+    [
+      "24 小時內：建檔與風險分流",
+      "完成耳標、母牛號、出生重、出生地點、異常事件與後續追蹤日期。"
+    ]
+  ],
+  "records": [
+    "犢牛編號",
+    "母牛號",
+    "出生日期時間",
+    "出生重",
+    "難產/雙胎/早產",
+    "體溫",
+    "初乳 Brix",
+    "初乳餵飼時間與量",
+    "餵飼方式",
+    "臍帶消毒時間",
+    "操作者",
+    "異常備註"
+  ],
+  "commonMistakes": [
+    "只記出生日期，沒有記出生時間。",
+    "臍帶用噴的沒有完整浸泡。",
+    "初乳有餵但沒有記 Brix、時間與量。",
+    "低溫犢牛沒有先保溫就直接餵。",
+    "高風險犢牛沒有標示，隔天交班就斷線。"
+  ],
+  "tracking": [
+    "出生 24 小時紀錄完整率",
+    "2 小時內初乳完成率",
+    "臍帶異常率",
+    "0–30 日腹瀉率",
+    "0–60 日死亡率",
+    "離乳前日增重"
+  ],
+  "warning": [
+    "無吸乳反射",
+    "體溫偏低或偏高",
+    "呼吸困難",
+    "臍帶出血或嚴重污染",
+    "精神沉鬱",
+    "出生後 2 小時仍未完成初乳"
+  ],
+  "example": "案例：若某批犢牛 7–14 日齡腹瀉增加，先回查這張表：是否集中在初乳延遲、臍帶消毒不完整、寒冷夜間出生或產房墊料污染。"
+},
+  "初乳庫建立與解凍 SOP": {
+  "subtitle": "初乳收集、分級、冷凍、解凍與使用順序 SOP",
+  "purpose": "建立可追溯的初乳庫，讓高品質初乳能在弱仔、難產犢牛或母牛初乳不足時立即使用。",
+  "applies": "所有可收集初乳之新產母牛、初乳冷凍庫管理、犢牛第一餐與緊急替代初乳情境。",
+  "why": "初乳庫不是把初乳冰起來而已，重點是品質分級、衛生、標示與解凍溫度。沒有分級的初乳庫很容易變成『不知道好壞的冰塊倉庫』。",
+  "levels": [
+    [
+      "優先使用",
+      "Brix 達高品質門檻、來源清楚、冷凍日期明確、解凍流程正確。"
+    ],
+    [
+      "可用但需標示",
+      "品質中等或來源資訊不完整，只作為一般備用，不優先給高風險犢牛。"
+    ],
+    [
+      "不建議使用",
+      "品質低、污染疑慮、標示不清、反覆解凍或保存時間過長。"
+    ]
+  ],
+  "steps": [
+    [
+      "收集前準備",
+      "確認容器、濾網、奶瓶與分裝袋清潔乾燥，避免收集過程污染。"
+    ],
+    [
+      "品質分級",
+      "以 Brix 或場內標準分級，記錄母牛號、胎次、採集日期與品質。"
+    ],
+    [
+      "分裝標示",
+      "以單次使用量分裝，標示日期、母牛號、Brix、容量與採集人員。"
+    ],
+    [
+      "冷凍保存",
+      "分裝後盡快冷凍，依先進先出管理，避免新舊混放。"
+    ],
+    [
+      "解凍使用",
+      "以溫水緩慢解凍，避免高溫破壞初乳品質；解凍後不反覆冷凍。"
+    ],
+    [
+      "使用後回填",
+      "記錄哪頭犢牛使用哪包初乳，確保後續腹瀉或免疫問題可追溯。"
+    ]
+  ],
+  "records": [
+    "採集日期",
+    "母牛號",
+    "胎次",
+    "Brix",
+    "容量",
+    "分裝編號",
+    "冷凍位置",
+    "使用犢牛號",
+    "解凍時間",
+    "操作人員"
+  ],
+  "commonMistakes": [
+    "只有冷凍日期，沒有 Brix 與母牛號。",
+    "大包冷凍導致解凍太慢或用不完。",
+    "用過熱水快速解凍。",
+    "解凍後剩餘再冰回去。",
+    "初乳庫沒有定期盤點。"
+  ],
+  "tracking": [
+    "初乳庫庫存量",
+    "高品質初乳比例",
+    "初乳使用追溯率",
+    "過期或標示不清件數",
+    "弱仔第一餐完成率"
+  ],
+  "warning": [
+    "標示不清",
+    "初乳有異味或凝塊",
+    "容器污染",
+    "解凍溫度過高",
+    "高風險犢牛無高品質初乳可用"
+  ],
+  "example": "案例：遇到難產弱仔但母牛初乳不足時，若初乳庫有分級與標示，現場能立即取用高品質初乳，不必臨時到處找。"
+},
+  "離乳轉群 SOP": {
+  "subtitle": "離乳、轉群與壓力疊加管理 SOP",
+  "purpose": "降低離乳與轉群造成的採食下降、掉重、腹瀉與肺炎，避免把多個壓力事件同一天疊在犢牛身上。",
+  "applies": "準備離乳犢牛、離乳後 2–4 週轉群犢牛、群飼轉換與疫苗/去角/搬遷安排。",
+  "why": "離乳不是只把奶停掉，而是從液態營養轉到固態採食的管理過程。若精料採食未穩定就離乳，常出現離乳後掉重與免疫壓力。",
+  "levels": [
+    [
+      "可離乳",
+      "連續多日精料採食達場內標準、健康穩定、無腹瀉肺炎、體重與精神正常。"
+    ],
+    [
+      "延後觀察",
+      "精料採食不穩、近期治療、體況偏弱或同批疾病壓力高。"
+    ],
+    [
+      "高風險",
+      "腹瀉、肺炎、剛治療、採食差、體重落後或同日又安排去角/搬欄/疫苗。"
+    ]
+  ],
+  "steps": [
+    [
+      "離乳前 7 天評估",
+      "確認精料採食、飲水、糞便、體況與疾病紀錄。"
+    ],
+    [
+      "分階段減奶",
+      "依牧場制度逐步降低奶量或餐次，避免突然斷奶。"
+    ],
+    [
+      "避免壓力疊加",
+      "離乳、轉群、疫苗、去角、長途搬移不要同一天集中。"
+    ],
+    [
+      "轉群前環境準備",
+      "新欄位乾燥、通風、飲水、飼槽空間與同批大小一致性先確認。"
+    ],
+    [
+      "離乳後 14 天追蹤",
+      "每天看採食、糞便、咳嗽、精神與掉重；異常個體早期分流。"
+    ]
+  ],
+  "records": [
+    "犢牛編號",
+    "出生日期",
+    "離乳日期",
+    "離乳前精料採食",
+    "體重",
+    "疾病紀錄",
+    "轉群日期",
+    "轉入欄位",
+    "離乳後異常",
+    "操作人員"
+  ],
+  "commonMistakes": [
+    "只看日齡，不看精料採食。",
+    "離乳當天同時轉群與打疫苗。",
+    "大小差太多的犢牛混群。",
+    "轉群後沒有追蹤 14 天。",
+    "水槽位置或高度不適合小牛。"
+  ],
+  "tracking": [
+    "離乳後 14 天掉重率",
+    "離乳後肺炎率",
+    "離乳後腹瀉率",
+    "精料採食達標率",
+    "轉群後治療率"
+  ],
+  "warning": [
+    "離乳後不吃",
+    "明顯掉重",
+    "咳嗽發燒",
+    "腹瀉",
+    "同批多頭精神差",
+    "飲水不足"
+  ],
+  "example": "案例：若離乳後 10 天肺炎增加，常不是單一病原問題，而是離乳、轉群、密度、通風與疫苗時機一起疊壓。"
+},
+  "青年牛體尺測量 SOP": {
+  "subtitle": "青年牛體高、胸圍、體重與 BCS 追蹤 SOP",
+  "purpose": "用一致的體尺測量流程追蹤青年牛成長，避免只看月齡配種，造成未來難產、低產或代謝風險。",
+  "applies": "離乳後至初配前青年牛、育成群月度追蹤、初配前檢核與成長落後個體管理。",
+  "why": "青年牛成長管理重點是結構、體重與體況同步達標。只追求快速變胖，可能換來未來乳腺發育、繁殖與圍產期問題。",
+  "levels": [
+    [
+      "達標",
+      "體高、胸圍/體重與 BCS 接近月齡目標，成長曲線穩定。"
+    ],
+    [
+      "需改善",
+      "體重或體高落後、BCS 偏高或偏低，需回查飼養密度與營養。"
+    ],
+    [
+      "高風險",
+      "體高不足但過肥、明顯落後、長期腹瀉肺炎後遺症或初配前未達標。"
+    ]
+  ],
+  "steps": [
+    [
+      "固定測量頻率",
+      "建議每月或每 4–6 週同一批次測量，建立成長曲線。"
+    ],
+    [
+      "測量工具一致",
+      "體高尺、胸圍尺或體重秤需固定方法與人員訓練。"
+    ],
+    [
+      "記錄 BCS",
+      "不要只量體重，需同步看 BCS，避免過肥假達標。"
+    ],
+    [
+      "與月齡對照",
+      "依月齡分布找出落後群與過肥群，回查配方、飼槽空間、疾病史。"
+    ],
+    [
+      "初配前確認",
+      "初配前再做一次體高、體重、BCS 與健康紀錄檢核。"
+    ]
+  ],
+  "records": [
+    "牛號",
+    "出生日期",
+    "月齡",
+    "體高",
+    "胸圍",
+    "估測/實測體重",
+    "BCS",
+    "測量日期",
+    "測量人員",
+    "異常備註"
+  ],
+  "commonMistakes": [
+    "不同人不同量法，數據不能比較。",
+    "只看體重，不看體高與 BCS。",
+    "初配只看月齡。",
+    "落後牛沒有回查疾病史。",
+    "過肥青年牛被誤判為成長好。"
+  ],
+  "tracking": [
+    "各月齡體高達標率",
+    "初配前達標率",
+    "過肥比例",
+    "成長落後比例",
+    "初產難產率",
+    "初產乳量表現"
+  ],
+  "warning": [
+    "體高明顯落後",
+    "BCS > 3.25",
+    "長期腹瀉或肺炎史",
+    "同批成長差異過大",
+    "初配前未達標"
+  ],
+  "example": "案例：13 月齡看似很重但 BCS 偏高、體高不足，代表不是育成成功，而是未來圍產期與初產表現的隱形風險。"
+},
+  "配種紀錄表": {
+  "subtitle": "配種、妊檢、再配與繁殖效率追蹤表",
+  "purpose": "把每次配種從『有配』變成可追蹤資料，讓受胎率、空胎天數、配種次數與問題牛能被管理。",
+  "applies": "所有人工授精或自然配種牛、青年牛初配、泌乳牛再配、妊娠檢查與繁殖月報。",
+  "why": "繁殖管理若沒有完整紀錄，就無法分辨問題是發情偵測、配種時機、精液品質、配種員、產後疾病或牛隻體況。",
+  "levels": [
+    [
+      "完整",
+      "牛號、胎次、DIM、發情徵象、配種時間、精液、配種員與妊檢結果完整。"
+    ],
+    [
+      "需改善",
+      "有配種日期但缺少發情、DIM、精液或妊檢追蹤。"
+    ],
+    [
+      "高風險",
+      "只靠口頭紀錄，未孕牛沒有再配或檢查清單。"
+    ]
+  ],
+  "steps": [
+    [
+      "配種前確認",
+      "確認牛號、胎次、產後天數、健康狀態、BCS、是否有產後疾病。"
+    ],
+    [
+      "記錄發情線索",
+      "記錄站立發情、黏液、活動量、爬跨或發情偵測系統訊號。"
+    ],
+    [
+      "記錄配種資訊",
+      "填入配種日期時間、配種員、精液來源/批號、配種次數與備註。"
+    ],
+    [
+      "設定妊檢日期",
+      "配種後立即安排妊檢或再檢日期，不要等想到才查。"
+    ],
+    [
+      "未孕分流",
+      "未孕牛依配種次數、DIM、子宮狀態、蹄病或代謝病史分流處理。"
+    ]
+  ],
+  "records": [
+    "牛號",
+    "胎次",
+    "DIM",
+    "BCS",
+    "發情徵象",
+    "配種日期時間",
+    "配種員",
+    "精液批號",
+    "配種次數",
+    "妊檢日期",
+    "妊檢結果",
+    "再配計畫"
+  ],
+  "commonMistakes": [
+    "只記配種日期，不記發情線索。",
+    "未孕結果沒有回填。",
+    "配種次數過多仍未列入問題牛。",
+    "忽略蹄病與產後疾病對受胎率的影響。",
+    "青年牛初配沒有體尺檢核。"
+  ],
+  "tracking": [
+    "受胎率",
+    "發情偵測率",
+    "平均配種次數",
+    "空胎天數",
+    "初配日齡/體況",
+    "問題牛清單完成率"
+  ],
+  "warning": [
+    "多次未孕",
+    "產後疾病史",
+    "BCS 過高或過低",
+    "蹄病跛行",
+    "DIM 過長仍未孕",
+    "發情紀錄混亂"
+  ],
+  "example": "案例：若受胎率下降，但配種紀錄顯示發情徵象多為不確定訊號，應先改善發情偵測與配種時機，而不是直接怪精液。"
+},
+  "初配前體高體重BCS檢核表": {
+  "subtitle": "青年牛初配前體尺、體重與體況門檻檢核表",
+  "purpose": "在初配前建立硬性檢核，避免只用月齡判斷，造成體型不足或過肥青年牛過早進入繁殖。",
+  "applies": "13–15 月齡左右準備初配之荷蘭牛青年牛，或牧場設定之初配候選牛。",
+  "why": "初配是未來初產表現的前哨站。體高、體重與 BCS 不合格仍配種，可能增加難產、低採食、初產乳量不佳與未來代謝風險。",
+  "levels": [
+    [
+      "可初配",
+      "約 13–14 月齡，體重約 380–400 kg、體高約 127 cm、BCS 2.75–3.0，且健康紀錄穩定。"
+    ],
+    [
+      "延後追蹤",
+      "單項略不足或 BCS 邊緣，需再追蹤 2–4 週與調整飼養。"
+    ],
+    [
+      "不建議初配",
+      "體高不足、體重落後、BCS > 3.25 或疾病史明顯，需先改善。"
+    ]
+  ],
+  "steps": [
+    [
+      "建立候選清單",
+      "依月齡與成長紀錄抓出候選牛，不直接全部配。"
+    ],
+    [
+      "測量體高體重",
+      "用固定方法測量體高、胸圍/體重，確認不是估計印象。"
+    ],
+    [
+      "評估 BCS",
+      "BCS 偏高代表脂肪堆積，不等於發育成熟。"
+    ],
+    [
+      "回查健康史",
+      "腹瀉、肺炎、跛行或長期成長落後牛需特別標示。"
+    ],
+    [
+      "決策分流",
+      "可初配、延後追蹤、不建議初配三類分清楚，並設定複查日期。"
+    ]
+  ],
+  "records": [
+    "牛號",
+    "出生日期",
+    "月齡",
+    "體高",
+    "體重/胸圍",
+    "BCS",
+    "疾病史",
+    "初配決策",
+    "複查日期",
+    "操作人員"
+  ],
+  "commonMistakes": [
+    "只看月齡。",
+    "過肥青年牛被當成達標。",
+    "量體高方法不固定。",
+    "未建立延後初配名單。",
+    "忽略青年牛早期疾病對發育的影響。"
+  ],
+  "tracking": [
+    "初配前達標率",
+    "延後初配比例",
+    "初產難產率",
+    "初產乳量",
+    "初產產後疾病率",
+    "青年牛淘汰率"
+  ],
+  "warning": [
+    "BCS > 3.25",
+    "體高不足",
+    "體重明顯落後",
+    "慢性肺炎或跛行史",
+    "同批成長差異過大"
+  ],
+  "example": "案例：某牛 14 月齡但體高不足、BCS 3.5，應延後初配並調整育成飼養，而不是因體重看起來夠就配。"
+},
+  "Close-up近迫乾乳牛每日檢核表": {
+  "subtitle": "產前 21 天近迫乾乳牛採食、體況、DCAD 與產房準備檢核表",
+  "purpose": "把產前 21 天從乾乳期中拆出來管理，提早發現採食下降、過肥、分群壓力、DCAD 執行不穩與產房環境問題。",
+  "applies": "預產前 21 天內之近迫乾乳牛、過肥牛、高胎次牛、前胎代謝病史牛與難產風險牛。",
+  "why": "產前 21 天的採食與舒適度會直接影響產後採食啟動、低血鈣、酮症、胎衣不下與第四胃變位風險。",
+  "levels": [
+    [
+      "穩定",
+      "採食、躺臥、糞便、BCS、產兆與環境穩定，DCAD 或礦物策略執行一致。"
+    ],
+    [
+      "需注意",
+      "採食下降、過肥、分群壓力、墊料偏濕或產兆不明確。"
+    ],
+    [
+      "高風險",
+      "連續採食差、BCS 過高、疑似低血鈣風險、產房髒濕、產前疾病或嚴重跛行。"
+    ]
+  ],
+  "steps": [
+    [
+      "每日巡欄",
+      "記錄採食、精神、躺臥、糞便、產兆、跛行與是否被擠壓。"
+    ],
+    [
+      "DCAD/礦物檢核",
+      "確認陰離子鹽策略、飼糧一致性、尿液酸鹼趨勢或場內監測指標。"
+    ],
+    [
+      "BCS 與分群",
+      "過肥或過瘦牛列高風險；避免近迫群過度擁擠或頻繁換群。"
+    ],
+    [
+      "產房準備",
+      "確認墊料乾燥、污染點清除、通風、照明與分娩動線。"
+    ],
+    [
+      "交班標示",
+      "接近分娩或異常牛需在交班表明確標示，避免夜班漏接。"
+    ]
+  ],
+  "records": [
+    "牛號",
+    "預產日",
+    "產前天數",
+    "採食狀態",
+    "BCS",
+    "糞便",
+    "產兆",
+    "DCAD/尿液監測",
+    "產房狀態",
+    "異常處理",
+    "操作者"
+  ],
+  "commonMistakes": [
+    "把所有乾乳牛混在一起看。",
+    "只看預產日，不看採食。",
+    "產房墊料濕但未列入風險。",
+    "過肥牛沒有提前標示。",
+    "DCAD 執行有名無實，沒有監測。"
+  ],
+  "tracking": [
+    "產前採食異常率",
+    "BCS 過高比例",
+    "低血鈣率",
+    "酮症率",
+    "胎衣不下率",
+    "產後 21 日疾病率"
+  ],
+  "warning": [
+    "產前不吃",
+    "嚴重跛行",
+    "BCS 過高",
+    "疑似臨產異常",
+    "產房污染",
+    "分群後採食下降"
+  ],
+  "example": "案例：若 Fresh cow 酮症上升，不要只查產後，先回看 Close-up 21 天採食、BCS、分群壓力與 DCAD 執行。"
+},
+  "Fresh cow產後21日追蹤 SOP": {
+  "subtitle": "產後 21 日採食、反芻、代謝與繁殖前健康追蹤 SOP",
+  "purpose": "把新產牛前 21 天建立成固定追蹤流程，早期偵測酮症、低血鈣、胎衣不下、子宮炎、第四胃變位與乳量啟動不良。",
+  "applies": "所有產後 0–21 天新產牛，高產牛、過肥牛、難產牛、雙胎牛、胎衣不下牛與前胎代謝病史牛優先。",
+  "why": "Fresh cow 是整個泌乳期的起跑點。產後前 21 天如果採食與反芻啟動失敗，後面乳量、繁殖與淘汰風險都會被拖累。",
+  "levels": [
+    [
+      "正常",
+      "產後可站立、飲水採食、反芻逐步恢復、乳量穩定啟動。"
+    ],
+    [
+      "需注意",
+      "採食偏低、反芻不穩、輕微酮體異常、體溫或惡露需追蹤。"
+    ],
+    [
+      "高風險",
+      "不吃、強陽性酮體、低血鈣症狀、胎衣不下、惡臭惡露、疑似第四胃變位或重症乳房炎。"
+    ]
+  ],
+  "steps": [
+    [
+      "產後 0–12 小時",
+      "確認站立、飲水、採食、胎衣、體溫與反芻啟動，必要時進入高風險清單。"
+    ],
+    [
+      "產後 1–7 天",
+      "每日追蹤採食、糞便、精神、乳量、體溫、BHB/酮體與惡露。"
+    ],
+    [
+      "產後 8–14 天",
+      "觀察乳量爬升、反芻穩定度、子宮恢復、蹄病與乳房炎。"
+    ],
+    [
+      "產後 15–21 天",
+      "回顧是否有疾病、治療、採食落後與繁殖前健康狀態。"
+    ],
+    [
+      "異常分流",
+      "依低血鈣、酮症、子宮炎、胎衣不下、DA 或乳房炎流程分流。"
+    ]
+  ],
+  "records": [
+    "牛號",
+    "產犢日",
+    "產後天數",
+    "採食",
+    "反芻",
+    "乳量",
+    "體溫",
+    "BHB/酮體",
+    "血鈣/低血鈣症狀",
+    "胎衣/惡露",
+    "疾病事件",
+    "處理結果"
+  ],
+  "commonMistakes": [
+    "只追蹤前 3 天就停止。",
+    "只看乳量，不看採食與反芻。",
+    "產後疾病未與乾乳期 BCS 回連。",
+    "異常牛沒有設定複查日。",
+    "Fresh cow 與一般泌乳牛混在一起管理。"
+  ],
+  "tracking": [
+    "產後 21 日疾病率",
+    "酮症率",
+    "低血鈣率",
+    "胎衣不下率",
+    "子宮炎率",
+    "產後淘汰率",
+    "乳量啟動曲線",
+    "產後首次配種成功率"
+  ],
+  "warning": [
+    "產後 12 小時仍不吃不喝",
+    "無法站立",
+    "強酮體陽性",
+    "體溫異常",
+    "惡露惡臭",
+    "乳量突然下降",
+    "疑似第四胃變位"
+  ],
+  "example": "案例：若某週多頭 Fresh cow 產後 3–5 天不吃，需同時檢查 Close-up 採食、產房舒適度、低血鈣與酮症，而不是逐頭單點處理。"
+},
+  "乾乳治療 SOP": {
+  "subtitle": "乾乳前評估、乳頭清潔、乾乳治療與停藥紀錄 SOP",
+  "purpose": "降低乾乳期新感染與下一胎初期乳房炎，並確保乾乳治療操作、標示、停藥期與追蹤完整。",
+  "applies": "準備乾乳之泌乳牛、乾乳治療或選擇性乾乳治療流程、乾乳前高 SCC 或乳房炎史牛。",
+  "why": "乾乳治療的成敗很大一部分取決於乳頭端清潔與紀錄。污染性操作可能把治療變成感染來源。",
+  "levels": [
+    [
+      "標準",
+      "乾乳前有 SCC/乳房炎史評估，操作無菌，標示與停藥紀錄完整。"
+    ],
+    [
+      "需改善",
+      "治療有做但紀錄或乳頭清潔不一致。"
+    ],
+    [
+      "高風險",
+      "無標示、無停藥紀錄、操作環境髒污或治療牛混入正常乳。"
+    ]
+  ],
+  "steps": [
+    [
+      "乾乳前評估",
+      "確認預產期、泌乳天數、SCC、乳房炎史、CMT 或場內乾乳策略。"
+    ],
+    [
+      "準備與隔離",
+      "準備乾淨操作區、藥品、手套、酒精棉、乳頭封閉劑與標示工具。"
+    ],
+    [
+      "乳頭端清潔",
+      "乳頭端由遠到近或依場內標準逐一清潔，插管前避免再次污染。"
+    ],
+    [
+      "注入與封閉",
+      "依產品與獸醫策略執行乾乳治療及/或乳頭封閉，避免過度插入。"
+    ],
+    [
+      "標示與記錄",
+      "標示乾乳牛，記錄藥物、乳區、批號、操作人員、停藥期與移群。"
+    ]
+  ],
+  "records": [
+    "牛號",
+    "乾乳日期",
+    "預產期",
+    "SCC/乳房炎史",
+    "治療藥物",
+    "批號",
+    "乳區",
+    "乳頭封閉劑",
+    "停藥期",
+    "操作人員",
+    "異常備註"
+  ],
+  "commonMistakes": [
+    "乳頭端清潔不完整。",
+    "先清潔後又摸到污染物。",
+    "沒有乳區紀錄。",
+    "治療牛標示不清。",
+    "停藥期沒有系統化管理。"
+  ],
+  "tracking": [
+    "乾乳治療紀錄完整率",
+    "乾乳後新感染率",
+    "產後 30 天乳房炎率",
+    "停藥期違規風險件數",
+    "高 SCC 牛改善率"
+  ],
+  "warning": [
+    "操作中污染",
+    "乳房腫脹熱痛",
+    "乾乳後漏乳",
+    "標示不清",
+    "預產期或停藥期資料錯誤"
+  ],
+  "example": "案例：若產後初期乳房炎集中發生，需回查乾乳治療清潔流程、牛床衛生、產房墊料與高 SCC 牛名單。"
+},
+  "乾乳牛分群檢核表": {
+  "subtitle": "遠乾、近迫、過肥與高風險乾乳牛分群檢核表",
+  "purpose": "依預產期、BCS、健康史與採食風險分群，降低圍產期代謝疾病與產後啟動不良。",
+  "applies": "所有乾乳牛，尤其預產前 21 天、BCS 過高/過低、高胎次、前胎酮症或低血鈣史牛。",
+  "why": "乾乳期不是休息而已，是下胎成功的前置管理。分群錯誤、過度擁擠或過肥牛未標示，會在產後用疾病形式討債。",
+  "levels": [
+    [
+      "良好",
+      "遠乾與近迫分群明確，BCS 合理，飼槽/躺臥/飲水空間足夠。"
+    ],
+    [
+      "需改善",
+      "分群標準不清、近迫牛採食不穩或部分過肥牛未列高風險。"
+    ],
+    [
+      "高風險",
+      "乾乳牛過度擁擠、遠乾近迫混亂、產前採食下降或產房準備不足。"
+    ]
+  ],
+  "steps": [
+    [
+      "建立預產清單",
+      "依預產日每週更新遠乾、近迫與即將分娩牛名單。"
+    ],
+    [
+      "BCS 分流",
+      "BCS 過高或過低牛標示，不只依預產日分群。"
+    ],
+    [
+      "檢查空間",
+      "確認飼槽、躺臥、飲水與通道動線，避免弱勢牛吃不到。"
+    ],
+    [
+      "近迫移群",
+      "預產前約 21 天進 Close-up 管理，避免頻繁換群造成採食下降。"
+    ],
+    [
+      "產後回饋",
+      "把 Fresh cow 疾病回饋到乾乳分群與 BCS 管理。"
+    ]
+  ],
+  "records": [
+    "牛號",
+    "預產日",
+    "乾乳日期",
+    "目前群別",
+    "BCS",
+    "胎次",
+    "前胎疾病史",
+    "移群日期",
+    "採食異常",
+    "管理備註"
+  ],
+  "commonMistakes": [
+    "只按欄位空間分群，不按預產期。",
+    "過肥牛沒有被標示。",
+    "近迫群過度擁擠。",
+    "移群太頻繁。",
+    "產後疾病沒有回頭檢討乾乳期。"
+  ],
+  "tracking": [
+    "乾乳天數分布",
+    "BCS 分布",
+    "近迫採食異常率",
+    "低血鈣率",
+    "酮症率",
+    "胎衣不下率",
+    "產後 21 日淘汰率"
+  ],
+  "warning": [
+    "近迫牛不吃",
+    "過肥比例高",
+    "群內擁擠",
+    "水槽不足",
+    "分娩前反覆移群",
+    "同批產後疾病升高"
+  ],
+  "example": "案例：如果產後酮症與低血鈣同步上升，可能不是單一配方問題，應同時回查乾乳牛分群、BCS 與近迫群採食。"
+},
+  "酒精陽性奶排查 SOP": {
+  "subtitle": "酒精陽性奶、非典型酸中毒與飼糧/青貯排查 SOP",
+  "purpose": "把酒精陽性奶從單純乳質異常，拆解成乳成分、瘤胃穩定、青貯二次發酵、TMR 水分突變與個別牛健康的排查路徑。",
+  "applies": "酒精測試陽性、低酸性酒精陽性、乳樣熱穩定異常、乳成分波動或同批乳質不穩牧場。",
+  "why": "酒精陽性奶常不是單一原因。若只看乳房炎或只看乳廠檢驗，容易漏掉青貯料發熱、TMR 水分突變、SARA、礦物質或個別牛代謝問題。",
+  "levels": [
+    [
+      "單頭/偶發",
+      "少數牛異常，優先查個別健康、乳房炎、產後天數與乳成分。"
+    ],
+    [
+      "批次/群體",
+      "同群或同批增加，需查 TMR、水分、青貯、採食與環境壓力。"
+    ],
+    [
+      "高風險",
+      "青貯切面發熱、TMR 水分 >55% 或雨後突變、乳脂下降、糞便異常與採食不穩同時出現。"
+    ]
+  ],
+  "steps": [
+    [
+      "確認範圍",
+      "分辨是單頭、單群、單槽乳或全場問題，並保留乳樣與紀錄時間。"
+    ],
+    [
+      "回查乳房與代謝",
+      "看乳房炎、SCC、CMT、產後天數、酮體、採食與乳成分。"
+    ],
+    [
+      "檢查青貯料",
+      "檢查切面是否發熱、氣味是否異常、是否有二次發酵、霉敗或丁酸/醋酸比例異常疑慮。"
+    ],
+    [
+      "檢查 TMR",
+      "量測乾物或水分，回查下雨後是否水分突變、混合時間、挑食與剩料。"
+    ],
+    [
+      "分流改善",
+      "依乳房炎、飼糧水分、青貯品質、SARA 或個別代謝問題分流處理並追蹤酒精陽性率。"
+    ]
+  ],
+  "records": [
+    "日期",
+    "牛號/批次",
+    "酒精測試結果",
+    "乳成分",
+    "SCC/CMT",
+    "產後天數",
+    "TMR 水分",
+    "青貯切面溫度",
+    "氣味/霉敗",
+    "糞便狀態",
+    "採食量",
+    "改善措施"
+  ],
+  "commonMistakes": [
+    "只怪乳房炎，沒有查飼糧。",
+    "沒有分單頭或群體問題。",
+    "雨後 TMR 水分變化沒記。",
+    "青貯切面發熱卻未處理。",
+    "只做一次酒精測試，沒有追蹤改善後結果。"
+  ],
+  "tracking": [
+    "酒精陽性件數",
+    "TMR 水分變異",
+    "乳脂/乳蛋白變化",
+    "SCC",
+    "採食量",
+    "糞便異常率",
+    "青貯切面溫度"
+  ],
+  "warning": [
+    "全群酒精陽性增加",
+    "青貯明顯發熱或霉敗",
+    "TMR 水分突然升高",
+    "乳脂快速下降",
+    "採食下降",
+    "產後牛集中異常"
+  ],
+  "example": "案例：雨後酒精陽性突然增加，同時 TMR 變濕、剩料挑食與糞便變稀，就要優先查 TMR 水分與瘤胃負荷，而不是只從乳房炎下手。"
+},
+  "產房墊料衛生評分 SOP": {
+  "subtitle": "產房乾燥度、污染點、墊料深度與更換頻率評分 SOP",
+  "purpose": "把產房衛生從『看起來乾淨』變成每日可評分、可追蹤、可改善的檢核表，降低犢牛感染與產後乳房炎風險。",
+  "applies": "分娩欄、待產區、難產處理區、新生犢牛接觸區與產房清潔交班。",
+  "why": "產房是母牛與犢牛共同的高風險區。潮濕、糞污、墊料不足或清潔不規律，會增加臍帶感染、犢牛腹瀉與環境性乳房炎。",
+  "levels": [
+    [
+      "合格",
+      "墊料乾燥蓬鬆，躺臥區無明顯糞污，分娩後即時清理。"
+    ],
+    [
+      "需改善",
+      "局部潮濕、墊料變薄、污染點未即時清除或氣味偏重。"
+    ],
+    [
+      "高風險",
+      "明顯濕滑、糞污堆積、墊料不足、多頭共用未清或產後未換墊料。"
+    ]
+  ],
+  "steps": [
+    [
+      "每日固定評分",
+      "以乾燥度、糞污、氣味、墊料深度與污染點數量評分。"
+    ],
+    [
+      "分娩後清理",
+      "每次分娩後清除胎衣、血水、濕墊料與明顯污染區。"
+    ],
+    [
+      "補充與翻鬆",
+      "依濕度與使用頻率補墊料，保持躺臥區乾燥。"
+    ],
+    [
+      "動線清潔",
+      "人員鞋靴、助產工具與犢牛搬運動線需同步管理。"
+    ],
+    [
+      "異常回報",
+      "連續評分不合格或同月感染上升，列入環境改善任務。"
+    ]
+  ],
+  "records": [
+    "日期",
+    "產房編號",
+    "乾燥度",
+    "糞污評分",
+    "墊料深度",
+    "氣味",
+    "分娩後清理時間",
+    "補料量",
+    "操作人員",
+    "改善事項"
+  ],
+  "commonMistakes": [
+    "只在分娩前清，分娩後不清。",
+    "看表面乾，底層其實潮濕。",
+    "助產工具與手套衛生未納入。",
+    "高峰分娩期未增加清理頻率。",
+    "沒有把產房評分連到犢牛腹瀉與乳房炎。"
+  ],
+  "tracking": [
+    "產房合格率",
+    "不合格天數",
+    "分娩後清理完成率",
+    "犢牛臍帶感染率",
+    "犢牛腹瀉率",
+    "產後乳房炎率"
+  ],
+  "warning": [
+    "墊料濕冷",
+    "糞污堆積",
+    "惡臭",
+    "分娩後污染未清",
+    "同月犢牛腹瀉或乳房炎上升"
+  ],
+  "example": "案例：若新生犢牛臍帶感染增加，除了看臍帶消毒，也要回查產房墊料評分、分娩後清潔與人員動線。"
+},
+  "飲水槽清洗與水流量檢核表": {
+  "subtitle": "水槽清潔、水流速度、數量與熱緊迫供水檢核表",
+  "purpose": "確保牛群在不同季節、群別與高峰採食時段都有足夠且乾淨的飲水，降低採食、乳量與熱緊迫問題。",
+  "applies": "泌乳牛、乾乳牛、近迫牛、青年牛與犢牛群之所有飲水槽與水線。",
+  "why": "水是最便宜但最常被忽略的營養。水槽髒、流速慢、位置差或數量不足，會直接影響採食、乳量、體溫調節與健康。",
+  "levels": [
+    [
+      "合格",
+      "水清澈、槽壁乾淨、流速足、牛隻不排隊、位置高度合適。"
+    ],
+    [
+      "需改善",
+      "槽壁有滑膜、局部水流慢、清洗紀錄不穩或熱天排隊。"
+    ],
+    [
+      "高風險",
+      "水槽髒臭、流量不足、斷水、藻類明顯或高溫時牛群搶水。"
+    ]
+  ],
+  "steps": [
+    [
+      "每日目視",
+      "檢查水色、氣味、浮渣、糞污、藻類與牛是否願意喝。"
+    ],
+    [
+      "定期清洗",
+      "依牧場制度刷洗槽壁與底部，清除生物膜與沉積物。"
+    ],
+    [
+      "測水流量",
+      "用固定容器與秒表量測單位時間出水量，記錄低流量點。"
+    ],
+    [
+      "檢查位置與數量",
+      "看高峰時間是否排隊、弱勢牛是否被擠出、水槽高度是否適合。"
+    ],
+    [
+      "季節加強",
+      "夏季、熱浪、換群或高產牛區需提高檢查頻率。"
+    ]
+  ],
+  "records": [
+    "日期",
+    "牛舍/水槽編號",
+    "清潔評分",
+    "水流量",
+    "水色/氣味",
+    "是否排隊",
+    "清洗時間",
+    "異常處理",
+    "操作者"
+  ],
+  "commonMistakes": [
+    "只看有沒有水，沒看牛能不能喝夠。",
+    "槽壁生物膜沒刷掉。",
+    "水流量從未量測。",
+    "夏季沒有增加檢查。",
+    "犢牛與青年牛水槽高度不合適。"
+  ],
+  "tracking": [
+    "水槽合格率",
+    "清洗完成率",
+    "低流量點數",
+    "熱緊迫期間採食量",
+    "乳量變化",
+    "糞便與尿液濃縮異常"
+  ],
+  "warning": [
+    "斷水",
+    "水槽髒臭",
+    "牛群排隊喝水",
+    "高溫乳量下降",
+    "採食下降",
+    "流量明顯不足"
+  ],
+  "example": "案例：夏季乳量下滑時，除了查風扇噴霧，也要到高峰時段看水槽是否排隊，因為水不夠會讓降溫設備效果打折。"
+},
+  "蹄浴槽配製與更換檢核表": {
+  "subtitle": "蹄浴濃度、液面、通過牛數、髒污負荷與更換頻率檢核表",
+  "purpose": "讓蹄浴從『有放一槽水』變成可管理的防治流程，降低數位皮膚炎、蹄腐病與環境型跛行。",
+  "applies": "泌乳牛、乾乳牛、青年牛或場內規劃之蹄浴路線，特別是跛行率或 DD 上升時。",
+  "why": "蹄浴效果取決於正確濃度、液面深度、通過次數、髒污負荷與更換頻率。槽很髒或太淺，反而變成污染水。",
+  "levels": [
+    [
+      "有效",
+      "配製正確、液面足、牛隻完整通過、髒污可控、更換紀錄清楚。"
+    ],
+    [
+      "需改善",
+      "濃度或液面偶有不穩，髒污增加但仍有更換紀錄。"
+    ],
+    [
+      "高風險",
+      "濃度不明、槽液太髒、液面不足、牛繞過蹄浴或長期未換。"
+    ]
+  ],
+  "steps": [
+    [
+      "確認配方",
+      "依場內獸醫/蹄病策略確認藥劑種類、濃度與安全注意。"
+    ],
+    [
+      "檢查槽體",
+      "確認長度、深度、入口出口防滑與牛隻能自然通過。"
+    ],
+    [
+      "配製紀錄",
+      "記錄水量、藥劑量、配製時間與操作者。"
+    ],
+    [
+      "通過監測",
+      "記錄通過牛數與槽液髒污程度，達更換條件即更換。"
+    ],
+    [
+      "效果追蹤",
+      "每週或每月對照 DD 發生率、跛行率與修蹄紀錄。"
+    ]
+  ],
+  "records": [
+    "日期",
+    "牛群",
+    "藥劑種類",
+    "水量",
+    "藥劑量",
+    "配製濃度",
+    "液面深度",
+    "通過牛數",
+    "更換時間",
+    "操作者",
+    "備註"
+  ],
+  "commonMistakes": [
+    "憑感覺倒藥。",
+    "只補水不重配。",
+    "槽液髒了還繼續用。",
+    "牛可以繞過蹄浴。",
+    "沒有把蹄浴紀錄與跛行率對照。"
+  ],
+  "tracking": [
+    "蹄浴執行率",
+    "更換頻率",
+    "DD 發生率",
+    "跛行率",
+    "修蹄件數",
+    "復發率"
+  ],
+  "warning": [
+    "蹄浴液明顯髒污",
+    "牛隻繞過或跳過",
+    "濃度不明",
+    "跛行率上升",
+    "皮膚刺激或安全疑慮"
+  ],
+  "example": "案例：DD 一直復發時，不只看藥劑，還要看通道是否積尿、蹄浴液是否過髒、牛是否完整通過。"
+},
+  "蹄病跛行評分與分流 SOP": {
+  "subtitle": "跛行分數、環境型/營養型線索與處置分流 SOP",
+  "purpose": "把跛行從『走路怪怪的』變成可評分、可拍照、可分流、可追蹤的蹄病管理流程。",
+  "applies": "所有泌乳牛、乾乳牛、青年牛的跛行觀察、修蹄前分流、蹄病爆發調查與月報追蹤。",
+  "why": "跛行會降低採食、躺臥、乳量與繁殖表現。若不分環境型與營養型，就很容易只修蹄不改善源頭。",
+  "levels": [
+    [
+      "輕度",
+      "步態稍不穩或背線輕微改變，仍可正常採食與移動。"
+    ],
+    [
+      "中度",
+      "明顯跛行、步幅變短、躺臥或採食受影響，需安排檢查。"
+    ],
+    [
+      "重度",
+      "無法負重、明顯腫脹疼痛、化膿或全身症狀，需立即分流與獸醫/修蹄處理。"
+    ]
+  ],
+  "steps": [
+    [
+      "固定評分",
+      "在平坦通道觀察步態、背線、負重與轉彎，記錄分數。"
+    ],
+    [
+      "拍照定位",
+      "記錄哪一肢、病灶位置與照片，避免只寫跛行。"
+    ],
+    [
+      "環境型回查",
+      "看積尿、濕滑、硬地面、蹄浴失效、站立時間與牛床舒適。"
+    ],
+    [
+      "營養型回查",
+      "看 TMR 挑食、乳脂下降、糞便異常、澱粉過高與 SARA 線索。"
+    ],
+    [
+      "分流追蹤",
+      "輕度觀察，中重度安排修蹄/獸醫，重症移至乾燥舒適區並記錄復發。"
+    ]
+  ],
+  "records": [
+    "日期",
+    "牛號",
+    "跛行分數",
+    "患肢",
+    "病灶照片",
+    "環境線索",
+    "營養線索",
+    "處置方式",
+    "複查日期",
+    "結果"
+  ],
+  "commonMistakes": [
+    "只寫跛行，沒有分數與患肢。",
+    "只修蹄不查地面或 TMR。",
+    "重症牛仍留在硬地面。",
+    "蹄浴紀錄與跛行紀錄沒有串接。",
+    "復發牛沒有獨立清單。"
+  ],
+  "tracking": [
+    "跛行率",
+    "重度跛行比例",
+    "DD 發生率",
+    "蹄底潰瘍件數",
+    "復發率",
+    "修蹄後恢復率",
+    "淘汰率"
+  ],
+  "warning": [
+    "無法負重",
+    "蹄部腫脹化膿",
+    "發燒或精神差",
+    "同群短期多頭跛行",
+    "修蹄後未改善"
+  ],
+  "example": "案例：若跛行集中在泌乳高峰且伴隨乳脂下降與糞便變稀，需懷疑營養型/SARA 線索；若集中在潮濕通道與 DD 病灶，則優先查環境與蹄浴。"
+},
+  "死亡淘汰原因回顧表": {
+  "subtitle": "死亡、非計畫淘汰、疾病成本與源頭改善回顧表",
+  "purpose": "把死亡與淘汰從單次事件變成管理回饋，找出前端可改善的營養、疾病、環境、繁殖與處置漏洞。",
+  "applies": "所有死亡、急宰、非計畫淘汰、重症治療失敗與短期多頭淘汰事件。",
+  "why": "淘汰與死亡是牧場管理的最終結果。如果只記『死了』或『賣了』，就失去回推前端問題與降低成本的機會。",
+  "levels": [
+    [
+      "可解釋且低頻",
+      "原因明確，非計畫比例低，紀錄完整且有改善追蹤。"
+    ],
+    [
+      "需改善",
+      "原因分類不清、紀錄不完整或特定疾病淘汰增加。"
+    ],
+    [
+      "高風險",
+      "短期多頭死亡/淘汰、原因集中、產後早期淘汰高或無改善計畫。"
+    ]
+  ],
+  "steps": [
+    [
+      "事件建檔",
+      "記錄日期、牛號、胎次、DIM、群別、主要原因、次要原因與處置。"
+    ],
+    [
+      "分類原因",
+      "分為代謝、乳房炎、繁殖、蹄病、消化、外傷、犢牛病、管理事故或其他。"
+    ],
+    [
+      "回查前端",
+      "依原因回查乾乳、圍產、TMR、蹄病、乳房炎、繁殖或環境紀錄。"
+    ],
+    [
+      "成本估算",
+      "估算治療、棄乳、死亡/淘汰損失、替代牛成本與人力時間。"
+    ],
+    [
+      "改善閉環",
+      "每月回顧前三大原因，指定改善責任人、期限與追蹤指標。"
+    ]
+  ],
+  "records": [
+    "日期",
+    "牛號",
+    "胎次",
+    "DIM/月齡",
+    "群別",
+    "死亡/淘汰類型",
+    "主要原因",
+    "次要原因",
+    "治療紀錄",
+    "成本估算",
+    "改善措施",
+    "責任人"
+  ],
+  "commonMistakes": [
+    "原因只寫死亡或淘汰。",
+    "沒有區分計畫與非計畫淘汰。",
+    "沒有記 DIM，無法看出是否集中產後。",
+    "沒有回查前端管理。",
+    "月報只統計數量，沒有改善任務。"
+  ],
+  "tracking": [
+    "死亡率",
+    "非計畫淘汰率",
+    "產後 60 日內淘汰率",
+    "前三大淘汰原因",
+    "疾病成本",
+    "改善任務完成率"
+  ],
+  "warning": [
+    "短期多頭死亡",
+    "產後早期淘汰集中",
+    "同一原因反覆出現",
+    "犢牛死亡率上升",
+    "紀錄原因不明比例過高"
+  ],
+  "example": "案例：若淘汰原因第一名是產後代謝問題，就要回頭查乾乳 BCS、Close-up 採食、Fresh cow 追蹤，而不是只在淘汰表上寫『酮症』。"
+}
 };
 
 function getDeepSop(title) {
@@ -9198,7 +10521,23 @@ renderFarmDashboard();
 mockAiAnswer();
 highlightNav();
 
-// V15 全域搜尋與緊急通報邏輯
+// V17 全域搜尋與緊急輔導入口邏輯
+function openGlobalSearch() {
+  const overlay = document.getElementById('searchOverlay');
+  overlay.style.display = 'grid';
+  const input = document.getElementById('globalSearchInput');
+  input.value = '';
+  input.focus();
+  document.getElementById('searchResults').innerHTML = '<div class="result-item"><strong>輸入關鍵字開始搜尋</strong><br><small>可搜尋生命階段、問題中心、疾病知識庫與 SOP，例如：初乳、跛行、酮症、酒精陽性奶。</small></div>';
+}
+
+function quickSearch(keyword) {
+  const input = document.getElementById('globalSearchInput');
+  input.value = keyword;
+  input.focus();
+  handleGlobalSearch();
+}
+
 function openEmergencySearch() {
   document.getElementById('searchOverlay').style.display = 'grid';
   const input = document.getElementById('globalSearchInput');
@@ -9217,31 +10556,52 @@ function handleGlobalSearch() {
   const resultsBox = document.getElementById('searchResults');
   if (!q) { resultsBox.innerHTML = ''; return; }
   const results = [];
+  const isEmergency = q.includes('緊急') || q.includes('急') || q.includes('重症');
+  if (isEmergency) {
+    problems.filter(p => (p.risk || '').includes('高')).slice(0, 10).forEach(p => results.push({ type:'problem', title:p.title, id:p.id, intro:p.intro }));
+    diseaseKnowledge.filter(d => (d.risk || '').includes('高')).slice(0, 10).forEach(d => results.push({ type:'disease', title:d.name, id:d.id, intro:d.intro }));
+    sops.filter(s => ['Fresh cow產後21日追蹤 SOP','酒精陽性奶排查 SOP','蹄病跛行評分與分流 SOP','出生24小時犢牛檢查流程','乳房炎分級 SOP','犢牛腹瀉處理流程'].includes(s[0])).forEach(s => results.push({ type:'sop', title:s[0], id:s[0], desc:s[3] }));
+  }
   stages.forEach(s => {
-    if (s.title.toLowerCase().includes(q) || s.desc.toLowerCase().includes(q)) {
+    const hay = `${s.title} ${s.desc} ${(s.goals||[]).join(' ')} ${(s.metrics||[]).join(' ')} ${(s.problems||[]).join(' ')} ${(s.sops||[]).join(' ')}`.toLowerCase();
+    const terms = q.split(/\s+/).filter(Boolean);
+    if (!isEmergency && terms.some(t => hay.includes(t))) {
       results.push({ type: 'stage', title: s.title, id: s.id, desc: s.desc });
     }
   });
   problems.forEach(p => {
-    if (p.title.toLowerCase().includes(q) || p.intro.toLowerCase().includes(q)) {
+    const hay = `${p.title} ${p.stage} ${p.intro} ${p.keywords||''} ${(p.flow||[]).map(x=>x.join(' ')).join(' ')}`.toLowerCase();
+    const terms = q.split(/\s+/).filter(Boolean);
+    if (!isEmergency && terms.some(t => hay.includes(t))) {
       results.push({ type: 'problem', title: p.title, id: p.id, intro: p.intro });
     }
   });
   diseaseKnowledge.forEach(d => {
-    if (d.name.toLowerCase().includes(q) || d.intro.toLowerCase().includes(q)) {
+    const hay = `${d.name} ${d.category||''} ${d.intro} ${(d.symptoms||[]).join(' ')} ${(d.collect||[]).join(' ')}`.toLowerCase();
+    const terms = q.split(/\s+/).filter(Boolean);
+    if (!isEmergency && terms.some(t => hay.includes(t))) {
       results.push({ type: 'disease', title: d.name, id: d.id, intro: d.intro });
     }
   });
   sops.forEach(s => {
-    if (s[0].toLowerCase().includes(q) || s[3].toLowerCase().includes(q)) {
+    const hay = s.join(' ').toLowerCase();
+    const terms = q.split(/\s+/).filter(Boolean);
+    if (!isEmergency && terms.some(t => hay.includes(t))) {
       results.push({ type: 'sop', title: s[0], id: s[0], desc: s[3] });
     }
   });
-  if (results.length === 0) {
+  const seen = new Set();
+  const uniqueResults = results.filter(r => {
+    const key = `${r.type}-${r.id}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+  if (uniqueResults.length === 0) {
     resultsBox.innerHTML = '<div class="result-item">找不到相關結果</div>';
     return;
   }
-  resultsBox.innerHTML = results.map((r, idx) => `
+  resultsBox.innerHTML = uniqueResults.map((r, idx) => `
     <div class="result-item" onclick="handleResultClick('${r.type}', '${r.id}')">
       <div><strong>${r.type === 'stage' ? '🐮' : r.type === 'problem' ? '🚑' : r.type === 'disease' ? '🔬' : '📋'} ${r.title}</strong></div>
       <small>${r.desc || r.intro || ''}</small>
