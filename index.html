@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DairyLife 360｜V18.5｜牛寶 IP 活潑化設計版</title>
+  <title>DairyLife 360｜V18.5.8｜Portal Shell 入口平台架構版</title>
   <style>
     :root {
       --green-900:#133a27;
@@ -3287,6 +3287,18 @@
     }
     .consult-case-btn:hover,.consult-case-btn.active,
     .benchmark-tab-btn:hover,.benchmark-tab-btn.active { background:white; color:var(--green-900); transform:translateX(2px); }
+    #consultCaseMenu {
+      display:grid;
+      gap:8px;
+      max-height:calc(100vh - 210px);
+      overflow-y:auto;
+      overscroll-behavior:contain;
+      padding-right:4px;
+      scrollbar-width:thin;
+    }
+    #consultCaseMenu::-webkit-scrollbar { width:8px; }
+    #consultCaseMenu::-webkit-scrollbar-thumb { background:rgba(255,255,255,.28); border-radius:999px; }
+    @media(max-width:1180px){ #consultCaseMenu{max-height:460px;} }
     .consult-detail,
     .benchmark-detail-panel {
       background:white;
@@ -3615,9 +3627,963 @@
       background:#fbfefb;
     }
 
+  
+    /* ==============================
+    V18.5.2 STABLE UI REFRESH STYLE
+    輕量首頁摘要 + 手機閱讀優化。不重構 V18.5.1 主功能。
+    ============================== */
+    .v1852-stable-dashboard {
+      margin: 18px 0 24px;
+      padding: 22px;
+      border-radius: 28px;
+      background: linear-gradient(135deg, rgba(255,255,255,.95), #f0f8f2);
+      border: 1px solid rgba(47,125,80,.18);
+      box-shadow: var(--soft-shadow);
+    }
+    .v1852-dashboard-head {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) 240px;
+      gap: 16px;
+      align-items: stretch;
+      margin-bottom: 16px;
+    }
+    .v1852-label {
+      display:inline-flex;
+      padding:6px 10px;
+      border-radius:999px;
+      background: var(--green-100);
+      color: var(--green-800);
+      font-size:12px;
+      font-weight:950;
+      margin-bottom:8px;
+    }
+    .v1852-dashboard-head h2 {
+      margin:0;
+      color:var(--green-900);
+      font-size: clamp(24px, 2.4vw, 34px);
+      line-height:1.12;
+      letter-spacing:-.4px;
+    }
+    .v1852-dashboard-head p {
+      margin:8px 0 0;
+      color:var(--muted);
+      font-weight:800;
+      line-height:1.6;
+    }
+    .v1852-niubao-note {
+      display:grid;
+      align-content:center;
+      gap:6px;
+      padding:16px;
+      border-radius:22px;
+      background: var(--green-900);
+      color:white;
+      position:relative;
+      overflow:hidden;
+    }
+    .v1852-niubao-note:after {
+      content:"🐮";
+      position:absolute;
+      right:10px;
+      bottom:-12px;
+      font-size:58px;
+      opacity:.16;
+      transform:rotate(-8deg);
+    }
+    .v1852-niubao-note b {
+      font-size:18px;
+      position:relative;
+      z-index:1;
+    }
+    .v1852-niubao-note span {
+      color:rgba(255,255,255,.78);
+      font-size:13px;
+      font-weight:850;
+      line-height:1.45;
+      position:relative;
+      z-index:1;
+    }
+    .v1852-kpi-grid {
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:12px;
+      margin-bottom:14px;
+    }
+    .v1852-kpi-card {
+      display:block;
+      padding:16px;
+      border-radius:22px;
+      background:white;
+      border:1px solid var(--line);
+      box-shadow:0 10px 24px rgba(21,72,45,.06);
+      transition:.18s ease;
+      min-height:132px;
+    }
+    .v1852-kpi-card:hover {
+      transform:translateY(-2px);
+      box-shadow:0 16px 30px rgba(21,72,45,.10);
+    }
+    .v1852-kpi-card small {
+      display:inline-flex;
+      padding:5px 9px;
+      border-radius:999px;
+      font-weight:950;
+      font-size:12px;
+      margin-bottom:10px;
+    }
+    .v1852-kpi-card strong {
+      display:block;
+      color:var(--green-900);
+      font-size:21px;
+      margin-bottom:6px;
+    }
+    .v1852-kpi-card span {
+      display:block;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.5;
+      font-weight:850;
+    }
+    .v1852-kpi-card.danger small { background:var(--red-100); color:#9d312b; }
+    .v1852-kpi-card.green small { background:var(--green-100); color:var(--green-800); }
+    .v1852-kpi-card.blue small { background:var(--blue-100); color:var(--blue-700); }
+    .v1852-kpi-card.orange small { background:var(--orange-100); color:#8c560d; }
+    .v1852-mini-actions {
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    .v1852-mini-actions button {
+      border:1px solid rgba(47,125,80,.18);
+      background:white;
+      color:var(--green-900);
+      border-radius:999px;
+      padding:10px 13px;
+      font-weight:950;
+      cursor:pointer;
+      box-shadow:0 8px 18px rgba(21,72,45,.05);
+    }
+    .v1852-mini-actions button:hover {
+      background:var(--green-100);
+      color:var(--green-800);
+    }
+
+    @media (max-width:1180px) {
+      .v1852-dashboard-head {
+        grid-template-columns:1fr;
+      }
+      .v1852-kpi-grid {
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+    }
+
+    @media (max-width:760px) {
+      section {
+        padding:38px 0;
+      }
+      .container {
+        padding:0 18px;
+      }
+      .hero {
+        padding:34px 0 30px;
+      }
+      .eyebrow {
+        font-size: clamp(18px, 5vw, 26px);
+        padding:10px 14px;
+      }
+      h1 {
+        font-size: clamp(26px, 8vw, 34px);
+      }
+      .hero-copy {
+        font-size:15px;
+      }
+      .v1852-stable-dashboard {
+        padding:16px;
+        border-radius:22px;
+        margin:16px 0 18px;
+      }
+      .v1852-dashboard-head h2 {
+        font-size:24px;
+      }
+      .v1852-dashboard-head p {
+        font-size:13px;
+      }
+      .v1852-niubao-note {
+        padding:13px;
+        border-radius:18px;
+      }
+      .v1852-kpi-grid {
+        grid-template-columns:1fr;
+        gap:9px;
+      }
+      .v1852-kpi-card {
+        min-height:auto;
+        padding:13px;
+        border-radius:18px;
+      }
+      .v1852-kpi-card strong {
+        font-size:18px;
+      }
+      .v1852-kpi-card span {
+        font-size:12px;
+      }
+      .v1852-mini-actions {
+        overflow-x:auto;
+        flex-wrap:nowrap;
+        padding-bottom:4px;
+        -webkit-overflow-scrolling:touch;
+      }
+      .v1852-mini-actions button {
+        flex:0 0 auto;
+        padding:9px 11px;
+        font-size:12px;
+      }
+      .hero-stats {
+        grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+      }
+      .stat-card {
+        padding:13px;
+      }
+      .stat-card strong {
+        font-size:20px;
+      }
+      .stat-card span {
+        font-size:12px;
+      }
+    }
+
+    @media (max-width:520px) {
+      .hero-stats {
+        grid-template-columns:1fr !important;
+      }
+    }
+
+  
+    /* ==============================
+    V18.5.3 STABLE CONTENT NAVIGATION STYLE
+    版本標示、內容導覽、手機底部快速列。
+    ============================== */
+    .v1853-version-chip {
+      position:absolute;
+      top:10px;
+      right:10px;
+      z-index:2;
+      padding:5px 8px;
+      border-radius:999px;
+      background:var(--green-100);
+      color:var(--green-800);
+      border:1px solid rgba(47,125,80,.16);
+      font-size:11px;
+      font-weight:950;
+      white-space:nowrap;
+    }
+    .brand {
+      position:relative;
+    }
+
+    .v1853-guide-panel {
+      margin: 0 0 24px;
+      padding: 22px;
+      border-radius: 28px;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      box-shadow: var(--soft-shadow);
+    }
+    .v1853-guide-head {
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 280px;
+      gap:16px;
+      align-items:stretch;
+      margin-bottom:16px;
+    }
+    .v1853-guide-head span {
+      display:inline-flex;
+      padding:6px 10px;
+      border-radius:999px;
+      background:var(--blue-100);
+      color:var(--blue-700);
+      font-size:12px;
+      font-weight:950;
+      margin-bottom:8px;
+    }
+    .v1853-guide-head h2 {
+      margin:0;
+      color:var(--green-900);
+      font-size:clamp(22px,2.2vw,31px);
+      line-height:1.15;
+    }
+    .v1853-guide-head p {
+      margin:8px 0 0;
+      color:var(--muted);
+      font-weight:850;
+      line-height:1.6;
+    }
+    .v1853-guide-note {
+      display:grid;
+      place-items:center;
+      padding:16px;
+      border-radius:22px;
+      background:linear-gradient(135deg,var(--green-900),#245c3d);
+      color:rgba(255,255,255,.86);
+      font-weight:900;
+      line-height:1.6;
+      position:relative;
+      overflow:hidden;
+    }
+    .v1853-guide-note:after {
+      content:"牛寶";
+      position:absolute;
+      right:-8px;
+      bottom:-6px;
+      color:rgba(255,255,255,.08);
+      font-size:42px;
+      font-weight:950;
+    }
+    .v1853-route-grid {
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:12px;
+    }
+    .v1853-route-card {
+      display:block;
+      padding:15px;
+      border-radius:20px;
+      background:#fbfefb;
+      border:1px solid var(--line);
+      transition:.18s ease;
+    }
+    .v1853-route-card:hover {
+      transform:translateY(-2px);
+      border-color:rgba(47,125,80,.28);
+      box-shadow:0 12px 24px rgba(21,72,45,.08);
+    }
+    .v1853-route-card b {
+      display:block;
+      color:var(--green-900);
+      font-size:16px;
+      margin-bottom:6px;
+    }
+    .v1853-route-card span {
+      display:block;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.55;
+      font-weight:850;
+    }
+
+    .v1853-mobile-quickbar {
+      display:none;
+    }
+
+    @media (max-width:1180px) {
+      .v1853-guide-head {
+        grid-template-columns:1fr;
+      }
+      .v1853-route-grid {
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+    }
+
+    @media (max-width:760px) {
+      body {
+        padding-bottom:64px;
+      }
+      .v1853-version-chip {
+        display:none;
+      }
+      .v1853-guide-panel {
+        padding:15px;
+        border-radius:22px;
+        margin-bottom:18px;
+      }
+      .v1853-guide-head {
+        gap:10px;
+        margin-bottom:12px;
+      }
+      .v1853-guide-head h2 {
+        font-size:21px;
+      }
+      .v1853-guide-head p {
+        font-size:13px;
+      }
+      .v1853-guide-note {
+        padding:12px;
+        border-radius:18px;
+        font-size:13px;
+      }
+      .v1853-route-grid {
+        grid-template-columns:1fr;
+        gap:9px;
+      }
+      .v1853-route-card {
+        padding:12px;
+        border-radius:17px;
+      }
+      .v1853-route-card b {
+        font-size:15px;
+      }
+      .v1853-route-card span {
+        font-size:12px;
+      }
+      .v1853-mobile-quickbar {
+        position:fixed;
+        left:10px;
+        right:10px;
+        bottom:10px;
+        z-index:120;
+        display:grid;
+        grid-template-columns:repeat(5,1fr);
+        gap:6px;
+        padding:8px;
+        border-radius:20px;
+        background:rgba(255,255,255,.94);
+        border:1px solid var(--line);
+        box-shadow:0 18px 42px rgba(21,72,45,.18);
+        backdrop-filter:blur(14px);
+      }
+      .v1853-mobile-quickbar button {
+        border:0;
+        border-radius:14px;
+        padding:9px 4px;
+        background:var(--green-100);
+        color:var(--green-900);
+        font-size:12px;
+        font-weight:950;
+        cursor:pointer;
+      }
+      .v1853-mobile-quickbar button:first-child {
+        background:var(--green-800);
+        color:white;
+      }
+    }
+
+  
+    /* ==============================
+    V18.5.4 STABLE HOME CLEANUP STYLE
+    將首頁摘要與導覽合併為牛寶管理入口；手機前段高度壓縮。
+    ============================== */
+    .v1854-home-gateway {
+      margin: 18px 0 22px;
+      padding: 22px;
+      border-radius: 30px;
+      background:
+        radial-gradient(circle at 96% 8%, rgba(61,153,101,.12), transparent 28%),
+        linear-gradient(135deg, #ffffff 0%, #f4fbf6 100%);
+      border: 1px solid rgba(47,125,80,.18);
+      box-shadow: var(--soft-shadow);
+    }
+    .v1854-gateway-top {
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 280px;
+      gap:16px;
+      align-items:stretch;
+      margin-bottom:16px;
+    }
+    .v1854-tag {
+      display:inline-flex;
+      align-items:center;
+      padding:6px 11px;
+      border-radius:999px;
+      background:var(--green-100);
+      color:var(--green-800);
+      font-size:12px;
+      font-weight:950;
+      margin-bottom:9px;
+    }
+    .v1854-gateway-title h2 {
+      margin:0;
+      color:var(--green-900);
+      font-size:clamp(26px,2.6vw,38px);
+      line-height:1.1;
+      letter-spacing:-.6px;
+    }
+    .v1854-gateway-title p {
+      margin:9px 0 0;
+      color:var(--muted);
+      line-height:1.65;
+      font-weight:850;
+      max-width:760px;
+    }
+    .v1854-niubao-card {
+      display:grid;
+      align-content:center;
+      gap:7px;
+      padding:17px;
+      border-radius:23px;
+      color:white;
+      background:linear-gradient(145deg,var(--green-900),#245f3d);
+      position:relative;
+      overflow:hidden;
+    }
+    .v1854-niubao-card:after {
+      content:"🐮";
+      position:absolute;
+      right:8px;
+      bottom:-18px;
+      font-size:72px;
+      opacity:.14;
+      transform:rotate(-10deg);
+    }
+    .v1854-niubao-card b {
+      position:relative;
+      z-index:1;
+      font-size:19px;
+    }
+    .v1854-niubao-card span {
+      position:relative;
+      z-index:1;
+      color:rgba(255,255,255,.78);
+      font-size:13px;
+      line-height:1.55;
+      font-weight:850;
+    }
+    .v1854-route-row {
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:12px;
+      margin-bottom:13px;
+    }
+    .v1854-route {
+      display:block;
+      min-height:128px;
+      padding:16px;
+      border-radius:23px;
+      background:white;
+      border:1px solid var(--line);
+      box-shadow:0 10px 24px rgba(21,72,45,.06);
+      transition:.18s ease;
+    }
+    .v1854-route:hover {
+      transform:translateY(-2px);
+      box-shadow:0 16px 30px rgba(21,72,45,.10);
+    }
+    .v1854-route small {
+      display:inline-flex;
+      padding:5px 9px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:950;
+      margin-bottom:10px;
+    }
+    .v1854-route strong {
+      display:block;
+      color:var(--green-900);
+      font-size:21px;
+      margin-bottom:6px;
+    }
+    .v1854-route span {
+      display:block;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.5;
+      font-weight:850;
+    }
+    .v1854-route.green small { background:var(--green-100); color:var(--green-800); }
+    .v1854-route.red small { background:var(--red-100); color:#9d312b; }
+    .v1854-route.blue small { background:var(--blue-100); color:var(--blue-700); }
+    .v1854-route.orange small { background:var(--orange-100); color:#8c560d; }
+
+    .v1854-action-row {
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    .v1854-action-row button {
+      border:1px solid rgba(47,125,80,.16);
+      background:white;
+      color:var(--green-900);
+      border-radius:999px;
+      padding:10px 13px;
+      font-weight:950;
+      cursor:pointer;
+      box-shadow:0 8px 18px rgba(21,72,45,.05);
+    }
+    .v1854-action-row button:hover {
+      background:var(--green-100);
+      color:var(--green-800);
+    }
+
+    @media (max-width:1180px) {
+      .v1854-gateway-top {
+        grid-template-columns:1fr;
+      }
+      .v1854-route-row {
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+    }
+
+    @media (max-width:760px) {
+      .v1854-home-gateway {
+        margin: 14px 0 16px;
+        padding: 14px;
+        border-radius: 22px;
+      }
+      .v1854-gateway-top {
+        gap:10px;
+        margin-bottom:12px;
+      }
+      .v1854-tag {
+        font-size:11px;
+        padding:5px 9px;
+        margin-bottom:7px;
+      }
+      .v1854-gateway-title h2 {
+        font-size:24px;
+      }
+      .v1854-gateway-title p {
+        font-size:13px;
+        line-height:1.5;
+      }
+      .v1854-niubao-card {
+        padding:12px 13px;
+        border-radius:18px;
+      }
+      .v1854-niubao-card b {
+        font-size:16px;
+      }
+      .v1854-niubao-card span {
+        font-size:12px;
+        line-height:1.45;
+      }
+      .v1854-route-row {
+        grid-template-columns:1fr 1fr;
+        gap:8px;
+        margin-bottom:10px;
+      }
+      .v1854-route {
+        min-height:104px;
+        padding:12px;
+        border-radius:17px;
+      }
+      .v1854-route small {
+        font-size:10px;
+        padding:4px 7px;
+        margin-bottom:7px;
+      }
+      .v1854-route strong {
+        font-size:16px;
+        margin-bottom:4px;
+      }
+      .v1854-route span {
+        font-size:11px;
+        line-height:1.35;
+      }
+      .v1854-action-row {
+        overflow-x:auto;
+        flex-wrap:nowrap;
+        padding-bottom:4px;
+        -webkit-overflow-scrolling:touch;
+      }
+      .v1854-action-row button {
+        flex:0 0 auto;
+        font-size:12px;
+        padding:9px 11px;
+      }
+
+      /* 手機版把原本 hero stats 也微縮，不影響桌機平板 */
+      .hero-stats {
+        gap:8px !important;
+      }
+    }
+
+    @media (max-width:440px) {
+      .v1854-route-row {
+        grid-template-columns:1fr;
+      }
+      .v1854-route {
+        min-height:auto;
+      }
+    }
+
+  
+    /* ==============================
+    V18.5.5 CROSS-MODULE SOP LINK STYLE
+    問診、視覺評分、營養原物料 → SOP 預覽一鍵聯動
+    ============================== */
+    .v1855-sop-link,
+    .v1855-benchmark-link {
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      border:1px solid rgba(47,125,80,.20);
+      background:linear-gradient(135deg,#ffffff,#f4fbf6);
+      color:var(--green-800);
+      border-radius:999px;
+      padding:7px 10px;
+      font-weight:950;
+      font-size:13px;
+      cursor:pointer;
+      box-shadow:0 8px 18px rgba(21,72,45,.06);
+      text-align:left;
+      line-height:1.35;
+    }
+    .v1855-sop-link:hover,
+    .v1855-benchmark-link:hover {
+      background:var(--green-100);
+      transform:translateY(-1px);
+    }
+    .v1855-sop-miss {
+      color:var(--muted);
+      font-weight:850;
+    }
+    .v1855-sop-note {
+      margin:10px 0 0;
+      padding:11px 13px;
+      border-radius:16px;
+      background:var(--green-50);
+      border:1px dashed rgba(47,125,80,.24);
+      color:var(--green-900);
+      font-weight:900;
+      font-size:13px;
+      line-height:1.55;
+    }
+    .v1855-benchmark-sop-box {
+      margin-top:12px;
+      padding:13px;
+      border-radius:18px;
+      background:#fbfefb;
+      border:1px solid var(--line);
+    }
+    .v1855-benchmark-sop-box b {
+      display:block;
+      color:var(--green-900);
+      margin-bottom:8px;
+    }
+    .v1855-benchmark-sop-box .v1855-sop-link {
+      margin:4px 6px 4px 0;
+    }
+    .nutrition-info-card .v1855-sop-link {
+      margin:3px 5px 5px 0;
+    }
+    @media (max-width:760px) {
+      .v1855-sop-link,
+      .v1855-benchmark-link {
+        font-size:12px;
+        padding:7px 9px;
+      }
+      .v1855-sop-note {
+        font-size:12px;
+      }
+    }
+
+  
+
+    /* ==============================
+       V18.5.8 PORTAL SHELL
+       左側入口導覽 × 右側單一模組工作區
+       ============================== */
+    body.portal-mode { overflow-x:hidden; }
+    .portal-sub-label { margin-top:18px; }
+    [data-portal-page][hidden] { display:none !important; }
+    [data-portal-page].portal-active { animation:portalPageIn .22s ease both; }
+    @keyframes portalPageIn {
+      from { opacity:0; transform:translateY(7px); }
+      to { opacity:1; transform:none; }
+    }
+    .portal-page:not(#home) {
+      min-height:calc(100vh - 20px);
+      padding-top:24px;
+      padding-bottom:64px;
+    }
+    .portal-contextbar {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      margin:0 0 24px;
+      padding:12px 14px;
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:rgba(255,255,255,.86);
+      backdrop-filter:blur(12px);
+      box-shadow:0 10px 28px rgba(21,72,45,.06);
+    }
+    .portal-breadcrumb {
+      display:flex;
+      align-items:center;
+      gap:9px;
+      min-width:0;
+      color:var(--muted);
+      font-size:13px;
+      font-weight:850;
+    }
+    .portal-breadcrumb strong {
+      color:var(--green-900);
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+    .portal-context-actions { display:flex; gap:8px; flex-shrink:0; }
+    .portal-context-actions button {
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:8px 11px;
+      background:white;
+      color:var(--green-900);
+      font-weight:900;
+      cursor:pointer;
+    }
+    .portal-context-actions button:first-child { background:var(--green-100); border-color:transparent; }
+
+    /* 首頁入口化：保留牛寶主視覺，但移除重複長內容 */
+    #home.portal-page {
+      padding-top:42px;
+      padding-bottom:58px;
+      align-items:start;
+    }
+    #home > div:first-child .actions,
+    #home > div:first-child .v1854-home-gateway,
+    #home > div:first-child .hero-stats,
+    #home > div:first-child .v185-niubao-inline-row { display:none !important; }
+    #home .hero-copy { max-width:660px; margin-bottom:18px; }
+    #home .hero-quick-tools { margin:0; }
+    #home .hero-visual { min-height:430px; }
+    #home .hero-mark-row { display:none !important; }
+    #home .niubao-showcase { min-height:370px; }
+    .portal-launchpad {
+      grid-column:1 / -1;
+      margin-top:8px;
+      padding:26px;
+      border-radius:30px;
+      background:rgba(255,255,255,.88);
+      border:1px solid var(--line);
+      box-shadow:var(--hard-shadow);
+    }
+    .portal-launchpad-head {
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:20px;
+      margin-bottom:18px;
+    }
+    .portal-launchpad-head small {
+      display:block;
+      color:var(--green-700);
+      font-weight:950;
+      letter-spacing:.09em;
+      margin-bottom:4px;
+    }
+    .portal-launchpad-head h2 {
+      margin:0;
+      color:var(--green-900);
+      font-size:clamp(25px,3vw,38px);
+      line-height:1.18;
+    }
+    .portal-launchpad-head p { margin:6px 0 0; color:var(--muted); }
+    .portal-search-pill {
+      border:0;
+      border-radius:999px;
+      padding:11px 15px;
+      background:var(--green-900);
+      color:white;
+      font-weight:950;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .portal-card-grid {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+    }
+    .portal-card {
+      display:grid;
+      grid-template-columns:48px minmax(0,1fr) 24px;
+      align-items:center;
+      gap:13px;
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:15px;
+      background:#fff;
+      color:var(--text);
+      text-align:left;
+      cursor:pointer;
+      box-shadow:0 8px 20px rgba(21,72,45,.04);
+      transition:.18s ease;
+    }
+    .portal-card:hover {
+      transform:translateY(-2px);
+      border-color:rgba(47,125,80,.28);
+      box-shadow:0 14px 28px rgba(21,72,45,.09);
+    }
+    .portal-card.featured {
+      background:linear-gradient(135deg,var(--green-900),#23633f);
+      color:white;
+      border-color:transparent;
+    }
+    .portal-card span:nth-child(2) { min-width:0; }
+    .portal-card b { display:block; font-size:16px; line-height:1.25; }
+    .portal-card small { display:block; color:var(--muted); margin-top:3px; font-weight:800; }
+    .portal-card.featured small { color:rgba(255,255,255,.70); }
+    .portal-card i { font-style:normal; font-weight:950; color:var(--green-700); text-align:right; }
+    .portal-card.featured i { color:white; }
+    .portal-card-icon {
+      width:48px;
+      height:48px;
+      display:grid;
+      place-items:center;
+      border-radius:16px;
+      font-size:24px;
+      background:var(--green-100);
+    }
+    .portal-card-icon.red { background:var(--red-100); }
+    .portal-card-icon.blue { background:var(--blue-100); }
+    .portal-card-icon.orange { background:var(--orange-100); }
+    .portal-card-icon.dark { background:rgba(255,255,255,.13); }
+    .portal-card-icon.purple { background:#f1eafd; }
+    .portal-card-icon.teal { background:#e5f7f4; }
+    .portal-card-icon.yellow { background:#fff5cf; }
+    .portal-card-icon.mint { background:#e8f7ef; }
+    .portal-card-icon.cream { background:#fff2e4; }
+
+    /* Portal 模式下只需當前模組，移除長頁式 section 間距感 */
+    .portal-page:not(#home) > .section-title:first-of-type,
+    .portal-page:not(#home) > .portal-contextbar + .section-title {
+      margin-top:0;
+    }
+    .portal-page:not(#home) .section-title { margin-bottom:20px; }
+    .portal-page:not(#home) .section-title h2 { font-size:clamp(27px,3vw,40px); }
+    .portal-side-card { position:relative; }
+
+    @media (max-width:1080px) {
+      .portal-card-grid { grid-template-columns:1fr; }
+      #home .hero-visual { min-height:390px; }
+    }
+    @media (max-width:900px) {
+      #home.portal-page { padding-top:24px; }
+      .portal-launchpad { padding:19px; border-radius:24px; }
+      .portal-launchpad-head { align-items:flex-start; flex-direction:column; }
+      .portal-search-pill { width:100%; }
+      .portal-page:not(#home) { padding-top:16px; }
+    }
+    @media (max-width:760px) {
+      #home.portal-page { display:block; }
+      #home > div:first-child { margin-bottom:18px; }
+      #home .hero-visual { min-height:340px; margin-bottom:18px; }
+      #home .niubao-showcase { min-height:310px; }
+      .portal-launchpad { margin-top:0; padding:16px; }
+      .portal-launchpad-head h2 { font-size:25px; }
+      .portal-launchpad-head p { font-size:14px; }
+      .portal-card { grid-template-columns:44px minmax(0,1fr) 18px; padding:13px; border-radius:18px; }
+      .portal-card-icon { width:44px; height:44px; border-radius:14px; font-size:22px; }
+      .portal-card b { font-size:15px; }
+      .portal-card small { font-size:12px; }
+      .portal-contextbar { position:sticky; top:68px; z-index:18; margin-bottom:18px; }
+      .portal-breadcrumb span { display:none; }
+      .portal-context-actions button { padding:8px 10px; font-size:12px; }
+    }
+
   </style>
 </head>
 <body>
+  <!-- V18.5.5 STABLE LINE
+  基底：V18.5.3 穩定版內容導覽與手機細節優化。
+  原則：保留 V18.5.1/V18.5.2/V18.5.3 功能與牛寶 IP，合併首頁前段，改善手機首屏效率，並新增問診／視覺評分／營養原物料到 SOP 預覽的一鍵聯動。
+  -->
+  <!-- V18.5.2 STABLE LINE
+  基底：V18.5.1 牛寶 IP 穩定修正版。
+  原則：不重構、不移除原功能、不刪除牛寶 IP，只新增首頁摘要與手機閱讀優化。
+  -->
   <!-- V18.1: role separation between structured consultation and Niubao AI advisor, plus public-source visual benchmarking images. -->
   <div class="topbar">
     <div class="brand" style="margin:0;padding:0;">
@@ -3636,6 +4602,7 @@
   <div class="mobile-overlay" id="mobileOverlay" onclick="toggleDrawer(false)"></div>
   <aside class="mobile-drawer" id="mobileDrawer">
     <div class="brand">
+      <div class="v1853-version-chip">入口架構版 V18.5.8</div>
       <span class="brand-logo brand-logo-image"><img src="data:image/webp;base64,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" alt="DairyLife 360 logo"></span>
       <div><strong>DairyLife 360</strong><span>乳牛全生命週期管理平台</span></div>
     </div>
@@ -3659,19 +4626,22 @@
         <a class="nav-link" href="#lifecycle"><span class="emoji">🐮</span>生命週期</a>
         <a class="nav-link" href="#nutrition"><span class="emoji">🌾</span>營養雷達</a>
         <a class="nav-link" href="#problems"><span class="emoji">🚑</span>問題中心</a>
+        <a class="nav-link" href="#disease"><span class="emoji">🩺</span>疾病知識庫</a>
         <a class="nav-link" href="#diagnosis"><span class="emoji">🧭</span>現場問診</a>
         <a class="nav-link" href="#benchmark"><span class="emoji">👁️</span>視覺評分</a>
         <a class="nav-link" href="#sop"><span class="emoji">📋</span>SOP資料庫</a>
         <a class="nav-link" href="#tools"><span class="emoji">🧮</span>管理工具</a>
+        <a class="nav-link" href="#fieldtools"><span class="emoji">🧰</span>現場工具箱</a>
         <a class="nav-link" href="#assistant"><span class="emoji">🤖</span>AI牛隻顧問</a>
+        <div class="side-label portal-sub-label">平台資訊</div>
         <a class="nav-link" href="#service"><span class="emoji">🤝</span>顧問服務</a>
         <a class="nav-link" href="#roadmap"><span class="emoji">🚀</span>開發藍圖</a>
       </nav>
 
-      <div class="side-card">
-        <strong>提案版 MVP</strong>
-        <p>可直接拿去展示網站方向、功能模組與未來商業化路線。</p>
-        <a href="#roadmap">看開發階段</a>
+      <div class="side-card portal-side-card">
+        <strong>V18.5.8 Portal Shell</strong>
+        <p>一次開啟一個工作模組，內容完整保留，操作更聚焦。</p>
+        <a href="#home">回到入口首頁</a>
       </div>
     </aside>
 
@@ -3696,6 +4666,61 @@
             <button class="quick-tool-btn" onclick="openGlobalSearch()">🔎 全站搜尋</button>
             <button class="quick-tool-btn danger" onclick="openEmergencySearch()">🚨 緊急輔導入口</button>
           </div>
+
+        <!-- ==============================
+        V18.5.4 STABLE HOME GATEWAY START
+        首頁整理版：將 V18.5.2 摘要與 V18.5.3 導覽合併為單一「牛寶管理入口」。
+        原功能不移動、不刪除；只整理首頁前段。
+        ============================== -->
+        <div class="v1854-home-gateway" id="niubaoGateway">
+          <div class="v1854-gateway-top">
+            <div class="v1854-gateway-title">
+              <span class="v1854-tag">V18.5.4 穩定主線</span>
+              <h2>牛寶管理入口</h2>
+              <p>把首頁前段收斂成一個工作入口：先看牛隻階段，再查現場問題，接著確認疾病風險，最後落到 SOP 執行。</p>
+            </div>
+
+            <div class="v1854-niubao-card">
+              <b>牛寶提醒</b>
+              <span>先判斷「在哪個階段」與「現場看到什麼」，不要一開始就跳疾病結論。</span>
+            </div>
+          </div>
+
+          <div class="v1854-route-row">
+            <a class="v1854-route green" href="#lifecycle">
+              <small>STEP 1</small>
+              <strong>生命週期</strong>
+              <span>先確認牛隻目前階段</span>
+            </a>
+            <a class="v1854-route red" href="#problems">
+              <small>STEP 2</small>
+              <strong>問題中心</strong>
+              <span>依現象進入排查</span>
+            </a>
+            <a class="v1854-route blue" href="#disease">
+              <small>STEP 3</small>
+              <strong>疾病知識</strong>
+              <span>確認風險與可能原因</span>
+            </a>
+            <a class="v1854-route orange" href="#sop">
+              <small>STEP 4</small>
+              <strong>SOP 執行</strong>
+              <span>轉成現場檢核與行動</span>
+            </a>
+          </div>
+
+          <div class="v1854-action-row">
+            <button onclick="openGlobalSearch()">🔎 全站搜尋</button>
+            <button onclick="document.querySelector('#nutrition')?.scrollIntoView({behavior:'smooth'})">🌿 營養雷達</button>
+            <button onclick="document.querySelector('#assistant')?.scrollIntoView({behavior:'smooth'})">🤖 AI 牛隻顧問</button>
+            <button onclick="document.querySelector('#tools')?.scrollIntoView({behavior:'smooth'})">🧰 現場工具箱</button>
+          </div>
+        </div>
+        <!-- V18.5.4 STABLE HOME GATEWAY END -->
+
+
+
+
 
           <div class="hero-stats">
             <div class="stat-card"><strong>9</strong><span>生命階段管理</span></div>
@@ -3738,6 +4763,49 @@
             </div>
           </div>
         </div>
+        <div class="portal-launchpad" aria-label="DairyLife 360 功能入口">
+          <div class="portal-launchpad-head">
+            <div>
+              <small>DAIRYLIFE 360 PORTAL</small>
+              <h2>選擇今天要處理的工作</h2>
+              <p>首頁只負責帶你進門；進入後，右側一次只顯示一個模組。</p>
+            </div>
+            <button type="button" class="portal-search-pill" onclick="openGlobalSearch()">🔎 搜尋全部內容</button>
+          </div>
+          <div class="portal-card-grid">
+            <button type="button" class="portal-card" data-route="lifecycle">
+              <span class="portal-card-icon green">🐮</span><span><b>生命週期管理</b><small>9 大階段・依牛群階段進入</small></span><i>→</i>
+            </button>
+            <button type="button" class="portal-card featured" data-route="diagnosis">
+              <span class="portal-card-icon dark">🧭</span><span><b>現場問診</b><small>21 組問診・根因推理與任務卡</small></span><i>→</i>
+            </button>
+            <button type="button" class="portal-card" data-route="problems">
+              <span class="portal-card-icon red">🚑</span><span><b>問題解決中心</b><small>50 個現場問題・快速排查</small></span><i>→</i>
+            </button>
+            <button type="button" class="portal-card" data-route="disease">
+              <span class="portal-card-icon blue">🩺</span><span><b>疾病知識庫</b><small>症狀辨識・蒐證與通報</small></span><i>→</i>
+            </button>
+            <button type="button" class="portal-card" data-route="nutrition">
+              <span class="portal-card-icon orange">🌾</span><span><b>營養風險雷達</b><small>26 張原物料資料卡</small></span><i>→</i>
+            </button>
+            <button type="button" class="portal-card" data-route="benchmark">
+              <span class="portal-card-icon purple">👁️</span><span><b>視覺評分</b><small>糞便・跛行・BCS・衛生</small></span><i>→</i>
+            </button>
+            <button type="button" class="portal-card" data-route="sop">
+              <span class="portal-card-icon teal">📋</span><span><b>SOP 資料庫</b><small>30 份 SOP、表單與檢核表</small></span><i>→</i>
+            </button>
+            <button type="button" class="portal-card" data-route="fieldtools">
+              <span class="portal-card-icon yellow">🧰</span><span><b>現場工具箱</b><small>分級、紀錄與月報工具</small></span><i>→</i>
+            </button>
+            <button type="button" class="portal-card" data-route="tools">
+              <span class="portal-card-icon mint">🧮</span><span><b>管理試算工具</b><small>把現場判斷轉成數字</small></span><i>→</i>
+            </button>
+            <button type="button" class="portal-card" data-route="assistant">
+              <span class="portal-card-icon cream">🤖</span><span><b>牛寶 AI 顧問</b><small>用白話描述現場狀況</small></span><i>→</i>
+            </button>
+          </div>
+        </div>
+
       </section>
 
       <section id="lifecycle" class="container">
@@ -3885,7 +4953,7 @@
           <div>
             <span class="badge">V18 現場問診與根因推理</span>
             <h2>從「症狀」走到「根因」，讓輔導判斷有路徑</h2>
-            <p>先以 5 個高頻高價值問題建立示範：犢牛腹瀉、酒精陽性奶、蹄病跛行、產後食慾差／酮症風險、乳房炎／SCC 升高。</p>
+            <p>第二階段完成後已擴充為 21 組高頻現場問診：在原有 13 組上，新增臍帶與關節、生長與離乳、育成體況、乳成分、飼料變質、牛床環境、流產及難產弱仔管理。</p>
           </div>
         </div>
         <div class="v18-value-card">
@@ -3899,7 +4967,7 @@
         <div class="consult-shell">
           <div class="consult-menu">
             <h3>選擇現場問題</h3>
-            <p>點選問題後，右側會展開問診流程、根因分流、牛寶提示與追蹤任務卡。</p>
+            <p>目前共 21 組。點選問題後，右側會展開問診流程、根因分流、牛寶提示與追蹤任務卡。</p>
             <div id="consultCaseMenu"></div>
           </div>
           <div class="consult-detail">
@@ -4750,10 +5818,12 @@ const navHtml = `
   <a class="nav-link" href="#lifecycle" onclick="toggleDrawer(false)"><span class="emoji">🐮</span>生命週期</a>
   <a class="nav-link" href="#nutrition" onclick="toggleDrawer(false)"><span class="emoji">🌾</span>營養雷達</a>
   <a class="nav-link" href="#problems" onclick="toggleDrawer(false)"><span class="emoji">🚑</span>問題中心</a>
+  <a class="nav-link" href="#disease" onclick="toggleDrawer(false)"><span class="emoji">🩺</span>疾病知識庫</a>
   <a class="nav-link" href="#diagnosis" onclick="toggleDrawer(false)"><span class="emoji">🧭</span>現場問診</a>
   <a class="nav-link" href="#benchmark" onclick="toggleDrawer(false)"><span class="emoji">👁️</span>視覺評分</a>
   <a class="nav-link" href="#sop" onclick="toggleDrawer(false)"><span class="emoji">📋</span>SOP資料庫</a>
   <a class="nav-link" href="#tools" onclick="toggleDrawer(false)"><span class="emoji">🧮</span>管理工具</a>
+  <a class="nav-link" href="#fieldtools" onclick="toggleDrawer(false)"><span class="emoji">🧰</span>現場工具箱</a>
   <a class="nav-link" href="#assistant" onclick="toggleDrawer(false)"><span class="emoji">🤖</span>AI牛隻顧問</a>
   <a class="nav-link" href="#service" onclick="toggleDrawer(false)"><span class="emoji">🤝</span>顧問服務</a>
   <a class="nav-link" href="#roadmap" onclick="toggleDrawer(false)"><span class="emoji">🚀</span>開發藍圖</a>
@@ -11224,7 +12294,7 @@ function selectDisease(id){const d=diseaseKnowledge.find(x=>x.id===id); if(!d) r
 
 
 
-const consultationCases = [{"id": "calf_diarrhea", "icon": "🍼", "title": "犢牛腹瀉／下痢", "subtitle": "從日齡、初乳、脫水、糞便型態與同批發生率，區分感染、初乳失敗與飼養管理問題。", "risk": "高風險", "riskClass": "high", "questions": ["犢牛目前幾日齡？是 1–7 日齡、7–14 日齡，還是離乳前後？", "同批是否多頭發生？是否集中在同一欄位、同一奶桶或同一照護人員？", "糞便是水樣、黏液、血樣、惡臭，還是灰白色消化不良？", "精神、吸吮反射、眼窩凹陷、皮膚回彈與四肢溫度如何？", "初乳第一餐時間、量、Brix 或 IgG 紀錄是否完整？", "最近是否換奶粉、換奶量、換餵飼時間或更換欄位？"], "evidence": ["拍攝糞便近照與欄位環境，標註日齡與編號。", "紀錄體溫、脫水程度、吸吮反射與精神狀態。", "查初乳紀錄、奶具清洗紀錄、奶溫與餵飼時間。", "統計同批發生頭數與開始日期，判斷是否為群體事件。"], "roots": [{"name": "初乳失敗", "signals": "出生後第一餐延遲、Brix 不足、同批抵抗力差。", "check": "查初乳庫、解凍紀錄、餵飼時間與血清蛋白。", "next": "先改善初乳流程，再處理個別腹瀉。"}, {"name": "環境污染", "signals": "墊料潮濕、奶桶交叉污染、欄位密度高。", "check": "拍照評分墊料、奶瓶奶嘴與清洗區。", "next": "啟動犢牛欄消毒與墊料更換 SOP。"}, {"name": "餵飼突變", "signals": "換奶粉、奶溫不穩、餵量忽高忽低。", "check": "比對餵飼表與實際現場操作。", "next": "固定奶溫、濃度、時間與人員操作。"}, {"name": "感染性下痢", "signals": "血便、發燒、惡臭或同批快速擴散。", "check": "通知獸醫評估病原、脫水與電解質補液。", "next": "隔離、補液、環境消毒並追蹤同批。"}], "tip": "先不要急著問『要用什麼藥』。牛寶建議先確認日齡、脫水、初乳與同批發生率，這四個答案會決定方向。", "tasks": [["0–30 分鐘", "完成體溫、脫水、精神與吸吮反射評估", "體溫、脫水分級、糞便型態", "血便、倒地、無吸吮反射立即升級"], ["30–60 分鐘", "回查初乳與餵飼流程", "第一餐時間、量、Brix、奶溫", "同批多頭發生需啟動群體排查"], ["當日", "清潔奶具、補乾墊料、隔離病犢", "欄位照片、奶具清洗紀錄", "24 小時內惡化或不喝奶需通知獸醫"], ["D1–D3", "每日追蹤糞便、精神與補液反應", "糞便分數、喝奶量、體溫", "連續腹瀉或脫水未改善需再評估"]], "related": ["犢牛腹瀉處理流程", "出生24小時犢牛檢查流程", "初乳庫建立與解凍 SOP", "糞便評分 Visual Benchmark"], "escalation": ["血便、持續高燒、無法站立或無吸吮反射。", "同批超過 10–20% 犢牛出現腹瀉。", "脫水快速惡化或 24 小時內沒有改善。"]}, {"id": "alcohol_positive", "icon": "🥛", "title": "酒精陽性奶／非典型酸中毒", "subtitle": "從青貯二次發酵、TMR 水分突變、瘤胃負荷與採樣保存，拆解酒精陽性奶的誘發型管理問題。", "risk": "中高風險", "riskClass": "mid", "questions": ["酒精陽性是單批、單日，還是連續多日發生？", "最近是否下雨、TMR 水分突變或飼料混拌時間改變？", "青貯切面是否發熱、發黴、酸臭或有二次發酵？", "乳脂、乳蛋白、糞便未消化粒與反芻時間是否同步異常？", "是否集中在高泌乳群、產後牛或特定飼料槽線？", "採樣容器、冷藏與送驗時間是否標準化？"], "evidence": ["測 TMR 水分並拍攝混拌均勻度與挑食狀況。", "以手背或溫度槍檢查青貯切面發熱。", "收集乳成分、糞便評分、反芻與採食資料。", "記錄採樣時間、冷藏時間與運輸方式。"], "roots": [{"name": "青貯二次發酵", "signals": "切面發熱、黴味、酸味刺鼻、採食下降。", "check": "查青貯取料面、壓實、覆蓋與每日取料厚度。", "next": "先穩定青貯品質與取料面管理。"}, {"name": "TMR 水分突變", "signals": "下雨後 TMR 過濕、挑食、糞便變稀。", "check": "測水分，若高於預期需調整乾物採食估算。", "next": "重新校正配方乾物與混拌順序。"}, {"name": "SARA／瘤胃負荷", "signals": "乳脂下降、糞便泡沫、未消化粒、反芻下降。", "check": "對照澱粉、有效纖維與採食曲線。", "next": "啟動酸中毒排查與纖維管理。"}, {"name": "採樣保存問題", "signals": "單一樣本異常、冷藏或容器管理不一致。", "check": "重複採樣、確認容器清潔與溫度。", "next": "建立採樣標準化流程。"}], "tip": "酒精陽性奶常不是單一乳房問題。牛寶建議先看『飼料變了沒、TMR 濕了沒、青貯熱了沒、糞便變了沒』。", "tasks": [["立即", "確認是否單日或連續事件", "發生日期、批次、檢驗紀錄", "連續發生需啟動飼料排查"], ["當日", "檢查青貯切面與 TMR 水分", "照片、水分、氣味、溫度", "切面發熱或明顯黴變需停用或分流"], ["24 小時內", "比對乳成分、糞便與採食", "乳脂、乳蛋白、糞便分數、反芻", "乳脂下降合併糞便異常需排查 SARA"], ["D3–D7", "追蹤調整後酒精檢驗與採食反應", "檢驗結果、採食、糞便", "未改善需進一步檢查配方與原料"]], "related": ["酒精陽性奶排查 SOP", "糞便評分 Visual Benchmark", "TMR 水分與挑食檢核", "青貯料管理檢核"], "escalation": ["連續多日或多群酒精陽性。", "合併乳量下降、採食下降、糞便異常。", "青貯料明顯發熱、發黴或有異味。"]}, {"id": "lameness", "icon": "🦶", "title": "蹄病跛行", "subtitle": "將跛行拆成環境型、感染型與營養型，避免所有跛行都用同一套處置。", "risk": "中高風險", "riskClass": "mid", "questions": ["跛行是單頭、零星，還是群體比例上升？", "發生在前蹄或後蹄？是否可承重？", "牛舍地面是否潮濕、積尿、硬水泥或轉彎打滑？", "蹄浴濃度、更換頻率、通過率與清洗是否有紀錄？", "最近 TMR 澱粉、有效纖維或挑食狀況是否變化？", "是否有蹄冠腫脹、惡臭、皮膚病灶或蹄底潰瘍？"], "evidence": ["拍攝行走影片，側面與後方各一段。", "使用跛行評分 1–5 分統一描述。", "拍攝蹄部、蹄浴槽、牛舍地面與積尿處。", "紀錄蹄浴日期、藥劑、濃度、更換頭數。"], "roots": [{"name": "環境型", "signals": "積尿、濕滑、硬地面、躺臥不足。", "check": "看地面、牛床、走道與待擠區。", "next": "改善排水、防滑、牛床舒適與休息時間。"}, {"name": "感染型", "signals": "DD、蹄腐、惡臭、蹄冠腫脹、皮膚病灶。", "check": "查蹄浴制度、蹄部清潔與群體通過率。", "next": "重建蹄浴 SOP 並分流個體處理。"}, {"name": "營養型", "signals": "蹄底潰瘍、白線病、SARA 線索、糞便變稀。", "check": "查澱粉、有效纖維、挑食與糞便評分。", "next": "回頭處理 TMR 與瘤胃穩定。"}, {"name": "外傷／機械性", "signals": "單頭突然嚴重、局部腫痛、無法承重。", "check": "檢查是否夾傷、滑倒、異物。", "next": "立即隔離止滑並通知獸醫或削蹄師。"}], "tip": "牛寶提醒：跛行要先分群體還是單頭。群體上升多半是環境、蹄浴或營養；單頭嚴重則先排除外傷與急性感染。", "tasks": [["立即", "完成跛行 1–5 分評分", "影片、分數、牛號", "4–5 分或不能承重需立即隔離"], ["當日", "分辨環境型、感染型、營養型線索", "地面、蹄浴、TMR、糞便", "群體比例上升需啟動管理排查"], ["48 小時內", "安排修蹄、蹄浴或環境改善", "處置日期、負責人、照片", "惡臭腫脹或病灶擴大需獸醫介入"], ["D7–D14", "追蹤復原與新發率", "新發率、復發率、分數變化", "新發率未降需調整根因策略"]], "related": ["蹄病跛行評分與分流 SOP", "蹄浴槽配製與更換檢核表", "跛行評分 Visual Benchmark", "環境衛生 Visual Benchmark"], "escalation": ["跛行分數 4–5 分、無法承重或明顯腫脹。", "同群跛行比例快速上升。", "DD 或蹄腐疑似爆發。"]}, {"id": "fresh_ketosis", "icon": "⚡", "title": "產後食慾差／酮症風險", "subtitle": "用 Fresh cow 21 日追蹤邏輯，區分低血鈣、酮症、子宮問題、移位胃與飼料不適應。", "risk": "高風險", "riskClass": "high", "questions": ["產後第幾天？D0–D3、D4–D7，還是 D8–D21？", "是否不吃、反芻低、乳量低於預期或精神差？", "有無發燒、胎衣不下、惡露異常或子宮炎線索？", "耳溫、四肢溫度、站立與步態是否正常？", "是否測 BHB、尿酮、血鈣或糞便評分？", "Close-up 期間 BCS、採食、DCAD 與分娩難產是否有紀錄？"], "evidence": ["建立產後 D0、D1、D3、D7、D14、D21 追蹤表。", "紀錄採食、反芻、乳量、體溫、糞便與精神。", "拍攝飼槽剩料、糞便與牛隻站姿。", "回查產前 21 天管理與 BCS。"], "roots": [{"name": "低血鈣／鈣動員不足", "signals": "產後初期虛弱、冷耳、站立不穩、採食差。", "check": "查產前 DCAD、鈣策略、產次與分娩狀況。", "next": "立即分級並依獸醫建議處置。"}, {"name": "酮症／能量負平衡", "signals": "產後 3–21 天採食差、乳量不穩、BHB 高。", "check": "測 BHB 或尿酮，對照 BCS 與乳量。", "next": "啟動 Fresh cow 酮症風險追蹤。"}, {"name": "子宮／分娩問題", "signals": "發燒、惡露異常、胎衣不下、難產。", "check": "查分娩紀錄、體溫與子宮狀態。", "next": "通知獸醫並隔離追蹤。"}, {"name": "飼料轉換不適應", "signals": "Close-up 到泌乳料切換後採食下降。", "check": "查 TMR、飼槽空槽、挑食與糞便。", "next": "穩定轉群與新產牛採食策略。"}], "tip": "Fresh cow 的重點不是只看乳量。牛寶建議把產後 21 天當成一張任務卡：吃不吃、反不反芻、熱不熱、糞便怎樣、BHB 怎樣。", "tasks": [["D0", "確認分娩、胎衣、精神、站立與採食", "分娩難易、胎衣、體溫、採食", "倒地、冷耳、無法站立立即通報"], ["D1–D3", "追蹤低血鈣與急性食慾差", "體溫、採食、反芻、糞便", "發燒或不吃需獸醫評估"], ["D4–D7", "測酮症風險與乳量趨勢", "BHB/尿酮、乳量、BCS", "BHB 異常或乳量落後需介入"], ["D14–D21", "確認進入正常泌乳軌道", "採食、乳量、繁殖恢復線索", "持續掉重或反覆不吃需回查根因"]], "related": ["Fresh cow產後21日追蹤 SOP", "Close-up近迫乾乳牛每日檢核表", "BCS 體況 Visual Benchmark", "糞便評分 Visual Benchmark"], "escalation": ["產後倒地、無法站立或疑似低血鈣。", "高燒、惡露異常或胎衣不下。", "BHB 異常、連續不吃或乳量明顯低於同群。"]}, {"id": "mastitis_scc", "icon": "🧫", "title": "乳房炎／SCC 升高", "subtitle": "從個體乳房炎、群體體細胞、擠乳流程與環境污染四條線同步排查。", "risk": "中高風險", "riskClass": "mid", "questions": ["是臨床乳房炎、體細胞升高，還是乳質檢驗異常？", "是單頭、單乳區，還是群體 SCC 趨勢上升？", "是否有凝塊、水樣乳、發熱、腫脹或全身症狀？", "擠乳前後藥浴、擦拭、套杯順序與過度擠乳是否一致？", "牛床、產房、乾乳牛環境是否潮濕或污染？", "是否有 CMT、培養、DHI 或乳檢紀錄可比對？"], "evidence": ["拍攝乳房、乳汁異常與牛床衛生。", "記錄 CMT、SCC、乳區、體溫與精神。", "觀察一次完整擠乳流程。", "回查乾乳治療、乾乳期與產房衛生紀錄。"], "roots": [{"name": "擠乳流程不一致", "signals": "多人操作差異、前處理不足、過度擠乳。", "check": "現場觀察 SOP 是否落地。", "next": "重新訓練並建立稽核表。"}, {"name": "環境污染", "signals": "牛床潮濕、墊料髒、產房污染。", "check": "做環境衛生評分與墊料檢查。", "next": "改善牛床、產房與乾乳環境。"}, {"name": "傳染性乳房炎", "signals": "特定牛反覆高 SCC、群體慢性上升。", "check": "查乳檢、培養與擠乳順序。", "next": "隔離、最後擠、治療或淘汰評估。"}, {"name": "乾乳期管理漏洞", "signals": "產後早期乳房炎、乾乳牛環境差。", "check": "查乾乳治療、封乳、乾乳牛分群與產房。", "next": "補強乾乳與產房 SOP。"}], "tip": "牛寶提醒：SCC 升高不要只看一頭牛。請同時看『個體、群體、擠乳流程、環境』四張圖，才能分辨是牛的問題還是系統的問題。", "tasks": [["立即", "分級臨床症狀與是否全身性", "乳區、體溫、精神、乳汁外觀", "高燒、倒地、毒血症需立即獸醫"], ["當日", "完成 CMT／SCC 與採樣", "CMT、SCC、樣本編號", "群體升高需做流程與環境排查"], ["48 小時內", "觀察擠乳流程與牛床衛生", "流程稽核、環境評分", "操作落差需重新訓練"], ["D7–D14", "追蹤復發與群體趨勢", "復發率、SCC 趨勢、治療結果", "反覆高 SCC 牛需進一步決策"]], "related": ["乾乳治療 SOP", "產房墊料衛生評分 SOP", "環境衛生 Visual Benchmark", "乳房炎／SCC 疾病知識庫"], "escalation": ["高燒、精神沉鬱、毒血症或嚴重乳房腫痛。", "短期內多頭臨床乳房炎。", "SCC 持續升高且無法用單頭解釋。"]}];
+const consultationCases = [{"id":"calf_diarrhea","icon":"🍼","title":"犢牛腹瀉／下痢","subtitle":"從日齡、初乳、脫水、糞便型態與同批發生率，區分感染、初乳失敗與飼養管理問題。","risk":"高風險","riskClass":"high","questions":["犢牛目前幾日齡？是 1–7 日齡、7–14 日齡，還是離乳前後？","同批是否多頭發生？是否集中在同一欄位、同一奶桶或同一照護人員？","糞便是水樣、黏液、血樣、惡臭，還是灰白色消化不良？","精神、吸吮反射、眼窩凹陷、皮膚回彈與四肢溫度如何？","初乳第一餐時間、量、Brix 或 IgG 紀錄是否完整？","最近是否換奶粉、換奶量、換餵飼時間或更換欄位？"],"evidence":["拍攝糞便近照與欄位環境，標註日齡與編號。","紀錄體溫、脫水程度、吸吮反射與精神狀態。","查初乳紀錄、奶具清洗紀錄、奶溫與餵飼時間。","統計同批發生頭數與開始日期，判斷是否為群體事件。"],"roots":[{"name":"初乳失敗","signals":"出生後第一餐延遲、Brix 不足、同批抵抗力差。","check":"查初乳庫、解凍紀錄、餵飼時間與血清蛋白。","next":"先改善初乳流程，再處理個別腹瀉。"},{"name":"環境污染","signals":"墊料潮濕、奶桶交叉污染、欄位密度高。","check":"拍照評分墊料、奶瓶奶嘴與清洗區。","next":"啟動犢牛欄消毒與墊料更換 SOP。"},{"name":"餵飼突變","signals":"換奶粉、奶溫不穩、餵量忽高忽低。","check":"比對餵飼表與實際現場操作。","next":"固定奶溫、濃度、時間與人員操作。"},{"name":"感染性下痢","signals":"血便、發燒、惡臭或同批快速擴散。","check":"通知獸醫評估病原、脫水與電解質補液。","next":"隔離、補液、環境消毒並追蹤同批。"}],"tip":"先不要急著問『要用什麼藥』。牛寶建議先確認日齡、脫水、初乳與同批發生率，這四個答案會決定方向。","tasks":[["0–30 分鐘","完成體溫、脫水、精神與吸吮反射評估","體溫、脫水分級、糞便型態","血便、倒地、無吸吮反射立即升級"],["30–60 分鐘","回查初乳與餵飼流程","第一餐時間、量、Brix、奶溫","同批多頭發生需啟動群體排查"],["當日","清潔奶具、補乾墊料、隔離病犢","欄位照片、奶具清洗紀錄","24 小時內惡化或不喝奶需通知獸醫"],["D1–D3","每日追蹤糞便、精神與補液反應","糞便分數、喝奶量、體溫","連續腹瀉或脫水未改善需再評估"]],"related":["犢牛腹瀉處理流程","出生24小時犢牛檢查流程","初乳庫建立與解凍 SOP","糞便評分 Visual Benchmark"],"escalation":["血便、持續高燒、無法站立或無吸吮反射。","同批超過 10–20% 犢牛出現腹瀉。","脫水快速惡化或 24 小時內沒有改善。"]},{"id":"alcohol_positive","icon":"🥛","title":"酒精陽性奶／非典型酸中毒","subtitle":"從青貯二次發酵、TMR 水分突變、瘤胃負荷與採樣保存，拆解酒精陽性奶的誘發型管理問題。","risk":"中高風險","riskClass":"mid","questions":["酒精陽性是單批、單日，還是連續多日發生？","最近是否下雨、TMR 水分突變或飼料混拌時間改變？","青貯切面是否發熱、發黴、酸臭或有二次發酵？","乳脂、乳蛋白、糞便未消化粒與反芻時間是否同步異常？","是否集中在高泌乳群、產後牛或特定飼料槽線？","採樣容器、冷藏與送驗時間是否標準化？"],"evidence":["測 TMR 水分並拍攝混拌均勻度與挑食狀況。","以手背或溫度槍檢查青貯切面發熱。","收集乳成分、糞便評分、反芻與採食資料。","記錄採樣時間、冷藏時間與運輸方式。"],"roots":[{"name":"青貯二次發酵","signals":"切面發熱、黴味、酸味刺鼻、採食下降。","check":"查青貯取料面、壓實、覆蓋與每日取料厚度。","next":"先穩定青貯品質與取料面管理。"},{"name":"TMR 水分突變","signals":"下雨後 TMR 過濕、挑食、糞便變稀。","check":"測水分，若高於預期需調整乾物採食估算。","next":"重新校正配方乾物與混拌順序。"},{"name":"SARA／瘤胃負荷","signals":"乳脂下降、糞便泡沫、未消化粒、反芻下降。","check":"對照澱粉、有效纖維與採食曲線。","next":"啟動酸中毒排查與纖維管理。"},{"name":"採樣保存問題","signals":"單一樣本異常、冷藏或容器管理不一致。","check":"重複採樣、確認容器清潔與溫度。","next":"建立採樣標準化流程。"}],"tip":"酒精陽性奶常不是單一乳房問題。牛寶建議先看『飼料變了沒、TMR 濕了沒、青貯熱了沒、糞便變了沒』。","tasks":[["立即","確認是否單日或連續事件","發生日期、批次、檢驗紀錄","連續發生需啟動飼料排查"],["當日","檢查青貯切面與 TMR 水分","照片、水分、氣味、溫度","切面發熱或明顯黴變需停用或分流"],["24 小時內","比對乳成分、糞便與採食","乳脂、乳蛋白、糞便分數、反芻","乳脂下降合併糞便異常需排查 SARA"],["D3–D7","追蹤調整後酒精檢驗與採食反應","檢驗結果、採食、糞便","未改善需進一步檢查配方與原料"]],"related":["酒精陽性奶排查 SOP","糞便評分 Visual Benchmark","TMR 水分與挑食檢核","青貯料管理檢核"],"escalation":["連續多日或多群酒精陽性。","合併乳量下降、採食下降、糞便異常。","青貯料明顯發熱、發黴或有異味。"]},{"id":"lameness","icon":"🦶","title":"蹄病跛行","subtitle":"將跛行拆成環境型、感染型與營養型，避免所有跛行都用同一套處置。","risk":"中高風險","riskClass":"mid","questions":["跛行是單頭、零星，還是群體比例上升？","發生在前蹄或後蹄？是否可承重？","牛舍地面是否潮濕、積尿、硬水泥或轉彎打滑？","蹄浴濃度、更換頻率、通過率與清洗是否有紀錄？","最近 TMR 澱粉、有效纖維或挑食狀況是否變化？","是否有蹄冠腫脹、惡臭、皮膚病灶或蹄底潰瘍？"],"evidence":["拍攝行走影片，側面與後方各一段。","使用跛行評分 1–5 分統一描述。","拍攝蹄部、蹄浴槽、牛舍地面與積尿處。","紀錄蹄浴日期、藥劑、濃度、更換頭數。"],"roots":[{"name":"環境型","signals":"積尿、濕滑、硬地面、躺臥不足。","check":"看地面、牛床、走道與待擠區。","next":"改善排水、防滑、牛床舒適與休息時間。"},{"name":"感染型","signals":"DD、蹄腐、惡臭、蹄冠腫脹、皮膚病灶。","check":"查蹄浴制度、蹄部清潔與群體通過率。","next":"重建蹄浴 SOP 並分流個體處理。"},{"name":"營養型","signals":"蹄底潰瘍、白線病、SARA 線索、糞便變稀。","check":"查澱粉、有效纖維、挑食與糞便評分。","next":"回頭處理 TMR 與瘤胃穩定。"},{"name":"外傷／機械性","signals":"單頭突然嚴重、局部腫痛、無法承重。","check":"檢查是否夾傷、滑倒、異物。","next":"立即隔離止滑並通知獸醫或削蹄師。"}],"tip":"牛寶提醒：跛行要先分群體還是單頭。群體上升多半是環境、蹄浴或營養；單頭嚴重則先排除外傷與急性感染。","tasks":[["立即","完成跛行 1–5 分評分","影片、分數、牛號","4–5 分或不能承重需立即隔離"],["當日","分辨環境型、感染型、營養型線索","地面、蹄浴、TMR、糞便","群體比例上升需啟動管理排查"],["48 小時內","安排修蹄、蹄浴或環境改善","處置日期、負責人、照片","惡臭腫脹或病灶擴大需獸醫介入"],["D7–D14","追蹤復原與新發率","新發率、復發率、分數變化","新發率未降需調整根因策略"]],"related":["蹄病跛行評分與分流 SOP","蹄浴槽配製與更換檢核表","跛行評分 Visual Benchmark","環境衛生 Visual Benchmark"],"escalation":["跛行分數 4–5 分、無法承重或明顯腫脹。","同群跛行比例快速上升。","DD 或蹄腐疑似爆發。"]},{"id":"fresh_ketosis","icon":"⚡","title":"產後食慾差／酮症風險","subtitle":"用 Fresh cow 21 日追蹤邏輯，區分低血鈣、酮症、子宮問題、移位胃與飼料不適應。","risk":"高風險","riskClass":"high","questions":["產後第幾天？D0–D3、D4–D7，還是 D8–D21？","是否不吃、反芻低、乳量低於預期或精神差？","有無發燒、胎衣不下、惡露異常或子宮炎線索？","耳溫、四肢溫度、站立與步態是否正常？","是否測 BHB、尿酮、血鈣或糞便評分？","Close-up 期間 BCS、採食、DCAD 與分娩難產是否有紀錄？"],"evidence":["建立產後 D0、D1、D3、D7、D14、D21 追蹤表。","紀錄採食、反芻、乳量、體溫、糞便與精神。","拍攝飼槽剩料、糞便與牛隻站姿。","回查產前 21 天管理與 BCS。"],"roots":[{"name":"低血鈣／鈣動員不足","signals":"產後初期虛弱、冷耳、站立不穩、採食差。","check":"查產前 DCAD、鈣策略、產次與分娩狀況。","next":"立即分級並依獸醫建議處置。"},{"name":"酮症／能量負平衡","signals":"產後 3–21 天採食差、乳量不穩、BHB 高。","check":"測 BHB 或尿酮，對照 BCS 與乳量。","next":"啟動 Fresh cow 酮症風險追蹤。"},{"name":"子宮／分娩問題","signals":"發燒、惡露異常、胎衣不下、難產。","check":"查分娩紀錄、體溫與子宮狀態。","next":"通知獸醫並隔離追蹤。"},{"name":"飼料轉換不適應","signals":"Close-up 到泌乳料切換後採食下降。","check":"查 TMR、飼槽空槽、挑食與糞便。","next":"穩定轉群與新產牛採食策略。"}],"tip":"Fresh cow 的重點不是只看乳量。牛寶建議把產後 21 天當成一張任務卡：吃不吃、反不反芻、熱不熱、糞便怎樣、BHB 怎樣。","tasks":[["D0","確認分娩、胎衣、精神、站立與採食","分娩難易、胎衣、體溫、採食","倒地、冷耳、無法站立立即通報"],["D1–D3","追蹤低血鈣與急性食慾差","體溫、採食、反芻、糞便","發燒或不吃需獸醫評估"],["D4–D7","測酮症風險與乳量趨勢","BHB/尿酮、乳量、BCS","BHB 異常或乳量落後需介入"],["D14–D21","確認進入正常泌乳軌道","採食、乳量、繁殖恢復線索","持續掉重或反覆不吃需回查根因"]],"related":["Fresh cow產後21日追蹤 SOP","Close-up近迫乾乳牛每日檢核表","BCS 體況 Visual Benchmark","糞便評分 Visual Benchmark"],"escalation":["產後倒地、無法站立或疑似低血鈣。","高燒、惡露異常或胎衣不下。","BHB 異常、連續不吃或乳量明顯低於同群。"]},{"id":"mastitis_scc","icon":"🧫","title":"乳房炎／SCC 升高","subtitle":"從個體乳房炎、群體體細胞、擠乳流程與環境污染四條線同步排查。","risk":"中高風險","riskClass":"mid","questions":["是臨床乳房炎、體細胞升高，還是乳質檢驗異常？","是單頭、單乳區，還是群體 SCC 趨勢上升？","是否有凝塊、水樣乳、發熱、腫脹或全身症狀？","擠乳前後藥浴、擦拭、套杯順序與過度擠乳是否一致？","牛床、產房、乾乳牛環境是否潮濕或污染？","是否有 CMT、培養、DHI 或乳檢紀錄可比對？"],"evidence":["拍攝乳房、乳汁異常與牛床衛生。","記錄 CMT、SCC、乳區、體溫與精神。","觀察一次完整擠乳流程。","回查乾乳治療、乾乳期與產房衛生紀錄。"],"roots":[{"name":"擠乳流程不一致","signals":"多人操作差異、前處理不足、過度擠乳。","check":"現場觀察 SOP 是否落地。","next":"重新訓練並建立稽核表。"},{"name":"環境污染","signals":"牛床潮濕、墊料髒、產房污染。","check":"做環境衛生評分與墊料檢查。","next":"改善牛床、產房與乾乳環境。"},{"name":"傳染性乳房炎","signals":"特定牛反覆高 SCC、群體慢性上升。","check":"查乳檢、培養與擠乳順序。","next":"隔離、最後擠、治療或淘汰評估。"},{"name":"乾乳期管理漏洞","signals":"產後早期乳房炎、乾乳牛環境差。","check":"查乾乳治療、封乳、乾乳牛分群與產房。","next":"補強乾乳與產房 SOP。"}],"tip":"牛寶提醒：SCC 升高不要只看一頭牛。請同時看『個體、群體、擠乳流程、環境』四張圖，才能分辨是牛的問題還是系統的問題。","tasks":[["立即","分級臨床症狀與是否全身性","乳區、體溫、精神、乳汁外觀","高燒、倒地、毒血症需立即獸醫"],["當日","完成 CMT／SCC 與採樣","CMT、SCC、樣本編號","群體升高需做流程與環境排查"],["48 小時內","觀察擠乳流程與牛床衛生","流程稽核、環境評分","操作落差需重新訓練"],["D7–D14","追蹤復發與群體趨勢","復發率、SCC 趨勢、治療結果","反覆高 SCC 牛需進一步決策"]],"related":["乾乳治療 SOP","產房墊料衛生評分 SOP","環境衛生 Visual Benchmark","乳房炎／SCC 疾病知識庫"],"escalation":["高燒、精神沉鬱、毒血症或嚴重乳房腫痛。","短期內多頭臨床乳房炎。","SCC 持續升高且無法用單頭解釋。"]},{"id":"milk_drop","icon":"📉","title":"乳量突然下降","subtitle":"先分辨個體、牛群或全場事件，再從採食、飲水、熱緊迫、疾病與擠乳資料逐層排查。","risk":"中高風險","riskClass":"mid","questions":["乳量下降是單頭、單群，還是全場同步發生？下降幅度與開始日期為何？","是突然在 1–2 天內下降，還是連續一週緩慢下滑？是否對應換料、轉群、停電或天氣事件？","乾物採食、剩料、反芻、糞便與飲水量是否同步改變？","是否集中在 Fresh cow、高泌乳群、特定胎次或特定 DIM？","THI、呼吸速率、風扇噴霧與待擠區停留時間是否異常？","SCC、臨床乳房炎、發燒、跛行、酮症或擠乳設備資料是否出現警訊？"],"evidence":["匯出最近 14 天個體、群別與全場乳量趨勢，標註換料、天氣、轉群與設備事件。","拍攝新鮮 TMR、剩料、糞便、飲水槽與飼槽前牛群狀況。","記錄同群採食、反芻、呼吸速率、THI、SCC 與疾病新發率。","核對擠乳次數、擠乳間隔、套杯時間、真空與乳量計資料。"],"roots":[{"name":"採食／日糧變動","signals":"換料、TMR 水分突變、挑食、剩料增加、反芻與乳脂同步下降。","check":"比對配方、乾物、水分、混拌順序、剩料與糞便。","next":"先穩定乾物採食與 TMR 一致性，連續追蹤 3–7 天。"},{"name":"熱緊迫／飲水限制","signals":"高 THI、喘氣、站立不臥、夜間乳量稍回升、飲水槽擁擠或流量不足。","check":"查風速、噴霧、飲水流量、待擠區與餵飼時段。","next":"啟動降溫與供水改善，優先處理高泌乳與 Fresh cow。"},{"name":"疾病／代謝壓力","signals":"Fresh cow、發燒、BHB 異常、跛行、乳房炎或採食急降。","check":"依牛號查體溫、BHB、CMT、步態、分娩與治療紀錄。","next":"將異常牛分流並交由獸醫或營養師評估。"},{"name":"擠乳／資料異常","signals":"特定班次、特定機台或乳量計數據突變，但採食與牛群狀況正常。","check":"核對擠乳間隔、設備警報、乳量計校正與資料上傳。","next":"先排除量測與設備問題，再判斷是否為真實減乳。"}],"tip":"乳量下降是結果，不是根因。牛寶建議先畫出『哪一群、哪一天、同時還有什麼變化』，比只看一個總乳量數字更快抓到問題。","tasks":[["立即","確認下降範圍與幅度","個體／群別／全場乳量、開始日期","單日急降超出平常波動需立即排查設備與群體事件"],["當日","完成採食、飲水、THI 與疾病四線快篩","DMI、剩料、反芻、THI、體溫、SCC","合併不吃、發燒或群體喘氣需升級"],["24–48 小時","針對最高可能根因執行改善","調整內容、負責人、前後照片","乳量持續下降或新增病牛需獸醫／營養師介入"],["D3–D7","追蹤乳量回升與伴隨指標","乳量、採食、反芻、疾病率","未回升需重新檢視根因而非重複同一處置"]],"related":["TMR 均勻度檢核表","熱緊迫設備檢核表","飲水槽清洗與水流量檢核表","CMT 操作與判讀表"],"escalation":["全場或多群乳量在短期內明顯下降。","合併高燒、不吃、倒地、群體喘氣或飲水中斷。","完成採食、環境與設備改善後 48–72 小時仍持續下降。"]},{"id":"calf_pneumonia","icon":"🫁","title":"犢牛肺炎／呼吸道異常","subtitle":"從日齡、體溫、呼吸型態、通風、初乳與轉群壓力，區分空氣品質、免疫不足與感染擴散。","risk":"高風險","riskClass":"high","questions":["犢牛幾日齡？是單頭、同欄多頭，還是跨欄位增加？","是否發燒、咳嗽、鼻液、耳下垂、呼吸急促或張口呼吸？","症狀在安靜休息時仍存在，還是只在趕牛、餵奶後出現？","欄舍是否悶熱、潮濕、氨味重、賊風直吹或早晚溫差大？","初乳第一餐時間、Brix、血清蛋白或被動免疫紀錄是否合格？","最近是否離乳、轉群、長途運輸、去角、疫苗或更換照護人員？"],"evidence":["記錄體溫、安靜時呼吸次數、咳嗽、鼻液與耳位。","拍攝欄舍通風路徑、墊料、天花板結露與犢牛呼吸影片。","統計同批發生率、日齡分布與開始日期。","回查初乳、轉群、疫苗、奶量與日增重紀錄。"],"roots":[{"name":"通風／空氣品質不良","signals":"氨味、結露、潮濕、密度高、同欄多頭咳嗽。","check":"在犢牛鼻端高度觀察氣流、濕度、氨味與死角。","next":"改善換氣、乾燥墊料與欄位密度，避免冷風直吹。"},{"name":"被動免疫不足","signals":"初乳延遲、Brix 低、早期腹瀉與肺炎反覆發生。","check":"查初乳第一餐、品質、餵量與血清蛋白結果。","next":"補強初乳管理並將高風險犢牛列入追蹤。"},{"name":"轉群／多重壓力","signals":"離乳、轉群、去角、運輸或疫苗集中在短時間內。","check":"畫出事件時間軸與症狀發生日。","next":"拆開壓力事件，提供穩定採食、飲水與乾燥休息區。"},{"name":"感染性呼吸道疾病","signals":"發燒、膿性鼻液、耳下垂、呼吸費力、同批快速增加。","check":"由獸醫完成肺部與病原評估，確認是否需隔離。","next":"分流病犢、加強清消並追蹤同批暴露牛。"}],"tip":"犢牛肺炎不要只聽有沒有咳嗽。牛寶建議一起看體溫、耳位、鼻液、安靜時呼吸與欄舍空氣，群體管理問題才不會被漏掉。","tasks":[["0–30 分鐘","完成體溫與呼吸嚴重度分級","體溫、呼吸次數、鼻液、耳位","張口呼吸、發紺、無法站立立即通知獸醫"],["當日","隔離高風險犢牛並檢查欄舍空氣","牛號、欄位、通風與墊料照片","同欄多頭發燒需啟動群體事件處理"],["24 小時內","回查初乳與近期壓力事件","初乳、轉群、疫苗、去角紀錄","早期多發或反覆發生需檢討免疫與環境"],["D1–D7","追蹤體溫、呼吸、奶量與日增重","每日症狀分數與採食","48 小時惡化或治療反應差需再評估"]],"related":["出生24小時犢牛檢查流程","初乳庫建立與解凍 SOP","離乳轉群 SOP","犢牛呼吸道疾病知識庫"],"escalation":["張口呼吸、發紺、倒地或明顯呼吸困難。","同欄或同批多頭發燒、咳嗽快速增加。","處置後 24–48 小時惡化、持續不喝奶或日增重明顯下降。"]},{"id":"dmi_tmr_sorting","icon":"🌾","title":"採食量不足／TMR 挑食","subtitle":"從乾物、水分、混拌、飼槽空間、推料、飲水與疾病，找出牛群吃不夠或只挑自己愛吃的原因。","risk":"中高風險","riskClass":"mid","questions":["採食下降是全群、特定群、Fresh cow，還是弱勢牛優先出現？","新鮮 TMR 與剩料的長草、細料、粉料比例是否明顯不同？","最近是否換原料、切草長度、混拌順序、混拌時間或加水量？","飼槽是否曾空槽？推料、補料時間與剩料率是否穩定？","飼槽空間、分群密度與強弱勢競爭是否造成部分牛吃不到？","THI、飲水、糞便、反芻、乳脂與疾病新發率是否同步異常？"],"evidence":["同時拍攝新鮮 TMR 與剩料，必要時做賓州篩或簡易顆粒分布比較。","測量 TMR 乾物與水分，記錄混拌順序、時間與出料批次。","建立 24 小時飼槽空槽、推料、補料與剩料時間軸。","觀察弱勢牛、Fresh cow 的採食位置與被驅趕情形。"],"roots":[{"name":"TMR 水分／混拌不一致","signals":"雨後過濕、局部成團、長草與細料分離、批次差異大。","check":"測乾物、水分、混拌順序、刀片與混拌時間。","next":"校正乾物與混拌流程，確認每批出料一致。"},{"name":"飼槽管理／競爭","signals":"空槽時間長、推料不足、過度擁擠、弱勢牛採食時間短。","check":"查飼槽空間、分群密度、推料頻率與夜間供料。","next":"減少空槽並增加弱勢牛可用的採食機會。"},{"name":"熱緊迫／飲水限制","signals":"白天不吃、夜間稍回升、喘氣、飲水槽擁擠或水流量不足。","check":"查 THI、風扇噴霧、飲水與餵飼時段。","next":"把主要餵飼移向涼爽時段並改善降溫供水。"},{"name":"疾病／Fresh cow 問題","signals":"單頭或 Fresh cow 不吃、發燒、BHB 異常、跛行或糞便異常。","check":"做個體健康快篩並查產後天數。","next":"將個體疾病與群體日糧問題分開處理。"}],"tip":"配方表看起來再漂亮，牛如果挑著吃，實際吃進去的就是另一張配方。先比對新鮮料和剩料，現場答案通常很誠實。","tasks":[["立即","確認採食下降範圍與是否空槽","群別、剩料率、空槽時間","Fresh cow 單頭不吃或群體急降需優先處理"],["當日","完成 TMR 水分與新鮮料／剩料比較","水分、照片、篩分結果","發熱、發黴或異味原料需立即分流"],["24–48 小時","調整混拌、推料、空間或供水","改善項目與負責人","採食持續下降合併乳量或糞便異常需營養師介入"],["D3–D7","追蹤 DMI、反芻、乳脂與剩料一致性","採食、反芻、乳成分、剩料","沒有改善時重新查疾病與原料品質"]],"related":["TMR 均勻度檢核表","青貯料切面與TMR水分檢核表","飲水槽清洗與水流量檢核表","糞便評分 Visual Benchmark"],"escalation":["群體採食在短期內明顯下降或大面積空槽。","飼料發熱、發黴、異味或疑似污染。","合併不吃、發燒、鼓脹、乳量急降或多頭糞便異常。"]},{"id":"heat_stress","icon":"🌡️","title":"熱緊迫／中暑風險","subtitle":"從 THI、呼吸速率、飲水、風速、噴霧、待擠區與餵飼時段，判斷降溫系統真正的失效點。","risk":"高風險","riskClass":"high","questions":["目前溫度、濕度與 THI 為何？高風險時段持續多久？","牛群是否呼吸急促、張口喘、流涎、站立不臥或聚集在特定位置？","風扇是否全數運轉、角度正確，飼槽與躺臥區牛體高度是否有足夠風速？","噴霧或灑水是否真正淋濕牛體，噴嘴是否堵塞、週期是否合適？","飲水槽流量、清潔、數量與高峰時段排隊情況如何？","待擠區、趕牛、轉群與餵飼是否集中在最熱時段？"],"evidence":["記錄不同時段 THI、安靜牛呼吸速率與張口喘比例。","量測飼槽、牛床與待擠區牛體高度風速，拍攝風扇角度與噴霧覆蓋。","測試各飲水槽每分鐘流量並記錄清潔度、排隊與故障點。","比對高溫時段採食、反芻、乳量、躺臥與受胎率趨勢。"],"roots":[{"name":"風流不足／設備死角","signals":"風扇有轉但牛體無風、角度不對、待擠區或牛床形成熱點。","check":"在牛體高度實測風速並觀察牛群聚集。","next":"調整角度、補足死角並建立設備巡檢。"},{"name":"噴霧／蒸發效率不足","signals":"只濕地不濕牛、噴嘴堵塞、濕度高卻持續細霧、牛體不降溫。","check":"看噴霧粒徑、週期、覆蓋與風扇搭配。","next":"修正灑水與送風節奏，避免只增加濕度。"},{"name":"飲水供應不足","signals":"排隊、流量低、水槽髒、強勢牛霸占、最熱時段缺水。","check":"逐槽測流量與可用水面，觀察高峰使用。","next":"立即恢復供水並增加可及性與清潔頻率。"},{"name":"作業時段增加熱負荷","signals":"最熱時段趕牛、長時間待擠、轉群或集中操作。","check":"畫出每日作業與高 THI 時段重疊。","next":"將餵飼、趕牛與必要操作移向清晨或夜間。"}],"tip":"設備有開不等於牛有被降溫。牛寶建議站到牛鼻子和牛背的高度，實際感受風、看牛有沒有濕、再看牠們是不是還在喘。","tasks":[["立即","確認嚴重度並恢復供水與通風","THI、呼吸速率、張口喘比例、故障點","倒地、步態不穩、持續張口喘需緊急降溫與獸醫評估"],["30–60 分鐘","檢查風扇、噴霧、飲水與待擠區","設備清單、風速、流量、照片","多區設備失效需啟動緊急維修"],["當日","調整餵飼與作業時段","時段調整、夜間供料、趕牛時間","採食與乳量持續急降需加強措施"],["D1–D7","追蹤 THI、呼吸、DMI、乳量與躺臥","每日趨勢與設備稽核","熱點反覆出現需重新設計降溫覆蓋"]],"related":["熱緊迫設備檢核表","飲水槽清洗與水流量檢核表","TMR 均勻度檢核表","熱緊迫損失模型"],"escalation":["張口喘、流涎、步態不穩、倒地或疑似中暑。","飲水中斷、風扇大面積停機或待擠區高溫失控。","群體採食、乳量與反芻快速下降。"]},{"id":"high_bacteria_count","icon":"🧪","title":"生菌數／總菌數偏高","subtitle":"從乳房表面、擠乳前處理、設備死角、CIP、冷卻速度與採樣保存，切開乳質污染來源。","risk":"高風險","riskClass":"high","questions":["異常是單次、連續多批，還是特定班次或特定貯乳槽？","體細胞、臨床乳房炎與總菌數是一起升高，還是只有菌數異常？","擠乳前乳頭清潔、擦乾、前乳、套杯與手套更換是否一致？","管線、集乳器、乳量計、橡膠件與貯乳槽是否有奶垢、死角或異味？","CIP 的水溫、時間、濃度、流量與酸鹼清洗紀錄是否完整？","生乳離開乳房後多久降到目標冷藏溫度？採樣容器與冷藏運送是否標準化？"],"evidence":["依班次、日期與貯乳槽整理總菌數、SCC 與溫度紀錄。","完整觀察一次擠乳前處理、套杯、卸杯與結束清洗。","拍攝設備死角、橡膠件、集乳器、管線出口與貯乳槽內部。","記錄 CIP 起始／回流溫度、藥劑濃度、時間與生乳冷卻曲線。"],"roots":[{"name":"乳頭／擠乳前污染","signals":"牛體髒污、乳頭未擦乾、濕套杯、操作人員差異大。","check":"現場稽核每頭牛的清潔、擦乾與套杯等待時間。","next":"標準化前處理並改善牛床與乳房清潔。"},{"name":"設備／CIP 清洗失效","signals":"奶垢、異味、回流水溫不足、藥劑或流量不穩、特定班次偏高。","check":"查 CIP 曲線、藥劑、橡膠件與管線死角。","next":"先完成設備清洗驗證與耗材更換。"},{"name":"冷卻／貯乳問題","signals":"冷卻慢、攪拌或冷凍機異常、貯乳時間過長、槽內溫度波動。","check":"建立擠乳後冷卻時間與槽溫曲線。","next":"修復冷卻、縮短降溫時間並避免反覆升溫。"},{"name":"採樣／運送污染","signals":"單一樣本異常、重採正常、容器或冷藏流程不一致。","check":"雙份重採並核對容器、採樣點、冷藏與送驗時間。","next":"重建標準採樣流程，避免把假異常當牧場異常。"}],"tip":"總菌數偏高要沿著牛奶走過的路倒查：乳頭、套杯、管線、槽體、冷卻、樣本。哪一段失控，數字就會留下指紋。","tasks":[["立即","確認批次與冷藏安全","批次、槽溫、採樣時間、檢驗值","冷卻失效或疑似乳品安全風險需立即分流"],["當日","稽核擠乳前處理與 CIP","流程影片、溫度、濃度、時間","設備明顯髒污或回流水溫不足需停線改善"],["24 小時內","完成重採與設備死角排查","重採結果、擦拭點、維修清單","連續多批偏高需升級乳質與設備專業評估"],["D3–D7","追蹤檢驗、冷卻與清洗改善","菌數、槽溫、CIP 紀錄","改善後仍偏高需進一步分段採樣定位"]],"related":["擠乳流程檢核表","牛床衛生稽核表","乳房炎分級 SOP","CIP 清洗與生乳冷卻檢核"],"escalation":["連續多批或多槽總菌數明顯升高。","生乳冷卻失效、槽溫異常或設備有明顯奶垢污染。","合併異味、凝乳或其他乳品安全疑慮。"]},{"id":"low_conception","icon":"💞","title":"發情不明顯／受胎率偏低","subtitle":"從發情偵測、配種時機、體況能量、產後疾病、熱緊迫與操作品質，區分偵測問題和真正繁殖障礙。","risk":"中高風險","riskClass":"mid","questions":["問題是發情偵測率低、配種後不受胎、早期胚胎損失，還是空胎天數拉長？","是否集中在特定季節、胎次、DIM、配種員、精液批次或牛群？","站立發情、活動量、黏液與排卵時間的紀錄是否完整？","配種時機、解凍溫度、解凍到授精時間與精液保存是否標準化？","BCS、產後掉膘、乳量、酮症、子宮炎、胎衣不下與跛行率如何？","THI、夜間降溫、飲水與夏季採食是否造成熱季繁殖下滑？"],"evidence":["依季節、胎次、DIM、配種員與精液批次拆分受胎率。","抽查發情觀察、活動量、配種時間與妊檢結果。","比對 BCS、產後疾病、乳量、跛行與空胎天數。","回查精液保存、解凍、授精器材與現場操作流程。"],"roots":[{"name":"發情偵測／配種時機","signals":"活動警報未追蹤、觀察時段不足、配種時間不一致。","check":"比對發情徵象、警報、配種與妊檢時間軸。","next":"固定觀察責任與配種決策規則。"},{"name":"能量／體況與產後疾病","signals":"產後掉膘、BHB 高、子宮炎、跛行、初次排卵延遲。","check":"查 BCS、Fresh cow、疾病與乳量啟動。","next":"先改善產後健康與採食，再追求配種數字。"},{"name":"熱緊迫","signals":"熱季發情弱、受胎率下降、喘氣、DMI 下降。","check":"按 THI 與月份拆解繁殖 KPI。","next":"強化降溫並將熱季目標與涼季分開管理。"},{"name":"精液／授精操作或生殖疾病","signals":"特定批次、配種員或牛群表現異常，或有流產、分泌物等線索。","check":"稽核精液鏈、授精技術並由獸醫做生殖檢查。","next":"分開處理操作問題與感染／生殖器官問題。"}],"tip":"受胎率是最後一棒，前面還有發情偵測、配種時機、產後健康與熱緊迫。牛寶建議先把 KPI 拆開，不要讓所有問題都怪在精液或配種員身上。","tasks":[["當日","確認問題落在偵測、配種或受胎哪一段","發情偵測率、配種率、受胎率、空胎天數","流產群聚或異常分泌物需通知獸醫"],["一週內","按季節、胎次、DIM、配種員拆分資料","分層 KPI 表","特定群或批次顯著偏低需專案排查"],["D7–D30","改善發情觀察、Fresh cow 與降溫","稽核紀錄、BCS、疾病、THI","產後疾病率高需先處理前端健康"],["每月","追蹤偵測率、配種率、受胎率與空胎天數","月趨勢與改善項目","連續 2–3 個週期未改善需獸醫／繁殖顧問介入"]],"related":["發情觀察 SOP","配種紀錄表","初配前體高體重BCS檢核表","熱緊迫設備檢核表"],"escalation":["流產、早期胚胎損失或異常分泌物呈群聚。","特定精液批次、配種員或牛群受胎率明顯異常。","連續多月繁殖 KPI 下降且排除季節性波動。"]},{"id":"water_shortage","icon":"💧","title":"飲水不足／水槽異常","subtitle":"從水源、流量、儲水、清潔、水溫、槽位與群體競爭，判斷供水系統是否正在限制採食與乳量。","risk":"高風險","riskClass":"high","questions":["是全場停水、特定區域低壓，還是高峰時段流量不足？","各水槽每分鐘流量、補水速度與儲水量是否足以應付同群牛數？","水槽是否有藻、飼料、糞污、異味、過熱或清洗藥劑殘留？","水槽數量、位置與可用水面是否被強勢牛或死角限制？","最近是否更換水源、管線、泵浦、濾心或發生停電與漏水？","採食、糞便、尿色、乳量、體溫與熱緊迫表現是否同步改變？"],"evidence":["逐槽測量 1 分鐘流量、補滿時間、水溫與清潔度。","畫出水源、儲水、泵浦、主幹管與各牛舍末端供水圖。","拍攝高峰時段排隊、搶水、漏水與低壓位置。","比對停水／低壓時間與採食、乳量、糞便及 THI。"],"roots":[{"name":"流量／容量不足","signals":"高峰時段水槽空、末端低壓、補水慢、泵浦頻繁啟停。","check":"逐槽與末端測流量，查泵浦與儲水容量。","next":"先恢復供水，再改善管徑、泵浦或儲水。"},{"name":"清潔／適口性問題","signals":"藻、糞污、異味、水溫高、換水源後採水下降。","check":"清槽並檢查水質、氣味與水溫。","next":"建立固定清洗與水質監測。"},{"name":"槽位／群體競爭","signals":"弱勢牛喝不到、轉角擁擠、水槽被強勢牛霸占。","check":"觀察高峰時段群體行為與可用水面。","next":"增加可及水槽或調整位置與分群。"},{"name":"突發設備故障／漏水","signals":"停電、泵浦故障、浮球卡住、管線破裂或閥門誤關。","check":"沿供水路徑逐段確認壓力與設備。","next":"啟動備援供水與維修通報。"}],"tip":"水槽有水，不代表牛喝得到。牛寶建議在牛最想喝的時候去看：擠乳後、餵料後和最熱時段，問題才會現形。","tasks":[["立即","確認停水範圍並提供備援水源","區域、開始時間、可用水量","全場停水或高溫時供水中斷需緊急處理"],["30–60 分鐘","逐槽測流量與故障點","流量、水溫、清潔、照片","泵浦、主幹管或儲水異常需叫修"],["當日","清洗水槽並改善可及性","清洗紀錄、槽位、排隊觀察","疑似水質污染需停止使用並送驗"],["D1–D3","追蹤採食、乳量、糞便與供水穩定","每日流量與牛群反應","恢復供水後仍不吃或乳量不回升需查疾病與熱緊迫"]],"related":["飲水槽清洗與水流量檢核表","熱緊迫設備檢核表","TMR 均勻度檢核表","糞便評分 Visual Benchmark"],"escalation":["全場或大區域停水、泵浦故障或主幹管破裂。","高溫期間供水中斷，牛群出現喘氣、躁動或倒地。","水有異味、污染、化學殘留或疑似水質安全問題。"]},{"id":"dry_closeup","icon":"🛌","title":"乾乳期／Close-up 管理異常","subtitle":"從分群、過度擁擠、BCS、採食、DCAD、熱緊迫與產房轉換，找出產前風險如何延伸到產後疾病。","risk":"高風險","riskClass":"high","questions":["異常發生在遠期乾乳、Close-up 產前 21 天，還是轉入產房後？","乾乳牛是否過肥、過瘦，或 Close-up 期間體況與採食明顯下降？","分群密度、飼槽空間、轉群次數與弱勢牛競爭情況如何？","配方、DCAD／陰離子鹽、尿液 pH、礦物質與實際乾物採食是否有紀錄？","牛床、產房墊料、通風、飲水與熱緊迫管理是否合格？","產後是否出現低血鈣、酮症、胎衣不下、子宮炎、LDA 或乳房炎增加？"],"evidence":["整理遠乾、Close-up、產房與 Fresh cow 的轉群時間軸與牛數。","抽查 BCS、採食、剩料、尿液 pH、糞便與反芻。","拍攝飼槽、牛床、產房墊料、飲水與降溫設備。","比對產後 21 天低血鈣、BHB、子宮炎、乳房炎與淘汰資料。"],"roots":[{"name":"分群／擁擠與轉群壓力","signals":"飼槽不足、弱勢牛被驅趕、頻繁轉群、產房停留過久。","check":"查牛數、飼槽空間、轉群次數與躺臥。","next":"降低擁擠並減少不必要轉群。"},{"name":"體況／日糧與 DCAD 管理","signals":"乾乳過肥、Close-up 採食低、尿液 pH 偏離牧場目標、產後低血鈣或酮症高。","check":"查 BCS、乾物採食、配方執行與尿液 pH。","next":"由營養師校正配方與實際採食管理。"},{"name":"環境／熱緊迫與飲水","signals":"乾乳牛喘氣、站立不臥、水槽不足、產房潮濕。","check":"查 THI、風扇噴霧、飲水、牛床與墊料。","next":"乾乳牛也要完整降溫與供水，不可只顧泌乳牛。"},{"name":"監測與產後銜接不足","signals":"產前無每日檢核、分娩紀錄不完整、產後疾病延遲發現。","check":"查 Close-up 與 Fresh cow 表單是否真正使用。","next":"串接產前 21 天與產後 21 天任務卡。"}],"tip":"很多 Fresh cow 問題，其實在產前 21 天就埋下伏筆。牛寶建議不要把乾乳期當休假區，而要當下一胎的發射台。","tasks":[["當日","確認異常群別與擁擠、採食、BCS","牛數、飼槽、BCS、剩料","Close-up 大量不吃或高溫喘氣需立即改善"],["48 小時內","抽查尿液 pH、日糧與環境","尿液 pH、乾物、配方、THI、飲水","結果偏離牧場策略需營養師介入"],["分娩前後","串接產房與 Fresh cow 追蹤","分娩、胎衣、體溫、採食、BHB","倒地、難產、胎衣不下或高燒需獸醫"],["每月","回顧產後 21 天疾病與乾乳前端原因","低血鈣、酮症、子宮炎、乳房炎、淘汰","疾病率未降需調整分群、配方或環境"]],"related":["乾乳牛分群檢核表","Close-up近迫乾乳牛每日檢核表","Fresh cow產後21日追蹤 SOP","產房墊料衛生評分 SOP"],"escalation":["Close-up 群體採食明顯下降或多頭精神異常。","產後低血鈣、酮症、胎衣不下或子宮炎短期增加。","尿液 pH、配方執行或陰離子鹽管理明顯偏離牧場設定。"]},{"id":"calf_navel_joint","icon":"🧷","title":"臍帶感染／關節腫脹","subtitle":"從出生環境、臍帶處理、初乳免疫、臥床污染與敗血風險，區分局部臍炎、關節感染與全身性感染。","risk":"高風險","riskClass":"high","questions":["犢牛目前幾日齡？臍帶異常從出生後何時開始？","臍部是否腫脹、熱痛、潮濕、滲液、有異味或形成膿包？","是否同時出現單一或多個關節腫脹、跛行、不願站立或吸乳下降？","出生時臍帶是否完整浸泡消毒？使用藥劑、濃度與重複處理是否有紀錄？","產房與犢牛欄墊料是否乾燥？臍帶是否曾接觸糞尿、泥水或共用器具？","初乳第一餐時間、Brix、餵量、精神與體溫是否正常？同批是否也有腹瀉或肺炎？"],"evidence":["拍攝臍部正面、側面與關節腫脹位置，標註犢牛編號與日齡。","紀錄體溫、精神、吸乳量、站立與跛行狀況。","回查分娩、臍帶消毒、初乳與轉欄紀錄。","拍攝產房、犢牛欄墊料與臍帶處理工具的清潔狀況。"],"roots":[{"name":"臍帶消毒不完整","signals":"只噴表面、未浸泡、藥液污染或處理延遲。","check":"查出生後處理時間、藥劑、容器與操作紀錄。","next":"重整臍帶消毒流程與器具管理，對同批犢牛全面檢查。"},{"name":"產房／欄位污染","signals":"墊料濕髒、臍帶拖地、產房清空與消毒不足。","check":"做產房與犢牛欄衛生評分，確認糞尿接觸。","next":"立即換乾墊料並改善分娩後轉欄動線。"},{"name":"被動免疫不足","signals":"初乳延遲、Brix 低、同批多種感染增加。","check":"查初乳時間、量、品質與血清蛋白資料。","next":"將高風險犢牛列入感染追蹤並補強初乳閉環。"},{"name":"局部感染擴散／敗血風險","signals":"多關節腫脹、發燒、精神差、不喝奶或無法站立。","check":"由獸醫評估臍部、關節與全身感染狀態。","next":"立即隔離與專業處置，不以外觀消腫作為結案。"}],"tip":"臍帶看似小傷口，卻可能是細菌進入全身的高速公路。牛寶建議臍部異常一旦合併關節腫、發燒或不喝奶，就不要只擦藥觀察。","tasks":[["立即","完成體溫、臍部與關節分級","日齡、體溫、照片、站立與吸乳","多關節腫、無法站立或高燒立即通知獸醫"],["當日","隔離並改善乾燥清潔環境","欄位、墊料、臍帶消毒紀錄","臍部滲膿、惡臭或快速腫大需升級"],["24 小時內","回查初乳與同批犢牛","Brix、餵量、同批異常率","同批多頭發生需啟動群體感染排查"],["D1–D7","追蹤腫脹、體溫、吸乳與日增重","每日症狀、喝奶量、體重","症狀未改善或新增關節病灶需再評估"]],"related":["臍帶消毒紀錄表","出生24小時犢牛檢查流程","初乳餵飼 SOP","犢牛疾病知識庫"],"escalation":["高燒、精神沉鬱、無法站立或吸乳反射消失。","多個關節腫脹、臍部膿液或惡臭。","同批犢牛出現臍炎、關節炎或其他感染群聚。"]},{"id":"calf_growth_weaning","icon":"📏","title":"犢牛生長遲緩／離乳後掉重","subtitle":"從初乳、奶量與濃度、開食料、飲水、疾病、離乳門檻與轉群壓力，找出日增重不足的真正斷點。","risk":"中高風險","riskClass":"mid","questions":["生長不足發生在哺乳期、離乳前兩週、離乳後兩週，還是轉群後？","目前體重、胸圍、日增重與同批差異如何？是否只是目測偏小？","奶量、奶粉濃度、奶溫、餵飼次數與實際沖泡是否一致？","開食料每日採食量、鮮度、粉化、飲水可及性與糞便狀況如何？","是否反覆腹瀉、肺炎、臍炎、球蟲或其他慢性疾病？","離乳是否依開食料採食與體重門檻，還是只按日齡一次完成？轉群是否同時疊加去角、疫苗或換料？"],"evidence":["整理出生、每週胸圍／體重與離乳後 14 天的生長曲線。","現場核對奶粉秤量、沖泡水量、奶溫與實際餵飼。","秤量開食料投餵與剩料，拍攝粉化、黴變及飲水槽。","建立腹瀉、肺炎、用藥、離乳與轉群事件時間軸。"],"roots":[{"name":"液態營養不足／濃度不穩","signals":"奶量不足、沖泡誤差、奶溫不穩、餵飼間隔過長。","check":"實秤奶粉、水量與每頭實際攝取量。","next":"標準化沖泡與餵飼，避免同一配方被不同人沖成不同世界。"},{"name":"開食料與飲水不足","signals":"開食料不新鮮、粉化、飲水髒或離乳前採食未達門檻。","check":"量每日開食料攝取、鮮度與水槽流量。","next":"提高開食料適口性與飲水可及性，再評估離乳。"},{"name":"慢性疾病拖累","signals":"反覆腹瀉、肺炎、咳嗽、糞便不穩、日增重長期落後。","check":"把疾病事件與體重曲線疊圖。","next":"先處理疾病與環境根因，不能只加奶掩蓋。"},{"name":"離乳／轉群壓力過度集中","signals":"離乳後掉重、採食下降、多重操作同週發生。","check":"查離乳門檻、轉群密度、換料與操作時程。","next":"採漸進離乳並拆開去角、疫苗與轉群壓力。"}],"tip":"日齡到了不代表瘤胃準備好了。牛寶建議離乳要看『吃了多少開食料、體重有沒有達標、最近有沒有生病』，不是只翻日曆。","tasks":[["當日","量測體重／胸圍並確認落後幅度","體重、胸圍、同批百分位","極度消瘦、不喝奶或精神差需優先健康評估"],["24 小時內","稽核奶液、開食料與飲水","濃度、奶溫、開食料量、水槽","飼料變質或供水不足需立即改善"],["一週內","調整離乳門檻與多重壓力事件","離乳條件、轉群、疫苗、去角時程","同批大量掉重需管理與獸醫共同排查"],["D14–D30","追蹤日增重與疾病率","體重、ADG、採食、疾病","日增重未改善需檢查配方、寄生蟲與慢性病"]],"related":["犢牛日增重追蹤表","離乳轉群 SOP","青年牛體尺測量 SOP","初乳庫建立與解凍 SOP"],"escalation":["離乳後同批多頭明顯掉重、拒食或精神變差。","日增重長期低於牧場目標且合併腹瀉或肺炎。","個體極度消瘦、脫水、持續發燒或無法正常站立。"]},{"id":"heifer_growth_bcs","icon":"🐄","title":"育成牛成長不均／過肥","subtitle":"從體高體重、分群競爭、粗精料平衡、寄生蟲與初配門檻，避免只看月齡決定配種或用平均值掩蓋落後牛。","risk":"中風險","riskClass":"mid","questions":["問題是同批差異大、整批偏小，還是體重增加但體高不足與 BCS 過高？","是否有固定量測體高、體重／胸圍與 BCS？目前與牧場初配目標差距多大？","分群是否依體型與體重，而非只按月齡？弱勢牛是否被擠出飼槽？","日糧能量、蛋白、有效纖維、精料比例與剩料是否符合育成目標？","是否有慢性肺炎、腹瀉、寄生蟲、蹄病或其他影響採食的問題？","初配是否同時檢核體高、體重、BCS、健康與發情，而非只看年齡？"],"evidence":["建立同批體高、體重／胸圍與 BCS 分布圖，標示落後與過肥個體。","拍攝飼槽競爭、分群密度、剩料與牛隻體況。","整理日糧、採食、寄生蟲防治與疾病紀錄。","比對初配月齡、初配體格與後續受胎／產犢表現。"],"roots":[{"name":"分群與競爭不均","signals":"大小牛混群、飼槽不足、弱勢牛採食時間短。","check":"觀察餵料後 60 分鐘採食位置與驅趕行為。","next":"依體型／體重重新分群並確保飼槽空間。"},{"name":"能量過高／骨架不足","signals":"BCS 高但體高不足、脂肪堆積、初配過早。","check":"查精料比例、能量密度、體高與 BCS 趨勢。","next":"調整能量與纖維，目標是長骨架而不是養成圓滾滾。"},{"name":"營養不足／日糧不平衡","signals":"整批體高體重偏低、毛況差、採食或蛋白供應不足。","check":"查配方、乾物採食、原料品質與剩料。","next":"由營養師依生長目標校正日糧。"},{"name":"疾病／寄生蟲拖累","signals":"同群落後牛有腹瀉、咳嗽、貧血、粗毛或蹄病。","check":"把健康、糞檢與生長曲線交叉比對。","next":"針對高風險個體與環境做健康排查。"}],"tip":"育成牛不是『等她長大』，而是每天都在決定未來產乳與繁殖表現。牛寶建議用體高＋體重＋BCS 三件套，平均月齡真的太會騙人。","tasks":[["當日","完成同批體尺與 BCS 抽測","體高、體重／胸圍、BCS","極端落後或跛行病牛先健康分流"],["一週內","檢查分群、飼槽與日糧","牛數、飼槽、配方、剩料","整批偏小或過肥需營養師介入"],["D14–D30","依體格重分群並追蹤採食","分群名單、採食與體況","落後牛持續被驅趕需調整空間"],["每月","回顧生長曲線與初配合格率","ADG、體高、體重、BCS、初配率","兩個月無改善需查疾病、寄生蟲與配方"]],"related":["青年牛體尺測量 SOP","初配前體高體重BCS檢核表","離乳轉群 SOP","BCS 體況 Visual Benchmark"],"escalation":["同批大量育成牛體格明顯低於牧場目標。","過肥或過瘦比例持續升高，影響初配合格率。","合併慢性腹瀉、呼吸道症狀、貧血或跛行。"]},{"id":"milk_components","icon":"🥛","title":"乳脂／乳蛋白異常","subtitle":"從乳脂乳蛋白組合、TMR 挑食、有效纖維、能量蛋白平衡、熱緊迫與泌乳階段，區分瘤胃與採食問題。","risk":"中高風險","riskClass":"mid","questions":["異常是乳脂下降、乳蛋白下降、兩者一起下降，還是乳脂蛋白比明顯改變？","是全場、特定群、Fresh cow、高產群或某批原料後發生？","TMR 新鮮料與剩料是否有挑食？有效纖維、澱粉、油脂與水分近期是否改變？","乾物採食、反芻、糞便、未消化顆粒與乳量是否同步變化？","THI、飲水、待擠區與夜間採食是否造成熱季乳成分下降？","產後天數、BCS 變化、BHB／酮症與泌乳曲線是否顯示能量負平衡？"],"evidence":["整理近 30 天乳脂、乳蛋白、乳量與乳脂蛋白比，按群別與 DIM 分層。","比較新鮮 TMR 與剩料，測水分並記錄混拌與原料變更。","拍攝糞便並記錄反芻、採食、BCS 與 THI。","將原料批次、換料、熱季與疾病事件標在乳成分趨勢上。"],"roots":[{"name":"有效纖維不足／SARA 風險","signals":"乳脂下降、糞便稀或泡沫、反芻低、蹄病增加。","check":"查有效纖維、澱粉、挑食、糞便與反芻。","next":"穩定瘤胃與 TMR 結構，由營養師校正日糧。"},{"name":"乾物採食／能量不足","signals":"乳蛋白下降、乳量或 BCS 下滑、Fresh cow 掉膘。","check":"查 DMI、空槽、飲水、BHB 與產後疾病。","next":"先恢復採食與產後健康，再評估配方微調。"},{"name":"TMR／原料批次不一致","signals":"換料後快速波動、剩料分離、青貯水分或品質改變。","check":"比對原料批次、乾物、混拌順序與篩分。","next":"重新校正乾物與批次一致性。"},{"name":"熱緊迫／泌乳階段結構","signals":"熱季全群下降、夜間稍改善，或群體 DIM 結構改變。","check":"依 THI、群別、DIM 與胎次分層分析。","next":"先改善降溫供水，並排除群體結構造成的假警報。"}],"tip":"乳脂和乳蛋白像兩個不同的警示燈：一個偏瘤胃纖維，一個偏採食與能量。牛寶建議看組合，不要看到任何下降都只加精料。","tasks":[["當日","確認異常型態與影響群別","乳脂、乳蛋白、比例、群別、DIM","短期大幅波動合併掉奶或不吃需立即排查"],["24 小時內","完成 TMR、糞便與採食快篩","水分、篩分、糞便、反芻、DMI","疑似 SARA 或飼料變質需營養師介入"],["D3–D7","調整最高可能根因並固定批次管理","調整項目、原料批次、THI、飲水","乳成分持續惡化需重新檢查疾病與資料分層"],["每週","追蹤乳成分、乳量與伴隨指標","週趨勢、BCS、蹄病、糞便","連續兩週未改善需完整日糧與採食稽核"]],"related":["TMR 均勻度檢核表","青貯料切面與TMR水分檢核表","糞便評分 Visual Benchmark","熱緊迫設備檢核表"],"escalation":["乳成分異常合併群體乳量與採食明顯下降。","糞便、反芻與蹄病顯示高 SARA 風險。","換料或原料批次後快速惡化、疑似發霉或污染。"]},{"id":"feed_spoilage","icon":"🌽","title":"飼料發熱／發霉／適口性下降","subtitle":"從青貯取料面、儲存含水、空氣暴露、霉菌毒素、混拌與剩料，判斷飼料品質是否正在拖累採食與乳質。","risk":"高風險","riskClass":"high","questions":["異常發生在青貯、乾草、精料、TMR 新鮮料或剩料？從哪個批次與日期開始？","是否發熱、酸臭、霉味、腐敗味、結塊、變色、粉塵或可見霉斑？","青貯取料面是否平整壓實？每日取料厚度、覆蓋與暴露時間如何？","倉儲是否漏水、結露、靠牆回潮、袋裝破損或先進先出失效？","採食、剩料、反芻、糞便、乳量、乳成分與酒精陽性率是否同步變化？","問題是單一原料，還是混拌後發熱？設備殘料、混拌時間與出料延遲是否異常？"],"evidence":["拍攝原料、青貯切面、霉斑、結塊與倉儲環境，保留批次標示。","量測青貯切面、TMR 出料與剩料溫度，並測水分／乾物。","留存代表性樣本，記錄氣味、顏色、粒度與發生範圍。","比對採食、乳量、糞便、乳成分與原料批次時間軸。"],"roots":[{"name":"青貯二次發酵／空氣暴露","signals":"切面發熱、酸臭、局部霉變、取料面鬆散。","check":"查壓實、覆蓋、取料速度與每日切面管理。","next":"移除明顯變質區並改善切面與覆蓋，是否使用由專業人員判斷。"},{"name":"倉儲含水／先進先出失效","signals":"漏水、結露、袋底結塊、舊料長期堆放。","check":"查屋頂、牆角、棧板、批號與入庫日期。","next":"隔離受潮批次並重建乾燥與 FIFO 管理。"},{"name":"混拌／設備殘料發熱","signals":"原料正常但 TMR 局部發熱，攪拌槽或輸送設備殘料。","check":"查設備死角、清槽、混拌時間與出料延遲。","next":"清除殘料並縮短混拌後暴露時間。"},{"name":"霉菌毒素／原料品質風險","signals":"採食下降、乳量或繁殖波動、群體症狀但外觀不一定明顯。","check":"依風險送驗代表樣本並查多批次暴露。","next":"由營養師／獸醫評估分流、替代與後續監測。"}],"tip":"鼻子聞到的只是冰山一角，沒看到霉也不代表沒風險。牛寶建議先隔離可疑批次、留樣、量溫度與水分，不要把所有料混在一起後再猜兇手。","tasks":[["立即","隔離可疑原料／批次並停止混入","批次、位置、照片、氣味、溫度","大面積霉變、異味或群體急性症狀立即升級"],["當日","完成切面、倉儲與設備排查","水分、溫度、取料面、漏水、殘料","疑似污染需留樣並通知營養／獸醫專業人員"],["24–48 小時","更換安全原料並追蹤牛群反應","替代批次、DMI、糞便、乳量","不吃、腹瀉、神經或繁殖異常需獸醫介入"],["D3–D14","追蹤檢驗與預防措施","送驗、FIFO、清槽、切面溫度","反覆發熱需調整儲存與取料系統"]],"related":["青貯料切面與TMR水分檢核表","TMR 均勻度檢核表","酒精陽性奶排查 SOP","糞便評分 Visual Benchmark"],"escalation":["可見大面積霉變、腐敗異味、疑似化學或毒性污染。","群體採食、乳量快速下降或出現腹瀉、神經症狀。","同一批次跨群造成異常，或替換後仍未改善。"]},{"id":"cow_comfort_hygiene","icon":"🛏️","title":"牛床舒適度／蒼蠅與衛生","subtitle":"從躺臥、牛床尺寸、墊料乾燥、刮糞、通風與蒼蠅孳生源，連結乳房炎、跛行、採食與動物福利。","risk":"中高風險","riskClass":"mid","questions":["牛隻是否長時間站立、前腳在床上後腳在通道、躺下猶豫或身體碰撞隔欄？","牛床尺寸、頸桿、胸擋、墊料厚度與表面平整是否符合不同體型牛？","後腿、乳房與腹側清潔度如何？牛床與通道是否潮濕、積糞、積尿或打滑？","是否出現乳房炎、SCC、跛行、蹄底潰瘍、飛節擦傷或躺臥不足增加？","蒼蠅主要集中在產房、犢牛區、飼料區、糞堆、排水或死角？幼蟲孳生源是否處理？","刮糞、補墊料、通風、排水與防蠅是否有頻率、責任人與效果紀錄？"],"evidence":["觀察並錄影牛隻進床、躺下、起身與離床動作。","量測牛床關鍵尺寸並拍攝墊料、積尿、濕滑與擦傷位置。","做牛體清潔度、跛行與飛節損傷抽樣評分。","標記蒼蠅熱點與孳生源，記錄清除前後密度。"],"roots":[{"name":"牛床尺寸／結構不合","signals":"躺下猶豫、碰撞、牛體外伸、前腳上床後腳站通道。","check":"量床寬、床長、頸桿、胸擋並看起臥影片。","next":"依體型調整結構，先處理高頻碰撞與拒躺位置。"},{"name":"墊料／排水與刮糞不足","signals":"乳房後腿髒、床面潮濕、積尿、滑倒與環境性乳房炎。","check":"做清潔度評分與時段性積污巡查。","next":"提高刮糞、補料、整床與排水頻率。"},{"name":"過度擁擠／躺臥時間不足","signals":"床位不足、待擠時間長、弱勢牛站立、蹄底問題增加。","check":"查床位比、轉群、待擠與每日作業時程。","next":"降低擁擠並縮短不必要站立時間。"},{"name":"蒼蠅孳生源未斷","signals":"只噴成蟲但幼蟲持續、濕糞與飼料殘渣累積。","check":"找濕有機物、排水死角、糞堆與犢牛區。","next":"先清除孳生源，再搭配合規防治與效果追蹤。"}],"tip":"牛床好不好，牛會用腳投票：不躺、站一半、飛節受傷、乳房變髒。牛寶建議先看牛怎麼用，而不是只看牛床看起來多漂亮。","tasks":[["當日","完成牛床、清潔度與躺臥快篩","尺寸、照片、清潔度、起臥影片","滑倒、嚴重擦傷或床位不足需立即改善"],["48 小時內","處理濕髒、積尿與蒼蠅孳生源","刮糞、墊料、排水、熱點清單","乳房炎或跛行短期增加需同步排查"],["一週內","調整尺寸、床位與待擠時間","改善前後照片、床位比、等待時間","結構性問題需設備／管理共同處理"],["每月","追蹤躺臥、清潔度、跛行與 SCC","抽樣分數、SCC、跛行、蒼蠅密度","指標未改善需重新定位孳生源與使用障礙"]],"related":["牛床衛生稽核表","產房墊料衛生評分 SOP","環境衛生 Visual Benchmark","蹄病跛行評分與分流 SOP"],"escalation":["滑倒、嚴重飛節傷、蹄傷或牛隻明顯拒絕躺臥。","乳房炎、SCC 或跛行在短期內同步升高。","蒼蠅密度失控並影響採食、休息或犢牛健康。"]},{"id":"abortion_cluster","icon":"⚠️","title":"流產／早產事件增加","subtitle":"從妊娠日齡、個體與群聚、發燒疾病、飼料水源、熱緊迫、生物安全與繁殖紀錄，分辨偶發事件和群體警訊。","risk":"高風險","riskClass":"high","questions":["事件是單頭偶發，還是 30–60 天內同群、同胎次或跨群增加？","流產／早產發生在妊娠哪一階段？胎兒、胎盤與分泌物是否可安全留樣？","母牛是否發燒、食慾下降、腹瀉、呼吸道症狀、乳量下降或異常分泌物？","近期是否有新進牛、訪客、共用器具、野生動物、犬貓、鼠害或生物安全漏洞？","飼料是否發霉、批次變更、青貯發熱？飲水或化學物質是否有異常？","是否集中於高 THI、轉群、運輸、過度擁擠、疫苗／治療操作或特定精液與配種時段？"],"evidence":["建立流產事件表：牛號、妊娠日齡、群別、日期、症狀與配種資料。","依獸醫與生物安全規範保存胎兒、胎盤或適當樣本，避免裸手接觸。","拍攝並記錄飼料、水源、發霉批次、環境與生物安全動線。","比對新進牛、熱緊迫、疾病、疫苗／用藥與流產時間軸。"],"roots":[{"name":"感染性／群體防疫風險","signals":"短期群聚、發燒、胎盤異常、新進牛或野生動物暴露。","check":"立即通知獸醫制定採樣、隔離與生物安全方案。","next":"限制動線、保護人員並依檢驗結果處理。"},{"name":"飼料／毒素與水源風險","signals":"發霉、批次更換、採食下降、多群同時出現繁殖異常。","check":"隔離批次、留樣並查倉儲、水源與化學暴露。","next":"由營養與獸醫團隊評估替換與檢驗。"},{"name":"熱緊迫／環境與操作壓力","signals":"高 THI、轉群運輸、擁擠或操作後事件增加。","check":"查 THI、作業時間與妊娠牛移動紀錄。","next":"降低熱負荷與非必要移動，保護高風險妊娠牛。"},{"name":"個體生殖／胎兒因素","signals":"單頭偶發、無群體趨勢、子宮或胎兒個體問題。","check":"由獸醫進行生殖檢查並回查繁殖史。","next":"個體追蹤，但仍納入群體監測避免漏掉早期訊號。"}],"tip":"一頭流產需要紀錄，兩三頭靠近發生就需要畫時間軸。牛寶提醒：先保護人員、隔離動線、留好樣本，再追問原因；現場清掉得太乾淨，線索也會一起下班。","tasks":[["立即","隔離現場並通知獸醫／管理者","牛號、妊娠日齡、日期、症狀、照片","群聚、發燒或人畜共通疑慮需緊急升級"],["當日","依規範採樣與完成生物安全清消","樣本、PPE、動線、清消紀錄","不可裸手接觸胎兒胎盤或任意丟棄"],["48 小時內","回查飼料、水源、新進牛與事件時間軸","批次、THI、配種、疾病與操作","跨群增加需啟動牧場級調查"],["D7–D30","追蹤新增事件與檢驗結果","流產率、妊娠日齡分布、檢驗","未找到原因但持續發生需擴大採樣與專家介入"]],"related":["配種紀錄表","Close-up近迫乾乳牛每日檢核表","產房墊料衛生評分 SOP","繁殖與流產疾病知識庫"],"escalation":["短期內同群或跨群多頭流產／早產。","母牛發燒、全身症狀或疑似人畜共通感染。","胎兒／胎盤異常、飼料毒素或水源污染疑慮。"]},{"id":"dystocia_stillbirth","icon":"🐮","title":"難產／死產／弱仔","subtitle":"從產程進展、胎位、母牛體況、初產牛體格、助產時機、產房衛生與新生犢牛復甦，回查單次事件與群體趨勢。","risk":"高風險","riskClass":"high","questions":["母牛是初產或經產？預產期、破水時間與目前產程進展多久？","胎位、胎向、胎勢是否正常？是否只見單蹄、頭部後仰、臀位或產道無進展？","母牛是否疲弱、倒地、持續出血、發燒或已長時間用力？","初產牛配種時體高體重、BCS、種公牛難產指標與妊娠期是否有紀錄？","助產何時開始、由誰判斷、使用何種器具與拉力方向？是否有粗暴或過早介入？","犢牛出生後呼吸、心跳、反射、體溫與臍帶處理如何？近期死產／弱仔是否增加？"],"evidence":["記錄破水、開始用力、每次檢查與助產時間點。","在不延誤急症前提下，記錄胎位、母牛狀態與產房環境。","建立犢牛出生狀態、復甦、初乳、臍帶與 24 小時追蹤。","每月拆分初產／經產、種公牛、胎位、助產者與死產率。"],"roots":[{"name":"胎位／胎兒與產道不合","signals":"無進展、單蹄、頭後仰、臀位、胎兒過大或產道不足。","check":"由受訓人員或獸醫確認胎位與產道。","next":"超過能力範圍立即升級，避免反覆拉扯。"},{"name":"母牛體況／初產體格不適","signals":"初產牛體格不足、過肥、產程長、胎兒過大。","check":"回查初配體高體重、BCS 與種公牛資料。","next":"修正初配門檻、乾乳體況與配種策略。"},{"name":"監測／助產時機與技術","signals":"發現太晚、過早干預、拉力方向錯誤、紀錄缺失。","check":"重建產程時間軸並檢討人員判斷與訓練。","next":"建立明確觀察、檢查與通報門檻。"},{"name":"新生犢牛復甦與產房環境","signals":"出生後呼吸弱、低溫、臍帶污染、初乳延遲。","check":"查復甦、乾燥保溫、臍帶與第一餐初乳。","next":"完成出生 24 小時閉環，弱仔加強監測。"}],"tip":"助產不是越快拉越專業。牛寶建議先看產程有沒有進展、胎位對不對、母牛狀態穩不穩；不確定時，早一點通報比多拉幾次更有價值。","tasks":[["立即","確認產程、胎位與母牛生命狀態","破水時間、進展、胎位、體溫、出血","胎位異常、無進展、母牛虛弱或出血立即通知獸醫"],["分娩當下","依能力分級助產並完成犢牛復甦","介入時間、方法、犢牛呼吸與反射","呼吸心跳弱、嚴重創傷或母牛倒地需緊急處理"],["0–24 小時","追蹤母牛與犢牛","胎衣、採食、體溫、臍帶、初乳、站立","胎衣不下、高燒、不吃或犢牛無吸乳需升級"],["每月","回顧難產、死產與弱仔結構","胎次、種公牛、助產者、胎位、死亡原因","比率上升需繁殖、育成、乾乳與產房共同檢討"]],"related":["產房墊料衛生評分 SOP","出生24小時犢牛檢查流程","Fresh cow產後21日追蹤 SOP","死亡淘汰原因回顧表"],"escalation":["破水後長時間無進展、胎位異常或產道判斷不明。","母牛大量出血、虛弱倒地、休克或嚴重疼痛。","犢牛無呼吸／心跳弱、嚴重創傷，或短期死產率增加。"]}];
 
 const visualBenchmarks = [{"id": "feces", "icon": "💩", "title": "糞便評分", "target": "目標多落在 3 分左右", "intro": "用糞便型態判斷消化、瘤胃穩定、水分與飼料轉換狀況。適合搭配酒精陽性、SARA、犢牛腹瀉與產後採食差排查。", "summary": [["適用情境", "TMR 調整、下雨後水分突變、腹瀉、乳脂下降、產後不吃。"], ["觀察單位", "同群至少觀察 10–20 頭或多處新鮮糞便。"], ["關聯模組", "酒精陽性奶、犢牛腹瀉、Fresh cow、營養型蹄病。"]], "howTo": ["選擇新鮮糞便，避免被水沖散或踩爛後再判斷。", "拍照時放入固定參照物，例如手套、鏟子或地面刻度。", "同一群牛要連續觀察 2–3 天，不要只看單一糞堆。"], "nextSteps": ["1–2 分偏稀：回查水分、澱粉、蛋白、換料與感染因素。", "4–5 分偏乾：回查飲水量、有效纖維、採食量與熱緊迫。", "若同群分數分散很大，優先排查 TMR 挑食與混拌均勻度。"], "scores": [["1", "水樣／噴射狀", "嚴重腹瀉或消化道刺激，犢牛需優先評估脫水與感染。", "立即評估精神、體溫與脫水；群體發生時啟動下痢排查。", false], ["2", "稀軟、攤開不成形", "可能與換料、TMR 過濕、SARA、熱緊迫或感染有關。", "回查飼料水分、換料紀錄、同群比例與糞便氣味。", false], ["3", "粥狀成堆、稍有環紋", "多數泌乳牛理想型態，代表水分與消化狀態相對穩定。", "維持追蹤，搭配乳脂、採食與反芻判斷。", true], ["4", "偏乾厚重、堆疊明顯", "可能採食不足、飲水不足、纖維偏高或產後恢復不佳。", "檢查飲水槽、熱緊迫、採食量與飼槽管理。", false], ["5", "乾硬球狀或塊狀", "嚴重乾硬，需注意脫水、低採食或腸胃蠕動問題。", "優先檢查飲水、疾病、產後狀態與是否需要獸醫評估。", false]], "images": [{"label": "糞便 Score 2｜稀軟、不堆疊", "src": "https://www.noble.org/wp-content/uploads/2024/09/manure-1.jpg", "source": "Noble Research Institute", "sourceUrl": "https://www.noble.org/regenerative-agriculture/livestock/manure-scoring-determines-supplementation-needs/", "note": "公開圖例可作為稀軟糞便參考；Noble 原文以 1–5 分說明糞便型態。"}, {"label": "糞便 Score 3｜理想粥狀成堆", "src": "https://www.noble.org/wp-content/uploads/2024/09/manure2.jpg", "source": "Noble Research Institute", "sourceUrl": "https://www.noble.org/regenerative-agriculture/livestock/manure-scoring-determines-supplementation-needs/", "note": "原文描述 score 3 通常為理想糞便型態。"}, {"label": "糞便 Score 5｜乾硬堆疊", "src": "https://www.noble.org/wp-content/uploads/2024/09/manure3.jpg", "source": "Noble Research Institute", "sourceUrl": "https://www.noble.org/regenerative-agriculture/livestock/manure-scoring-determines-supplementation-needs/", "note": "公開圖例可作為過乾糞便參考。Score 1 與 4 暫以文字標準保留。"}], "imageNote": "公開且可穩定連結的糞便圖例目前只找到 Noble Research Institute 的 Score 2／3／5。Score 1 與 4 保留文字標準，後續可由你補公司自有照片。"}, {"id": "lameness", "icon": "🦶", "title": "跛行評分", "target": "目標 1–2 分，3 分以上需追蹤", "intro": "用站姿、背線、步幅與承重情形判斷蹄病嚴重度，協助區分環境型、感染型、營養型與外傷。", "summary": [["適用情境", "蹄病、跛行、新發率上升、蹄浴效果評估、修蹄追蹤。"], ["觀察單位", "讓牛在平坦防滑地面直線行走，側面與後方都要看。"], ["關聯模組", "蹄病跛行、蹄浴 SOP、環境衛生、營養型 SARA 排查。"]], "howTo": ["觀察站立背線與行走背線是否拱起。", "看步幅是否縮短、頭部擺動、單腳不願承重。", "每次評分建議拍 5–10 秒影片，方便前後比較。"], "nextSteps": ["3 分：列入追蹤與修蹄清單，不要等到不能走。", "4–5 分：隔離到止滑乾燥區，安排修蹄或獸醫評估。", "若同群 3 分以上比例上升，回查蹄浴、地面與 TMR。"], "scores": [["1", "正常", "站立與行走背線平直，步幅均勻，承重正常。", "例行紀錄即可。", true], ["2", "輕微異常", "站立正常，但行走時背線略拱或步幅略短。", "列入觀察，7–14 天內複評。", true], ["3", "中度跛行", "站立與行走背線拱起，步幅短或步態不穩。", "排入修蹄／檢查清單，找環境或營養根因。", false], ["4", "明顯跛行", "明顯偏重、跛行，仍可行走但不舒服。", "立即分流，檢查蹄底、蹄冠、DD 或外傷。", false], ["5", "嚴重跛行", "幾乎不願承重、行走困難或臥地不起。", "緊急處置，隔離止滑並通知獸醫或削蹄師。", false]], "images": [{"label": "跛行／Locomotion 1–5 圖示表", "src": "https://www.agproud.com/ext/resources/2023/12/14/58796-Olson-Fig1.jpg", "source": "AgProud / Zinpro locomotion scoring guide", "sourceUrl": "https://www.agproud.com/articles/58796-identifying-lameness-can-be-part-of-everyones-job-description", "note": "用站立、行走、背線、承重與步幅判讀 1–5 分。"}, {"label": "繫欄牛跛行行為例：EDGE", "src": "https://www.nfacc.ca/images/codes-of-practice/dairy/AppE_Pic1.png", "source": "NFACC Dairy Code of Practice Appendix E", "sourceUrl": "https://www.nfacc.ca/codes-of-practice/dairy-cattle/code2023", "note": "NFACC 附錄 E 用於繫欄牛跛行行為判讀的圖例之一。"}], "imageNote": "跛行評分已補公開圖卡；NFACC 也提供正式的 1–5 分文字判讀標準。"}, {"id": "bcs", "icon": "🐄", "title": "BCS 體況評分", "target": "依階段校正，初配 2.75–3.0、分娩約 3.0–3.25", "intro": "用尾根、腰角、坐骨、短肋與背線脂肪覆蓋判斷能量儲備，連結初配、圍產期與乾乳期代謝風險。", "summary": [["適用情境", "初配前、乾乳、Close-up、Fresh cow、高峰泌乳掉體況。"], ["觀察單位", "固定同一評分者或用照片校正，避免人員差異太大。"], ["關聯模組", "初配前檢核、Close-up、Fresh cow、酮症風險。"]], "howTo": ["從後方與側方觀察尾根、腰角、坐骨與短肋。", "不要只看體重，需與體高、月齡、泌乳階段一起判讀。", "每月或關鍵階段固定評分，觀察變化趨勢比單點更重要。"], "nextSteps": ["初配前過肥 >3.25：需注意未來乾乳期與圍產代謝風險。", "產後掉體況過快：回查採食、酮症、蹄病與飼槽管理。", "乾乳過肥：調整乾乳分群與能量密度，避免產後代謝討債。"], "scores": [["1", "過瘦", "骨點突出、脂肪覆蓋極少，代表能量儲備不足。", "檢查疾病、採食、寄生蟲、競爭與飼料品質。", false], ["2", "偏瘦", "腰角、坐骨明顯，短肋可見，可能影響繁殖與免疫。", "調整營養與分群，追蹤月增重或產後回復。", false], ["3", "理想範圍", "骨點可辨但不尖銳，脂肪覆蓋適中。", "多數階段的核心目標區，依階段微調。", true], ["4", "偏肥", "尾根與腰部脂肪覆蓋明顯，移動與代謝風險升高。", "檢查乾乳與育成能量過高問題。", false], ["5", "過肥", "脂肪堆積明顯，圍產期酮症、脂肪肝與難產風險高。", "需重新檢討分群、配方與乾乳期管理。", false]], "images": [{"label": "BCS 評分解剖定位圖", "src": "https://www.nfacc.ca/images/codes-of-practice/dairy/AppB_BCS_1.png", "source": "NFACC Dairy Code of Practice Appendix B", "sourceUrl": "https://www.nfacc.ca/codes-of-practice/dairy-cattle/code2023", "note": "標示短肋、腰角、坐骨、尾根等評分位置。"}, {"label": "BCS 1｜過瘦", "src": "https://www.nfacc.ca/images/codes-of-practice/dairy/AppB_BCS_2.png", "source": "NFACC Dairy Code of Practice Appendix B", "sourceUrl": "https://www.nfacc.ca/codes-of-practice/dairy-cattle/code2023", "note": "骨點明顯突出。"}, {"label": "BCS 2｜偏瘦", "src": "https://www.nfacc.ca/images/codes-of-practice/dairy/AppB_BCS_3.png", "source": "NFACC Dairy Code of Practice Appendix B", "sourceUrl": "https://www.nfacc.ca/codes-of-practice/dairy-cattle/code2023", "note": "骨點仍明顯，但較 BCS 1 有少量覆蓋。"}, {"label": "BCS 3｜理想核心區", "src": "https://www.nfacc.ca/images/codes-of-practice/dairy/AppB_BCS_4.png", "source": "NFACC Dairy Code of Practice Appendix B", "sourceUrl": "https://www.nfacc.ca/codes-of-practice/dairy-cattle/code2023", "note": "多數階段的核心參考區間。"}, {"label": "BCS 4｜偏肥", "src": "https://www.nfacc.ca/images/codes-of-practice/dairy/AppB_BCS_5.png", "source": "NFACC Dairy Code of Practice Appendix B", "sourceUrl": "https://www.nfacc.ca/codes-of-practice/dairy-cattle/code2023", "note": "尾根與腰部覆蓋明顯。"}, {"label": "BCS 5｜過肥", "src": "https://www.nfacc.ca/images/codes-of-practice/dairy/AppB_BCS_6.png", "source": "NFACC Dairy Code of Practice Appendix B", "sourceUrl": "https://www.nfacc.ca/codes-of-practice/dairy-cattle/code2023", "note": "過肥與圍產期代謝風險連結。"}], "imageNote": "BCS 使用 NFACC Dairy Code of Practice 附錄 B 的公開圖例與評分定位圖。"}, {"id": "hygiene", "icon": "🧼", "title": "環境衛生評分", "target": "目標 1–2 分，3 分以上需改善", "intro": "將牛床、後腿、乳房、腹側與產房墊料的乾淨程度標準化，連結乳房炎、蹄病、犢牛健康與產房風險。", "summary": [["適用情境", "乳房炎、SCC 升高、蹄病、產房管理、犢牛環境污染。"], ["觀察單位", "同群抽樣，至少看後腿、乳房、腹側與牛床／產房。"], ["關聯模組", "產房墊料衛生評分、乾乳牛分群、乳房炎、蹄病。"]], "howTo": ["固定拍攝後腿、乳房、腹側與牛床表面。", "評分時區分乾土、濕泥、糞污結塊與墊料潮濕。", "同一天不同時段可複評，特別是擠乳前與高溫潮濕時。"], "nextSteps": ["3 分：安排墊料補充、牛床整平與走道刮糞頻率檢討。", "4–5 分：視為乳房炎與蹄病高風險，需立即改善環境。", "產房若 3 分以上，Fresh cow 與新生犢牛風險同步上升。"], "scores": [["1", "乾淨乾燥", "乳房、後腿與腹側乾淨，牛床乾燥舒適。", "維持例行清潔與抽查。", true], ["2", "輕微髒污", "少量乾土或局部髒污，不影響乳房或蹄部。", "維持觀察，注意潮濕天氣變化。", true], ["3", "中度髒污", "後腿或腹側有明顯糞污，牛床略潮濕。", "提高刮糞、補墊料與牛床整理頻率。", false], ["4", "重度髒污", "乳房附近或蹄部常被濕糞污染，牛床潮濕。", "立即改善墊料、排水、通風與擠乳前清潔。", false], ["5", "嚴重污染", "糞污結塊、長期潮濕，產房或牛床衛生失控。", "視為高風險事件，需現場整改與追蹤。", false]], "images": [{"label": "Cow Cleanliness Assessment｜1–4 分圖卡", "src": "https://www.nfacc.ca/images/resized/AppC_f750x824_1677876277.jpg", "source": "NFACC Dairy Code of Practice Appendix C / CBMQRN", "sourceUrl": "https://www.nfacc.ca/codes-of-practice/dairy-cattle/code2023", "note": "包含乳房、後腿、腹側與髖部清潔度圖例。"}], "imageNote": "環境衛生以 NFACC 附錄 C 的 Cow Cleanliness Assessment 作為正式公開圖卡來源。"}];
 
@@ -12531,7 +13601,7 @@ const v184OriginalSelectProblem = selectProblem;
 selectProblem = function(id) { v184OriginalSelectProblem(id); const p=problems.find(x=>x.id===id); renderProblemNutrition(p); };
 const v184OriginalSelectDisease = selectDisease;
 selectDisease = function(id) { v184OriginalSelectDisease(id); const d=diseaseKnowledge.find(x=>x.id===id); renderDiseaseNutrition(d); };
-document.title = 'DairyLife 360｜V18.5｜牛寶 IP 活潑化設計版';
+document.title = 'DairyLife 360｜V18.5.8｜Portal Shell 入口平台架構版';
 
 setupNutritionFilters();
 renderNutritionCards();
@@ -12819,7 +13889,7 @@ const v185NiubaoSections = [
 ];
 
 function initNiubaoIPV185(){
-  document.title = 'DairyLife 360｜V18.5｜牛寶 IP 活潑化設計版';
+  document.title = 'DairyLife 360｜V18.5.8｜Portal Shell 入口平台架構版';
   const homeCopy = document.querySelector('#home .hero-copy');
   if(homeCopy && !document.querySelector('.v185-home-niubao-note')){
     homeCopy.insertAdjacentHTML('afterend', `<div class="v185-niubao-section-tip v185-home-niubao-note">${v185NiubaoAvatar()}<div><b>牛寶登場｜現場小顧問模式</b><span>牛寶會在頁面各處自然出現，協助提醒階段判斷、問題分流、營養源頭與成本優化。牠很可愛，但不是來賣萌而已，牠是來盯 KPI 的。</span></div></div>`);
@@ -12877,6 +13947,443 @@ if(v185OriginalRenderGroupedSearchResults){
 
 initNiubaoIPV185();
 
+
+/* ==============================
+V18.5.5 CROSS-MODULE SOP LINK PATCH
+修正版邏輯：
+1. 不使用 Gemini 範例中的 d.rootCauses，改用目前網站實際資料 c.roots。
+2. 不把牛寶 base64 硬塞在函式中，沿用 getNiubaoDataUri()。
+3. 不用純文字硬比對到底，增加 alias 與模糊比對。
+4. 找不到 SOP 時不報錯，改成一般文字或導向對應模組。
+============================== */
+(function(){
+  document.title = 'DairyLife 360｜V18.5.8｜Portal Shell 入口平台架構版';
+
+  const sopAliasMap = {
+    '初乳庫建立與解凍 SOP': '初乳管理 SOP',
+    '出生24小時犢牛檢查流程': '初乳餵飼 SOP',
+    'Fresh cow產後21日追蹤 SOP': '產後 10 日觀察 SOP',
+    'Fresh cow 產後21日追蹤 SOP': '產後 10 日觀察 SOP',
+    'Close-up近迫乾乳牛每日檢核表': '乾乳牛分群檢核表',
+    'Close-up 近迫乾乳牛每日檢核表': '乾乳牛分群檢核表',
+    'TMR 水分與挑食檢核': 'TMR 水分檢測 SOP',
+    'TMR 賓州篩 SOP': 'TMR 均勻度檢核表',
+    '青貯料管理檢核': 'TMR 水分檢測 SOP',
+    '蹄病跛行評分與分流 SOP': '蹄浴槽配製與更換檢核表',
+    '蹄浴管理 SOP': '蹄浴槽配製與更換檢核表',
+    '乾乳期給藥與封乳 SOP': '乾乳治療 SOP',
+    '乳房炎／SCC 疾病知識庫': '乳房炎分級 SOP',
+    '產房墊料衛生評分 SOP': '牛床衛生稽核表',
+    'CMT 操作表': 'CMT 操作與判讀表',
+    '熱緊迫設備檢核表': '熱緊迫設備檢核表',
+    '酒精陽性奶排查 SOP': '酒精陽性奶排查 SOP',
+    '蹄浴槽配製與更換檢核表': '蹄浴槽配製與更換檢核表',
+    '初配前體高體重 BCS 檢核表': '初配前體高體重 BCS 檢核表',
+    '乾乳牛分群檢核表': '乾乳牛分群檢核表',
+    'TMR 水分檢測 SOP': 'TMR 水分檢測 SOP',
+    '牧草收貨檢核 SOP': '牧草收貨檢核 SOP',
+    '儲存管理 SOP': '儲存管理 SOP'
+  };
+
+  function v1855NormalizeText(text){
+    return String(text || '')
+      .replace(/SOP：/g,'')
+      .replace(/SOP:/g,'')
+      .replace(/Visual Benchmark/g,'')
+      .replace(/[｜|／\/\s　:：()（）\-—]/g,'')
+      .toLowerCase();
+  }
+
+  function v1855EscapeJs(text){
+    return String(text || '').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\n/g,' ');
+  }
+
+  function v1855AllSopTitles(){
+    const list = [];
+    if(typeof sops !== 'undefined' && Array.isArray(sops)){
+      sops.forEach(r => { if(r && r[0]) list.push(r[0]); });
+    }
+    if(typeof sopPreviewData !== 'undefined'){
+      Object.keys(sopPreviewData).forEach(k => list.push(k));
+    }
+    if(typeof deepSopPreviewData !== 'undefined'){
+      Object.keys(deepSopPreviewData).forEach(k => list.push(k));
+    }
+    return [...new Set(list)];
+  }
+
+  function v1855ResolveSopTitle(label){
+    const raw = String(label || '').replace(/^SOP[：:]/,'').trim();
+    if(!raw) return null;
+
+    if(sopAliasMap[raw]) return sopAliasMap[raw];
+
+    const titles = v1855AllSopTitles();
+    if(titles.includes(raw)) return raw;
+
+    const n = v1855NormalizeText(raw);
+    const exact = titles.find(t => v1855NormalizeText(t) === n);
+    if(exact) return exact;
+
+    const fuzzy = titles.find(t => {
+      const tn = v1855NormalizeText(t);
+      return tn && n && (tn.includes(n) || n.includes(tn));
+    });
+    if(fuzzy) return fuzzy;
+
+    return null;
+  }
+
+  function v1855BenchmarkTarget(label){
+    const raw = String(label || '');
+    if(raw.includes('糞便')) return 'feces';
+    if(raw.includes('跛行')) return 'lameness';
+    if(raw.includes('BCS') || raw.includes('體況')) return 'bcs';
+    if(raw.includes('環境') || raw.includes('衛生')) return 'hygiene';
+    return null;
+  }
+
+  function v1855SopButton(label){
+    const target = v1855ResolveSopTitle(label);
+    if(target){
+      return `<button type="button" class="v1855-sop-link" onclick="openSopPreview('${v1855EscapeJs(target)}')">📋 ${escapeHtml(label)} <span>一鍵預覽</span></button>`;
+    }
+
+    const bm = v1855BenchmarkTarget(label);
+    if(bm){
+      return `<button type="button" class="v1855-benchmark-link" onclick="selectBenchmark('${bm}');document.getElementById('benchmark')?.scrollIntoView({behavior:'smooth'});">🖼️ ${escapeHtml(label)} <span>前往評分</span></button>`;
+    }
+
+    return `<span class="v1855-sop-miss">${escapeHtml(label)}</span>`;
+  }
+
+  function v1855RelatedListHtml(items){
+    const arr = Array.isArray(items) ? items : [];
+    if(!arr.length) return '<li>尚未設定</li>';
+    return arr.map(x => `<li>${v1855SopButton(x)}</li>`).join('');
+  }
+
+  function v1855SopChipRow(items){
+    const arr = Array.isArray(items) ? items : [];
+    if(!arr.length) return '<span class="v1855-sop-miss">尚未設定</span>';
+    return arr.map(x => v1855SopButton(x)).join('');
+  }
+
+  function v1855BenchmarkSops(id, scoreValue){
+    const value = Number(scoreValue);
+    if(id === 'bcs'){
+      if(value <= 2) return ['初配前體高體重 BCS 檢核表', '產後 10 日觀察 SOP'];
+      if(value >= 4) return ['乾乳牛分群檢核表', 'Close-up近迫乾乳牛每日檢核表'];
+      return ['初配前體高體重 BCS 檢核表'];
+    }
+    if(id === 'feces'){
+      if(value <= 2) return ['TMR 水分檢測 SOP', '酒精陽性奶排查 SOP'];
+      if(value >= 4) return ['TMR 水分檢測 SOP', '熱緊迫設備檢核表'];
+      return ['TMR 均勻度檢核表'];
+    }
+    if(id === 'lameness'){
+      if(value >= 3) return ['蹄浴槽配製與更換檢核表', '乾乳牛分群檢核表'];
+      return ['蹄浴槽配製與更換檢核表'];
+    }
+    if(id === 'hygiene'){
+      if(value >= 3) return ['牛床衛生稽核表', '產房墊料衛生評分 SOP', '乳房炎分級 SOP'];
+      return ['牛床衛生稽核表'];
+    }
+    return [];
+  }
+
+  // 覆蓋現場問診：修正 c.roots，並讓關聯 SOP 可一鍵預覽。
+  window.selectConsultCase = function(id){
+    const c = consultationCases.find(x => x.id === id);
+    if(!c) return;
+
+    document.querySelectorAll('.consult-case-btn').forEach(btn => btn.classList.toggle('active', btn.textContent.includes(c.title)));
+
+    document.getElementById('consultTitle').textContent = c.title;
+    document.getElementById('consultSubtitle').textContent = c.subtitle;
+
+    const risk = document.getElementById('consultRisk');
+    risk.textContent = c.risk;
+    risk.className = 'consult-risk ' + c.riskClass;
+
+    document.getElementById('consultQuestions').innerHTML = c.questions.map(x => `<li>${escapeHtml(x)}</li>`).join('');
+    document.getElementById('consultEvidence').innerHTML = c.evidence.map(x => `<li>${escapeHtml(x)}</li>`).join('');
+
+    document.getElementById('consultRootCauses').innerHTML = c.roots.map(r => `
+      <div class="root-card">
+        <b>${escapeHtml(r.name)}</b>
+        <span>${escapeHtml(r.signals)}</span>
+        <small><b>檢查：</b>${escapeHtml(r.check)}<br><b>下一步：</b>${escapeHtml(r.next)}</small>
+      </div>
+    `).join('');
+
+    document.getElementById('consultNiubaoTip').innerHTML = `
+      <img src="${getNiubaoDataUri()}" alt="牛寶">
+      <div><b>牛寶提示</b><span>${escapeHtml(c.tip)}</span></div>
+    `;
+
+    document.getElementById('consultTaskCard').innerHTML = `
+      <table class="task-card-table">
+        <thead><tr><th>時間</th><th>動作</th><th>紀錄</th><th>通報</th></tr></thead>
+        <tbody>${c.tasks.map(t => `
+          <tr>
+            <td>${escapeHtml(t[0])}</td>
+            <td>${escapeHtml(t[1])}</td>
+            <td>${escapeHtml(t[2])}</td>
+            <td>${escapeHtml(t[3])}</td>
+          </tr>
+        `).join('')}</tbody>
+      </table>
+    `;
+
+    document.getElementById('consultRelated').innerHTML = v1855RelatedListHtml(c.related) + `
+      <li class="v1855-sop-note">V18.5.8：Portal Shell 完整保留第一、二階段共 21 組問診與 SOP 一鍵預覽；找不到正式 SOP 的項目仍保留文字，不讓功能壞掉。</li>
+    `;
+    document.getElementById('consultEscalation').innerHTML = c.escalation.map(x => `<li>${escapeHtml(x)}</li>`).join('');
+  };
+
+  // 覆蓋視覺評分分數卡：依分數插入下一步 SOP 預覽。
+  window.selectBenchmarkScore = function(id, idx){
+    const b = visualBenchmarks.find(x => x.id === id) || visualBenchmarks.find(x => x.id === activeBenchmarkId);
+    if(!b) return;
+    const s = b.scores[idx] || b.scores[0];
+
+    document.querySelectorAll('#benchmarkScores .score-card').forEach((card,i) => card.classList.toggle('active', i === idx));
+
+    const sopSuggestions = v1855BenchmarkSops(b.id, s[0]);
+    document.getElementById('benchmarkScoreDetail').innerHTML = `
+      <h4>${b.title}｜${escapeHtml(s[0])} 分：${escapeHtml(s[1])}</h4>
+      <p>${escapeHtml(s[2])}</p>
+      <ul>
+        <li>${escapeHtml(s[3])}</li>
+        <li>${s[4] ? '此分數屬於建議目標或可接受區間。' : '此分數需要依情境追蹤或啟動改善。'}</li>
+      </ul>
+      <div class="v1855-benchmark-sop-box">
+        <b>下一步建議 SOP</b>
+        ${sopSuggestions.length ? sopSuggestions.map(x => v1855SopButton(x)).join('') : '<span class="v1855-sop-miss">此分數暫無對應 SOP。</span>'}
+      </div>
+    `;
+  };
+
+  // 覆蓋營養原物料卡：對應 SOP 也改成可一鍵預覽。
+  window.selectNutritionCard = function(id, scroll = true){
+    const card = nutritionCards.find(c => c.id === id);
+    if(!card) return;
+
+    document.querySelectorAll('.nutrition-card').forEach(btn => btn.classList.toggle('active', btn.textContent.includes(card.name)));
+    const panel = document.getElementById('nutritionDetailPanel');
+    if(!panel) return;
+
+    panel.innerHTML = `
+      <div class="nutrition-detail-head"><div><h3>${card.name}</h3><p>${card.mainPurpose}</p></div><small>${card.category}</small></div>
+      <div class="nutrition-detail-grid">
+        <div class="nutrition-info-card"><h4>對應生命階段</h4><div class="nutrition-pill-row">${pillHtml(card.lifecycleStages)}</div></div>
+        <div class="nutrition-info-card"><h4>關聯問題</h4><div class="nutrition-pill-row">${pillHtml(card.linkedProblems)}</div></div>
+        <div class="nutrition-info-card"><h4>關聯疾病</h4><div class="nutrition-pill-row">${pillHtml(card.linkedDiseases)}</div></div>
+        <div class="nutrition-info-card"><h4>關鍵指標</h4><ul>${listHtml(card.keyMetrics)}</ul></div>
+        <div class="nutrition-info-card"><h4>現場檢查</h4><ul>${listHtml(card.fieldChecks)}</ul></div>
+        <div class="nutrition-info-card"><h4>對應 SOP</h4><div>${v1855SopChipRow(card.linkedSOP)}</div></div>
+        <div class="nutrition-info-card wide nutrition-advisor-lens"><h4>源頭預防 × 成本優化判讀</h4><p>${nutritionAdvisorLens(card)}</p></div>
+        <div class="nutrition-info-card wide"><h4>風險提醒</h4><p>${card.riskWarning || '尚未設定'}</p></div>
+        <div class="nutrition-info-card wide"><h4>顧問備註</h4><p>${card.consultantNote || '尚未設定'}</p></div>
+      </div>
+    `;
+
+    if(scroll) panel.scrollIntoView({behavior:'smooth', block:'start'});
+  };
+
+  // 重新渲染受影響區塊，讓新邏輯立即生效。
+  try {
+    if(typeof renderConsultCases === 'function') renderConsultCases();
+    if(typeof renderBenchmarkTabs === 'function') renderBenchmarkTabs();
+    if(typeof renderNutritionCards === 'function') renderNutritionCards();
+  } catch(err) {
+    console.warn('V18.5.7 diagnosis phase 2 patch warning:', err);
+  }
+})();
+
 </script>
+
+  <!-- ==============================
+  V18.5.3 MOBILE QUICK BAR
+  手機底部快速入口：不搬動原功能，只提供捷徑。
+  ============================== -->
+  <div class="v1853-mobile-quickbar" aria-label="手機快速功能列">
+    <button onclick="window.portalNavigate('home')">首頁</button>
+    <button onclick="window.portalNavigate('diagnosis')">問診</button>
+    <button onclick="window.portalNavigate('problems')">問題</button>
+    <button onclick="window.portalNavigate('sop')">SOP</button>
+    <button onclick="openGlobalSearch()">搜尋</button>
+  </div>
+
+
+<!-- DairyLife 360 V18.5.7 build note: based on V18.5.6, adds 8 phase-two consultation cases (21 total); Niubao assets and existing modules retained. -->
+<script>
+/* ==============================
+   V18.5.8 PORTAL SHELL ROUTER
+   單一 HTML、單一模組工作區、保留跨模組聯動
+   ============================== */
+(function(){
+  const portalPages = ['home','lifecycle','nutrition','problems','disease','diagnosis','benchmark','sop','tools','fieldtools','assistant','service','roadmap'];
+  const portalLabels = {
+    home:'入口首頁', lifecycle:'生命週期管理', nutrition:'營養風險雷達', problems:'問題解決中心',
+    disease:'疾病知識庫', diagnosis:'現場問診', benchmark:'視覺評分', sop:'SOP 資料庫',
+    tools:'管理試算工具', fieldtools:'現場工具箱', assistant:'牛寶 AI 顧問', service:'顧問服務', roadmap:'開發藍圖'
+  };
+  let portalCurrentPage = 'home';
+  let portalInternalNavigation = false;
+
+  function normalizePortalPage(page){
+    const clean = String(page || '').replace(/^#/,'').trim();
+    return portalPages.includes(clean) ? clean : 'home';
+  }
+
+  function makeContextBar(section, page){
+    if(page === 'home' || section.querySelector(':scope > .portal-contextbar')) return;
+    const bar = document.createElement('div');
+    bar.className = 'portal-contextbar';
+    bar.innerHTML = `
+      <div class="portal-breadcrumb"><span>DairyLife 360</span><b>›</b><strong>${portalLabels[page] || page}</strong></div>
+      <div class="portal-context-actions">
+        <button type="button" onclick="window.portalNavigate('home')">⌂ 入口首頁</button>
+        <button type="button" onclick="openGlobalSearch()">🔎 搜尋</button>
+      </div>`;
+    section.insertBefore(bar, section.firstChild);
+  }
+
+  window.portalNavigate = function(page, options = {}){
+    page = normalizePortalPage(page);
+    const updateHash = options.updateHash !== false;
+    const scrollTop = options.scrollTop !== false;
+    const replace = options.replace === true;
+
+    portalCurrentPage = page;
+    document.body.classList.add('portal-mode');
+
+    portalPages.forEach(id => {
+      const section = document.getElementById(id);
+      if(!section) return;
+      section.dataset.portalPage = id;
+      section.classList.add('portal-page');
+      const active = id === page;
+      section.hidden = !active;
+      section.classList.toggle('portal-active', active);
+      section.setAttribute('aria-hidden', active ? 'false' : 'true');
+      if(active) makeContextBar(section, id);
+    });
+
+    // Dashboard 試作線持續封存，不因 Portal 路由重新顯示。
+    const dashboard = document.getElementById('dashboard');
+    if(dashboard){ dashboard.hidden = true; dashboard.setAttribute('aria-hidden','true'); }
+
+    document.querySelectorAll('a.nav-link[href^="#"]').forEach(link => {
+      link.classList.toggle('active', link.getAttribute('href') === '#' + page);
+    });
+    document.querySelectorAll('.portal-card[data-route]').forEach(card => {
+      card.classList.toggle('portal-card-current', card.dataset.route === page);
+    });
+
+    document.title = `DairyLife 360｜${portalLabels[page] || '入口平台'}｜V18.5.8`;
+    if(updateHash){
+      const next = '#' + page;
+      if(location.hash !== next){
+        portalInternalNavigation = true;
+        if(replace) history.replaceState({portalPage:page}, '', next);
+        else history.pushState({portalPage:page}, '', next);
+        portalInternalNavigation = false;
+      }
+    }
+    if(typeof toggleDrawer === 'function') toggleDrawer(false);
+    if(scrollTop) window.scrollTo({top:0, behavior: options.instant ? 'auto' : 'smooth'});
+    return page;
+  };
+
+  // 所有頁內模組連結都變成 Portal 路由，而不是長頁捲動。
+  document.addEventListener('click', function(event){
+    const card = event.target.closest('.portal-card[data-route]');
+    if(card){ event.preventDefault(); window.portalNavigate(card.dataset.route); return; }
+
+    const anchor = event.target.closest('a[href^="#"]');
+    if(!anchor) return;
+    const target = normalizePortalPage(anchor.getAttribute('href'));
+    if(!portalPages.includes(target)) return;
+    event.preventDefault();
+    window.portalNavigate(target);
+  });
+
+  // 視覺評分聯動：先切換模組，再套用評分內容。
+  document.addEventListener('click', function(event){
+    const btn = event.target.closest('.v1855-benchmark-link');
+    if(!btn) return;
+    const inline = btn.getAttribute('onclick') || '';
+    const match = inline.match(/selectBenchmark\('([^']+)'\)/);
+    if(!match) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    window.portalNavigate('benchmark', {scrollTop:true});
+    if(typeof selectBenchmark === 'function') selectBenchmark(match[1]);
+  }, true);
+
+  // 覆蓋搜尋結果跳轉，讓結果直接打開正確模組。
+  window.handleResultClick = function(type, id){
+    if(typeof closeSearch === 'function') closeSearch();
+    const pageMap = {stage:'lifecycle', problem:'problems', disease:'disease', consult:'diagnosis', benchmark:'benchmark', nutrition:'nutrition'};
+    if(type === 'sop'){
+      window.portalNavigate('sop', {scrollTop:false});
+      if(typeof openSopPreview === 'function') openSopPreview(id);
+      return;
+    }
+    const page = pageMap[type] || 'home';
+    window.portalNavigate(page, {scrollTop:true});
+    requestAnimationFrame(() => {
+      if(type === 'stage' && typeof selectStage === 'function') selectStage(id);
+      if(type === 'problem' && typeof selectProblem === 'function') selectProblem(id);
+      if(type === 'disease' && typeof selectDisease === 'function') selectDisease(id);
+      if(type === 'consult' && typeof selectConsultCase === 'function') selectConsultCase(id);
+      if(type === 'benchmark' && typeof selectBenchmark === 'function') selectBenchmark(id);
+      if(type === 'nutrition' && typeof selectNutritionCard === 'function') selectNutritionCard(id, false);
+    });
+  };
+
+  // 跨模組營養卡：先打開營養頁，再帶入關鍵字或資料卡。
+  if(typeof window.setNutritionKeyword === 'function'){
+    const originalSetNutritionKeyword = window.setNutritionKeyword;
+    window.setNutritionKeyword = function(keyword){
+      window.portalNavigate('nutrition', {scrollTop:true});
+      return originalSetNutritionKeyword(keyword);
+    };
+  }
+  if(typeof window.selectNutritionCard === 'function'){
+    const originalSelectNutritionCard = window.selectNutritionCard;
+    window.selectNutritionCard = function(id, scroll = true){
+      window.portalNavigate('nutrition', {scrollTop:false});
+      return originalSelectNutritionCard(id, scroll);
+    };
+  }
+
+  // 舊版 inline scrollIntoView 按鈕的相容層。
+  const originalScrollIntoView = Element.prototype.scrollIntoView;
+  Element.prototype.scrollIntoView = function(options){
+    if(this && this.tagName === 'SECTION' && portalPages.includes(this.id)){
+      window.portalNavigate(this.id, {scrollTop:true});
+      return;
+    }
+    return originalScrollIntoView.call(this, options);
+  };
+
+  function routeFromLocation(){
+    const page = normalizePortalPage(location.hash);
+    window.portalNavigate(page, {updateHash:false, instant:true});
+  }
+  window.addEventListener('popstate', routeFromLocation);
+  window.addEventListener('hashchange', function(){ if(!portalInternalNavigation) routeFromLocation(); });
+
+  // 初始化：保留網址深連結；無網址時從入口首頁開始。
+  routeFromLocation();
+})();
+</script>
+
+
+<!-- DairyLife 360 V18.5.8 build note: Portal Shell single-module workspace; V18.5.7 content, Niubao IP and cross-module SOP links retained. -->
 </body>
 </html>
