@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DairyLife 360｜V18.5.8｜Portal Shell 入口平台架構版</title>
+  <title>DairyLife 360｜V18.5.15｜DHI＋TMR 試作版</title>
   <style>
     :root {
       --green-900:#133a27;
@@ -4369,7 +4369,7 @@
   
 
     /* ==============================
-       V18.5.8 PORTAL SHELL
+       V18.5.15 PORTAL SHELL
        左側入口導覽 × 右側單一模組工作區
        ============================== */
     body.portal-mode { overflow-x:hidden; }
@@ -4573,6 +4573,565 @@
       .portal-context-actions button { padding:8px 10px; font-size:12px; }
     }
 
+  
+
+    /* ==============================
+       V18.5.15 MOBILE WORKBENCH HOME
+       以 V18.5.8 為基底：手機首頁直接攤開工作入口
+       ============================== */
+    .portal-head-actions {
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+      flex-wrap:wrap;
+      gap:9px;
+    }
+    .portal-emergency-pill {
+      border:1px solid rgba(217,93,85,.24);
+      border-radius:999px;
+      padding:11px 15px;
+      background:var(--red-100);
+      color:#9d312b;
+      font-weight:950;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+
+    @media (max-width:760px) {
+      /* 手機首頁直接進入工作台，不先顯示大型品牌主視覺 */
+      #home.portal-page {
+        display:block;
+        padding-top:10px;
+        padding-bottom:28px;
+      }
+      #home.container {
+        padding-left:12px;
+        padding-right:12px;
+      }
+      #home > div:first-child,
+      #home > .hero-visual {
+        display:none !important;
+      }
+      #home .portal-launchpad {
+        width:100%;
+        margin:0;
+        padding:14px;
+        border-radius:24px;
+        background:rgba(255,255,255,.94);
+        box-shadow:0 14px 34px rgba(21,72,45,.09);
+      }
+      #home .portal-launchpad-head {
+        display:block;
+        margin-bottom:14px;
+      }
+      #home .portal-launchpad-head small {
+        font-size:10px;
+        letter-spacing:.08em;
+        margin-bottom:2px;
+      }
+      #home .portal-launchpad-head h2 {
+        font-size:22px;
+        line-height:1.22;
+      }
+      #home .portal-launchpad-head p {
+        margin:4px 0 11px;
+        font-size:13px;
+        line-height:1.5;
+      }
+      #home .portal-head-actions {
+        display:grid;
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:8px;
+      }
+      #home .portal-search-pill,
+      #home .portal-emergency-pill {
+        width:100%;
+        padding:10px 8px;
+        font-size:13px;
+      }
+      #home .portal-card-grid {
+        display:grid;
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:10px;
+      }
+      #home .portal-card {
+        position:relative;
+        display:flex;
+        flex-direction:column;
+        align-items:flex-start;
+        justify-content:flex-start;
+        gap:8px;
+        min-height:132px;
+        padding:12px;
+        border-radius:19px;
+        box-shadow:0 8px 18px rgba(21,72,45,.05);
+      }
+      #home .portal-card:hover {
+        transform:none;
+      }
+      #home .portal-card-icon {
+        width:42px;
+        height:42px;
+        flex:0 0 42px;
+        border-radius:14px;
+        font-size:22px;
+      }
+      #home .portal-card > span:nth-child(2) {
+        display:block;
+        width:100%;
+      }
+      #home .portal-card b {
+        padding-right:14px;
+        font-size:14px;
+        line-height:1.28;
+      }
+      #home .portal-card small {
+        display:-webkit-box;
+        overflow:hidden;
+        -webkit-box-orient:vertical;
+        -webkit-line-clamp:2;
+        font-size:11px;
+        line-height:1.38;
+        margin-top:4px;
+      }
+      #home .portal-card i {
+        position:absolute;
+        top:11px;
+        right:11px;
+        font-size:15px;
+      }
+      #home .portal-card.featured {
+        background:linear-gradient(145deg,var(--green-900),#23633f);
+      }
+    }
+
+    @media (max-width:360px) {
+      #home.container { padding-left:9px; padding-right:9px; }
+      #home .portal-launchpad { padding:11px; border-radius:21px; }
+      #home .portal-card-grid { gap:8px; }
+      #home .portal-card { min-height:127px; padding:10px; }
+      #home .portal-card b { font-size:13px; }
+      #home .portal-card small { font-size:10.5px; }
+    }
+
+  
+
+    /* ==============================
+       V18.5.15 NIUBAO PROFILE PAGE RESTORE
+       恢復獨立「認識牛寶」頁，沿用既有圖片函式，不複製 base64
+       ============================== */
+    .niubao-profile-shell {
+      display:grid;
+      grid-template-columns:minmax(280px,.72fr) minmax(0,1.28fr);
+      gap:24px;
+      align-items:center;
+      padding:28px;
+      border:1px solid var(--line);
+      border-radius:32px;
+      background:linear-gradient(145deg,#fff,#f1faf4);
+      box-shadow:var(--hard-shadow);
+    }
+    .niubao-profile-visual {
+      min-height:390px;
+      display:grid;
+      place-items:center;
+      border-radius:28px;
+      overflow:hidden;
+      background:radial-gradient(circle at 50% 20%,#fff 0%,#eef8f1 68%,#e3f1e8 100%);
+    }
+    .niubao-profile-visual img {
+      width:100%;
+      height:100%;
+      max-height:430px;
+      object-fit:contain;
+      display:block;
+    }
+    .niubao-profile-kicker {
+      color:var(--green-700);
+      font-weight:950;
+      letter-spacing:.06em;
+    }
+    .niubao-profile-copy h3 {
+      margin:8px 0 12px;
+      color:var(--green-900);
+      font-size:clamp(27px,3vw,40px);
+      line-height:1.22;
+    }
+    .niubao-profile-copy > p {
+      margin:0;
+      color:var(--muted);
+      font-weight:800;
+    }
+    .niubao-role-grid {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:10px;
+      margin-top:20px;
+    }
+    .niubao-role-grid div {
+      padding:14px;
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:rgba(255,255,255,.82);
+    }
+    .niubao-role-grid b,
+    .niubao-role-grid span { display:block; }
+    .niubao-role-grid b { color:var(--green-900); }
+    .niubao-role-grid span {
+      margin-top:3px;
+      color:var(--muted);
+      font-size:13px;
+      font-weight:800;
+    }
+    @media (max-width:900px) {
+      .niubao-profile-shell { grid-template-columns:1fr; }
+      .niubao-profile-visual { min-height:280px; }
+    }
+    @media (max-width:760px) {
+      #niubao { padding-top:12px; }
+      #niubao .section-title { margin-bottom:14px; }
+      #niubao .section-title h2 { font-size:28px; }
+      #niubao .section-title p { font-size:14px; }
+      .niubao-profile-shell { padding:15px; gap:14px; border-radius:23px; }
+      .niubao-profile-visual { min-height:210px; border-radius:20px; }
+      .niubao-profile-visual img { max-height:250px; }
+      .niubao-profile-copy h3 { font-size:24px; }
+      .niubao-role-grid { grid-template-columns:1fr 1fr; gap:8px; margin-top:14px; }
+      .niubao-role-grid div { padding:11px; border-radius:15px; }
+      .niubao-profile-actions { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+      .niubao-profile-actions .btn { padding:11px 10px; font-size:13px; }
+    }
+
+  
+    /* V18.5.15：手機已有獨立「認識牛寶」頁，關閉常駐浮動卡避免遮住工作入口。 */
+    @media (max-width:760px) {
+      .v185-niubao-floating { display:none !important; }
+    }
+
+
+    /* ==============================
+       V18.5.15 DHI + TMR MODULES
+       New standalone portal modules; existing V18.5.x code remains intact.
+       ============================== */
+    .v18515-module-intro {
+      display:grid;
+      grid-template-columns:minmax(0,1.15fr) minmax(280px,.85fr);
+      gap:18px;
+      margin-bottom:20px;
+    }
+    .v18515-hero-card,
+    .v18515-source-card,
+    .v18515-panel {
+      background:white;
+      border:1px solid var(--line);
+      border-radius:28px;
+      box-shadow:var(--soft-shadow);
+    }
+    .v18515-hero-card { padding:24px; }
+    .v18515-hero-card h3 { margin:0 0 8px; color:var(--green-900); font-size:27px; }
+    .v18515-hero-card p { margin:0; color:var(--muted); }
+    .v18515-flow {
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:16px;
+    }
+    .v18515-flow span {
+      display:inline-flex;
+      align-items:center;
+      padding:8px 11px;
+      border-radius:999px;
+      background:var(--green-50);
+      border:1px solid rgba(47,125,80,.14);
+      color:var(--green-800);
+      font-size:12px;
+      font-weight:950;
+    }
+    .v18515-source-card {
+      padding:20px;
+      background:linear-gradient(145deg,var(--green-900),#215f3d);
+      color:white;
+    }
+    .v18515-source-card b { display:block; margin-bottom:7px; font-size:18px; }
+    .v18515-source-card p { margin:0; color:rgba(255,255,255,.76); font-size:13px; }
+    .v18515-source-card small { display:block; margin-top:12px; color:rgba(255,255,255,.58); font-weight:850; }
+    .v18515-workspace {
+      display:grid;
+      grid-template-columns:minmax(330px,.8fr) minmax(0,1.2fr);
+      gap:18px;
+      align-items:start;
+    }
+    .v18515-panel { overflow:hidden; }
+    .v18515-panel-head {
+      padding:20px 22px;
+      border-bottom:1px solid var(--line);
+      background:linear-gradient(180deg,#fff,#fbfefb);
+    }
+    .v18515-panel-head h3 { margin:0; color:var(--green-900); font-size:23px; }
+    .v18515-panel-head p { margin:5px 0 0; color:var(--muted); font-size:13px; }
+    .v18515-panel-body { padding:20px 22px; }
+    .v18515-form-section {
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin:2px 0 12px;
+      color:var(--green-900);
+      font-size:13px;
+      font-weight:950;
+    }
+    .v18515-form-section::after { content:""; flex:1; height:1px; background:var(--line); }
+    .v18515-grid-2 { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+    .v18515-grid-4 { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; }
+    .v18515-field { display:grid; gap:5px; margin-bottom:10px; }
+    .v18515-field label { color:var(--muted); font-size:12px; font-weight:900; }
+    .v18515-field input,
+    .v18515-field select {
+      width:100%;
+      min-width:0;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:#fbfefb;
+      color:var(--text);
+      padding:11px 12px;
+      outline:0;
+    }
+    .v18515-field input:focus,
+    .v18515-field select:focus { border-color:var(--green-600); box-shadow:0 0 0 3px rgba(61,153,101,.10); }
+    .v18515-input-unit { position:relative; }
+    .v18515-input-unit input { padding-right:64px; }
+    .v18515-input-unit span {
+      position:absolute;
+      right:11px;
+      top:50%;
+      transform:translateY(-50%);
+      color:#8a988f;
+      font-size:11px;
+      font-weight:900;
+      pointer-events:none;
+    }
+    .v18515-actions { display:flex; flex-wrap:wrap; gap:9px; margin-top:8px; }
+    .v18515-actions .btn { flex:1; }
+    .v18515-demo-row { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:10px; }
+    .v18515-demo-btn {
+      border:1px solid var(--line);
+      background:white;
+      color:var(--green-900);
+      border-radius:14px;
+      padding:10px;
+      font-weight:950;
+      cursor:pointer;
+    }
+    .v18515-demo-btn:hover { background:var(--green-50); }
+    .v18515-note {
+      margin-top:13px;
+      padding:13px 14px;
+      border-radius:17px;
+      background:var(--orange-100);
+      color:#80540e;
+      border:1px solid rgba(244,162,97,.20);
+      font-size:12px;
+      font-weight:850;
+    }
+    .v18515-empty {
+      min-height:560px;
+      display:grid;
+      place-items:center;
+      padding:38px;
+      text-align:center;
+    }
+    .v18515-empty-icon {
+      width:82px;
+      height:82px;
+      display:grid;
+      place-items:center;
+      margin:0 auto 16px;
+      border-radius:27px;
+      background:linear-gradient(145deg,var(--green-900),var(--green-600));
+      color:white;
+      font-size:39px;
+      box-shadow:var(--hard-shadow);
+    }
+    .v18515-empty h3 { margin:0 0 7px; color:var(--green-900); font-size:24px; }
+    .v18515-empty p { margin:0; color:var(--muted); }
+    .v18515-results { display:grid; gap:14px; }
+    .v18515-summary-grid {
+      display:grid;
+      grid-template-columns:1.4fr repeat(3,minmax(0,1fr));
+      gap:10px;
+    }
+    .v18515-summary-card {
+      padding:16px;
+      border-radius:20px;
+      border:1px solid var(--line);
+      background:white;
+    }
+    .v18515-summary-card.primary { background:linear-gradient(145deg,var(--green-900),#215f3d); color:white; }
+    .v18515-summary-card small { display:block; color:var(--muted); font-weight:900; }
+    .v18515-summary-card.primary small { color:rgba(255,255,255,.67); }
+    .v18515-summary-card b { display:block; margin:5px 0 2px; color:var(--green-900); font-size:23px; line-height:1.18; }
+    .v18515-summary-card.primary b { color:white; }
+    .v18515-summary-card span { display:block; color:var(--muted); font-size:12px; font-weight:820; }
+    .v18515-summary-card.primary span { color:rgba(255,255,255,.72); }
+    .v18515-status {
+      display:inline-flex;
+      margin-top:8px;
+      padding:6px 9px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:950;
+    }
+    .v18515-status.ok { background:var(--green-100); color:var(--green-800); }
+    .v18515-status.watch { background:var(--orange-100); color:#80540e; }
+    .v18515-status.alert { background:var(--red-100); color:#96372f; }
+    .v18515-metric-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; }
+    .v18515-metric {
+      padding:13px;
+      border-radius:17px;
+      border:1px solid var(--line);
+      background:#fbfefb;
+    }
+    .v18515-metric-top { display:flex; justify-content:space-between; gap:8px; align-items:flex-start; }
+    .v18515-metric b { color:var(--green-900); font-size:14px; }
+    .v18515-metric strong { display:block; margin:5px 0 3px; color:var(--text); font-size:21px; line-height:1.15; }
+    .v18515-metric small { display:block; color:var(--muted); font-size:11px; }
+    .v18515-dot { width:10px; height:10px; border-radius:50%; margin-top:5px; flex:0 0 auto; }
+    .v18515-dot.ok { background:var(--green-600); }
+    .v18515-dot.watch { background:var(--orange); }
+    .v18515-dot.alert { background:var(--red); }
+    .v18515-step-list { display:grid; gap:10px; }
+    .v18515-step {
+      display:grid;
+      grid-template-columns:43px minmax(0,1fr);
+      gap:12px;
+      padding:14px;
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:#fbfefb;
+    }
+    .v18515-step-no {
+      width:38px;
+      height:38px;
+      display:grid;
+      place-items:center;
+      border-radius:14px;
+      background:var(--green-100);
+      color:var(--green-800);
+      font-weight:950;
+    }
+    .v18515-step h4 { margin:0 0 4px; color:var(--green-900); font-size:16px; }
+    .v18515-step p { margin:0; color:var(--muted); font-size:13px; }
+    .v18515-evidence-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:8px; }
+    .v18515-evidence { padding:11px; border-radius:14px; border:1px solid var(--line); background:white; }
+    .v18515-evidence.support { border-left:4px solid var(--green-600); }
+    .v18515-evidence.counter { border-left:4px solid var(--orange); }
+    .v18515-evidence b { display:block; margin-bottom:3px; color:var(--green-900); font-size:12px; }
+    .v18515-evidence span { color:var(--muted); font-size:12px; }
+    .v18515-action-list { display:grid; gap:6px; margin-top:7px; }
+    .v18515-action-item { padding:8px 10px; border-radius:12px; background:white; border:1px solid var(--line); color:var(--muted); font-size:12px; }
+    .v18515-action-item strong { color:var(--green-900); margin-right:6px; }
+    .v18515-sop-row { display:flex; flex-wrap:wrap; gap:7px; margin-top:8px; }
+    .v18515-sop-btn {
+      border:1px solid rgba(47,125,80,.18);
+      border-radius:999px;
+      background:var(--green-100);
+      color:var(--green-800);
+      padding:8px 10px;
+      font-weight:950;
+      font-size:12px;
+      cursor:pointer;
+    }
+    .v18515-sop-btn:hover { background:var(--green-700); color:white; }
+    .v18515-warning {
+      padding:14px 16px;
+      border-radius:18px;
+      background:var(--orange-100);
+      color:#80540e;
+      border:1px solid rgba(244,162,97,.22);
+      font-size:12px;
+      font-weight:850;
+    }
+    .v18515-formula {
+      margin-top:10px;
+      padding:13px 14px;
+      border-radius:16px;
+      background:var(--blue-100);
+      color:var(--blue-700);
+      border:1px solid rgba(47,111,159,.16);
+      font-size:13px;
+      font-weight:900;
+    }
+    .v18515-sieve-stack { display:grid; gap:8px; }
+    .v18515-sieve {
+      display:grid;
+      grid-template-columns:72px minmax(0,1fr) 88px;
+      gap:10px;
+      align-items:center;
+      border:1px solid var(--line);
+      background:#fbfefb;
+      border-radius:17px;
+      padding:12px;
+    }
+    .v18515-sieve-icon {
+      width:62px;
+      height:48px;
+      display:grid;
+      place-items:center;
+      border-radius:13px;
+      background:var(--green-100);
+      color:var(--green-800);
+      font-weight:950;
+      font-size:13px;
+    }
+    .v18515-sieve h4 { margin:0; color:var(--green-900); font-size:15px; }
+    .v18515-sieve p { margin:2px 0 0; color:var(--muted); font-size:11px; }
+    .v18515-sieve-value { text-align:right; }
+    .v18515-sieve-value b { display:block; color:var(--green-900); font-size:20px; }
+    .v18515-sieve-value span { display:block; color:var(--muted); font-size:10px; font-weight:850; }
+    .v18515-bar { height:9px; margin-top:8px; border-radius:999px; background:#edf3ef; overflow:hidden; }
+    .v18515-bar span { display:block; height:100%; border-radius:999px; background:var(--green-600); }
+    .v18515-rec-table { width:100%; border-collapse:separate; border-spacing:0 8px; }
+    .v18515-rec-table th { color:#809087; font-size:11px; text-align:left; padding:0 9px; }
+    .v18515-rec-table td { padding:10px 9px; background:#fbfefb; border-top:1px solid var(--line); border-bottom:1px solid var(--line); font-size:12px; }
+    .v18515-rec-table td:first-child { border-left:1px solid var(--line); border-radius:13px 0 0 13px; color:var(--green-900); font-weight:950; }
+    .v18515-rec-table td:last-child { border-right:1px solid var(--line); border-radius:0 13px 13px 0; }
+    .v18515-sort-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; margin-top:10px; }
+    .v18515-sort-card { padding:11px; border-radius:15px; border:1px solid var(--line); background:white; }
+    .v18515-sort-card b { display:block; color:var(--green-900); font-size:14px; }
+    .v18515-sort-card span { display:block; color:var(--muted); font-size:11px; }
+    .v18515-source-list { margin:10px 0 0; padding-left:18px; color:var(--muted); font-size:12px; }
+    .v18515-source-list li { margin:4px 0; }
+    .portal-card-icon.cyan { background:#e5f5fb; }
+    .portal-card-icon.lime { background:#eff8df; }
+
+    @media (max-width:1050px){
+      .v18515-workspace { grid-template-columns:1fr; }
+      .v18515-summary-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .v18515-summary-card.primary { grid-column:1/-1; }
+    }
+    @media (max-width:760px){
+      .v18515-module-intro { grid-template-columns:1fr; }
+      .v18515-grid-4,
+      .v18515-metric-grid,
+      .v18515-sort-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .v18515-evidence-grid { grid-template-columns:1fr; }
+    }
+    @media (max-width:520px){
+      .v18515-grid-2,
+      .v18515-grid-4,
+      .v18515-summary-grid,
+      .v18515-metric-grid,
+      .v18515-sort-grid { grid-template-columns:1fr; }
+      .v18515-summary-card.primary { grid-column:auto; }
+      .v18515-panel-head,
+      .v18515-panel-body,
+      .v18515-hero-card,
+      .v18515-source-card { padding:17px; }
+      .v18515-sieve { grid-template-columns:58px minmax(0,1fr) 68px; padding:10px; }
+      .v18515-sieve-icon { width:52px; height:43px; font-size:11px; }
+      .v18515-step { grid-template-columns:38px minmax(0,1fr); padding:12px; }
+      .v18515-step-no { width:34px; height:34px; }
+    }
+
   </style>
 </head>
 <body>
@@ -4590,19 +5149,13 @@
       <span class="brand-logo brand-logo-image" style="width:42px;height:42px;border-radius:15px;"><img src="data:image/webp;base64,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" alt="DairyLife 360 logo"></span>
       <div><strong>DairyLife 360</strong><span>乳牛全週期平台</span></div>
     </div>
-
-        <div style="border:1px solid rgba(242,201,76,.35);background:linear-gradient(135deg,#ffffff,#fff8df);border-radius:24px;padding:18px;box-shadow:0 16px 36px rgba(27,67,50,.06);margin-top:14px;">
-          <h3 style="margin:0 0 8px;color:var(--green-900);font-size:20px;">🎯 本版聚焦 Solution</h3>
-          <p style="margin:0;color:var(--muted);line-height:1.65;font-weight:850;">牧場儀表板屬於未來牧場管理模組，本版先不在頁面顯示；目前優先強化生命週期、問題診斷、疾病知識庫、SOP 與現場工具箱內容。</p>
-        </div>
-
     <button class="mobile-menu-btn" onclick="toggleDrawer(true)">選單</button>
   </div>
 
   <div class="mobile-overlay" id="mobileOverlay" onclick="toggleDrawer(false)"></div>
   <aside class="mobile-drawer" id="mobileDrawer">
     <div class="brand">
-      <div class="v1853-version-chip">入口架構版 V18.5.8</div>
+      <div class="v1853-version-chip">DHI＋TMR 試作版 V18.5.15</div>
       <span class="brand-logo brand-logo-image"><img src="data:image/webp;base64,UklGRnxHAABXRUJQVlA4IHBHAADQ/ACdASpYAkcBPjEYi0QiIaERqmSYIAMEsrdpDGe2RcAn/tRQDYeiF8/9uHv6WH/Kf2/zaeWPVvlZ8yf9z/Fezv/P/9T++e579Jf+H3Bf1Z/X31wfVV+3P5AfAT+p/4T9pvdv/3P7S+6v+6/6D9tPgD/q3+v///rvexd+8nsI/uz6cP7yfCX/Xf+d+5P/y+Rf9mf/3/yfcA///qAf//rb+vX++9KXj/+T/J/0J/Gfqn7x/eP2g/vH/y6F/qX+F/1fRH+P/cv8Z/if29/vP7n/M//C8Ifzf+P/7HqEfjv81/t39y/aj+7ft59ZUAm8b7Avtt9V/x3+A/cj/C+Uv6e/Nn7gH82/q/+f/v37x/3r//+9/4w/rXsB/zr+1/7v/Pfl19Mn9j/4f8b/qf2x9yv5z/kv+l/nP9R8hP8q/rH+0/v/+j/9X+l////x++P2UfuT///dD/Yj/+i70Et0a6oiyt0a6pSjIJbpD+1lWjBwBFCH4gg7Gb6yONXoQIWVjlhWG0kgr84gWr+387rmcbtCXh4ByY1hrsMjM4Ar+Qfe0vYOZDBzr92InsGncR15xdpnoN6CW5qcCWm+p+DWxC2lZW6MBk+q+QzUt2GT3tNDDPnkL5oOHok9ihk8oFqZ8AI/p2ckThKCk4rISQ4bTJu6ImjbHNX/jsbAM05jsMj/K2FMZ556L37EkUfcrcg0bVp+QUu6/61PI0qMJ5ODsqWpoTjwREKhCLKx3vqNvOY8DLRqHDXvP/57V6pXPOxByIs7F2IFzSxUU+CxcZoz7XG82OYJVviJCDGDxXjyZmTpRymcvuvUGIyC3Cbc3RP7dYUgey3RXuq7/S5D+Wo9gs3DZhkgPSYvVTpGexvCIDjvSbghpZZmhZvBOV3m1Gdl6Zm1QRpOCE5OpfV7F1l0MbN17M+WxeUcp5eVyvOqonPUsHxex1625dxsisG9yrgZKGsu1oeWOeVUbaQua9/xKQC8bSrJ+hmYhW5nazteRyOwx0m2Ps2RJVN0AwIXTqW9xSyCqg+XB+bfAcNRPvuY+r22F6C/Dp1RQAIX60hCDyNtRFidPw3XJEwkuCt3H64KS4bR6Zb4QU/jeMg58btFvre/m49RBPOv+o/LrlyDM78zGdnd+ZU2yd/fs7ZIN1OCot2gkbQn1ZTVqt6Z74w6NYHriNGBGSIQ5lsljxEJ9+Yjp3Cxcqr9wkvennfYXBzFbDfPUG2Tv/HY0b8k84Yf19aod1VP1ZIapY5eZpHmJjhaFe8vS140vAMI3SFRjdM5CtLWRvNB/cbOJPn21xtqRlcnCad9PIN2sG6L3LTOu3V/+ZsfiFidTOCY280E4Scl7xphZocKmWk3dSqvubC2kU7S9ew28R7XaJ1tTRVGK+VTgGnsFsyNz71zQc5/Zpdsn7dpO0bHTC14QQQNx8UhublATdmUDOTsFNNcuPORLzWFBM3SP/a2vQXh5epNwQXeR3HQMOxSRToQaZxCTJFBz/fvx4I5/0E9D2pYTseY1SDEWO2zJvgauesjgpZ1EVg09ebrG9XB48gyoVDUbZ+w/3j5JuNaay0C1+okHMUuxZ5roqtCmkQldumPg5tqr286RVfiiJHPMleMk/wozLge4x8w0n2p3ZJQ3dVqAnhPZJLYBouPrwK9Y+kIGpKN6Ox3drUmQMOrqK1Q2/kmyf0anzwvqNUofQCV3ro9tk85ijLG+psZqA/jS1V/jMEmYtOW880AbQIchM/Tl8SzJe/R7dsNATTeRDUk1EOCK7U9mkso8Xzoau/3CZiXygZSAojOUZFlbpJyTOFjChlG1iZdJKN4l+Uap8PjK3GGvgTXCYyN50S82K0shdVO8I7OoVz1CuDOjFmlubVOZYbyOQ0FvP29JBCKF6/58Q9p6hj8pmAmMy66Ff3+pXrEW7vp+MK9xdaH5ENVx7roOcTlDksDMjjXzAkdBRQdZi6AIzXKiGuohzlcH5ONWvctgebhVn6ViuvkHAINrHdK9ZvuXiEjnV/r37o+WMLK1QOrvgui7aXwtAL6VzNldsTshCjZpqe+u2fqTcjRt82T4mh4wxUNuBqUGjcND4IaYA8gbPkYlpjlB0Vxjq9PiFUJ3ZzX8c9WkC2Y5ogm23fgbowdv2uOmIJZ2oHBaHy9ZkiLSl9BZwqEE74BF4yGWygxLL+QEEySHofOaVpqyJSkxW84IIo+OI01ZQJtNlxydmW/IYwr4cmNJXf6ZpgNroefPzKbvE7khLn7lE0UfNUC+5vV8RpRNr0fQadyitJhm+jgQGDgU3NXXw2/MEtuiwxqbErAhWMoEo2tCgsphfv4z2MbKwPBZgVu1/goXe/Eu1AiI2XSMRj5tnt0i4ZlSNmTMB8jTxtLkDvjHtB5c9YRvG4lgKgKkzaVObn3XIgf/leTcO++U5ODAYfn/fmXZXyBvfI57v5nPUw2Xjaw4IHnVc9omG9daeK4OvT08blGE3SSvFVhJOlkrxVYMQekRfBWSiTB3EZrngbzXls9TXl0/kV8k5lhikB/OCWBysqWf1tkpVINWH8BRJh+Qcp0Et0a6oiyt0W+s1GkiDholiKGJpRCPZlDRtLmzc9l6njWuSMM5W4DeNsYoV9ORthjCqRl0nfvrsQt7bUda1FukQtWs1p9oY5mDH0cKLdA+6WLp5Z3YHfaXELKXLo4xcXC5BeRW0GOkODbmo5XsExOHiEwASExBwOVAqAA/v9yoXyJeclc/bXG+JtCfcdNddilRKAgi2a6rIk/CVj4HelXWpaxfh4UMIFen1bvw7iqloqiqdjp0o6a0xjVvThy3sCCmZb2fC1nraoHfYsrVowWsVAQ+LuF/n5I90Nl+jUZVZVCeQd6h/O1+o7unFCtArTHHWlgHxevExuXsmzF7wTQ2GIa1SKFerFUtVC9Jbyt3KLJpZjO2qv+St4cDjPKH2Ow2wBDyjlZWi4qmFWhYUOyeUAyyFSUZd4GI17bsq6cJWQKoNgf+s8zA6ZGewYyM9mt0G18QYmrX+6RNASKL7i1X92Ymeye59ynr/AaiEI9BSOnXvxnsWz+KWdfsOHtPn6LWgZwVX4J9tnOgOMn9x2Sfjb9l70PHD/RVxMq1+s7ADvDYcOIoS8HK5mpUOlZSQb3VPOU8+JRJeYrSHcRv3Cq/JLxbYWf9kmelyxOFp6A1mPV7S4oxMYjFdfJYiSVNR2arKp+p1s6R93BI3Q+U3PIfZTYhQTiiAxMhGgSwsroQqdaOd8EomljtMlkEXpRQrg+TZyBePvIhNnAuYdrXSnvaJZ3wvTAmHHV3c5WwzFVI+5y3rjEM55tgPKfuEzYLpxkXGlT8TaZTgNXWxZYbmCr+jhDsfNERnns9wsLrx5DMKWTR2UMARqGy36s0Y/vXNwrP0RM3jC6lt9ixOobwLDDYvzYt/KzrNwpAfbH9Ed0I/V7YAbFSFcX2mac8wLUkzbVA6opixfB0y3lH3Um+oJL7HAnVFSmCdWayGY8T4+tXszMBv3egQWncl1MYm79B+DxefNcZLBXHfJMC+bzq6gzCoEUJW806IVR2RqEDVoVxqSkC0yywgH7qrUhhN//Wvbo2WssxHRHrtS8mMIG5GxMZZPaMYaRvbFjEulvivS7IBsktkUuLEpI4VcNJ+IUR/b6FtkMD8/Iv3/rH/x7wecDd1xM2PQEI2hj+Ddvq+0xDvGRWpA4I4/wnZ3BrBuTqAtepzwRqEAvShEQSXp8kM8hWSahJA4hWefp77aPqN8wcHXYXHKtyXYEl/r5PXb8ep18N1z5OP4+uzgKaRtxeJH4IecOjIkA6JP99nVetL9LFEQ4eUMhVYQXlBycV9hehTHRWeTyIGAZzGLD01xcbsusOFWs/+aFj7LN44ZtIfYgyDIlllG2bpGodMH2itiED+YsOmT3LwiQGVJM4TQVuZr+JmVSUAwY/CQGP1FfUy1q3NPTtv9wUoixxshew3ZlmcRZwzvoje9e+ezyNyu0LJGD0HlTCcKDylGZ0e83S5+Ayi3s8Y8x+Pj5h9krzx9zFSxH1lzBY8lvu/HfquW/M1I/DaYIEm0VNWCcTY8R7EGHZx3THGcNZCLWT54uWMbNjRvqS3mSrud0qCnT0cq+/pqqeanHiXNzPqB+LR2aG1KBkkDJ/D/ncI70ZpPRl674f4tq4Aui4/8M1Xj/jIhd3/E6qj0Ru2xPSKaMWD8pD+RwqV9pdLDnq7rZXBg/r+FhOWaW7+PSkIxj+TMJLeveDSzdsWKn3y7IPF8wdSBaykifXDGSAgHzQOZrO6cHeYeyDwj4EA6oGMlgbroJtZYz+MVdG97ROHKXG+xYwUV4BbO80bPJkjhmwM3lSkj7VqGZKpANr+icfTxEakj6LnlSX+qGU2IH1pZWYw0eVZv/HiF2MgdmcNWBblyEM5bRyzHzBw84qZySq96YGgKhiwfz53lePNCMpN34RGpzq+/y8rLYUGm/dX4/9VYfNGksEHPLnm8k7TLgsVQgUq+tzL8WBqHF2YpsNOU/uW6BH2MC5Lpi7deksesQOoC5TGCiVOEcWDI2jZgKjcFymbqaF5zUlMLyK+Jrx7Aqz9XaVvwv1+VOe0iabVtBvLOnFtF3NGIXu/u+tEEVdfUJmwNcIqvjcBGWDL0Tx5LMuF3bbJYqcQz+wZGwG+bCP3rq0ntHjgZ/DSLKzulu749xhUqivA4zqCSx313HDeNHhmIEgP9YOZp722dhLbdOHpGwLoA0X13pI/A9MxrPjI1YowVPaf2hUnm0Z+8Qq/OzolN3/g1kFplfp5K8hM+yaowByFNphuW1O5qurb/8SxgVWTU9u6DwLVEl7bnYXu+b/DXUEfuIcjPd5/xIcfqwBkqST5nTE2jR4K9abPqgEOWEmPKhxp4nU7V3SRPu62NGtfvUa8ssL8B+775thgOcFPvdmcLjIWq0grwr8kJ////vt7CFWKM15igAQJtzqEP1oY03cNia0NoKSGKtX1zqxL0iLxM3PQoQ08jRk2TSoFs6cQRkRHlcVMmLHsGQAn+ozi3q9BmisJBNZZfCMMWFio59j5tOk9rKGi/WaRAnj6WhDDSzLA8Y7I5owvtXNuEdmtWBZ/GBpf79h99ZP9bZZLIK5bckL+epRTAH1LREKRvP/IaFsYhSxCr6Z1BxToOIKbIcxS4tte7Md4NLoLTw1h+pFZ5o+eHUGOWIRc5MfOLz82cSsc/1r9hZT8Q8SVr24UzcfcjLQ4sTtVX1ONhg0F3ThRoiKiKDpiZSvaXghMU6M5pRHYpxOyYfz8foMxwM5Yo4SD/t52mDlREzfWhxQThR/emM0TM9mbXaL//xfVzpwHFl4hgQdbaOjHouQlSTN5Dkzbv1mrGB47WMt+ZtsLGPAMfH99W32oxDwxOy0gF0BaFDnH/ZX5UW9RI6+5hddtJ/njVmtK4uH5kcAP7i98U2vn6DYurE1LBtNSy8oiVuQAPb5+gsU5nu5llAnsI/oesXmGveXpKZgeVhQDk+faS2WR+Jc0OuoOs6Zdq93EQI0Az7Mac+IuV34Lmy4IQGcFW4e70odmzZrnBhOVXh43u143RsXSo/LsupBiBHOoZN+XxGs/MkOiL7DwnQdDzAbw9q4dEzHfY4x1WZ/yjfHOeSU2+Di5OqXYF14TM6o1k22ZzWsjW91BKykDcAcNZ+BxYY/cGc+ki3DobUvo6t+qVFNf01go4SlhVkb87UhAYiriN7YsZ4uUwNLbd+TeqwYsUS2Eini3gHFGG4ypRNp8SfmcZayqpdnB9Sf1WljOoaLLEH2VfQUimnZexikKzi2qmyDCkxhv+6XH85f7tiWp6rfzHqxfaUTejUt99eXi6SMjDj+Nca0NrHhu3nqM4OmWvAsTabVSczKZpnJ8HZjW4QgNrmEbPlRwo2jMCNJGDFeLfBddctSzKiEKhAMpyLYgnsqucuwAukAv9PSNq8/H5u+KoFvDReYR2AuFNJvN88D2R/7VP+UwOVQ6hZag6tifqK/Q76XwW567oeNz/HPw1Vw26UEgEB/PZWv9GjrEv5dkihlQ5YhLfmB8Y8dcocAkiplwTDHBqzCSLL7nRacpoLC/3+T1EZRrNTaDdEteXRlAni+1Z3WAM8b1WH45beRETPuyoWb0ZJMMAvS8rV+kjBZ/fBP2o5U2wB11vUTK+jiJ5Cx0kxg4pv2C6C1NPw9Wzp0eUnolLBuxXZgegmZv5WHA2IckrWiVVD2VTuFfpZjttwPy8cL8vnonMlZnpKromzJEJzgmSXQFbIlYnUB/CpajNGg6Gi+0Z6siHyCjSi9ARUNMelxvFURkHLwBY2cFOblkyQtSY/SvuLhSSWTRt8TbfyC/3421hLJt5YBy5OAkI8Ey7PJyxakg16gpGgk8Kwv2nOVQa2HdON5fG+rx7VJzNksKTbgLmzkY9AlF7AJSEj7Y7VJmiZlmhMSANEcbqC0tRS+ROFHtnitoxGXrUeZfvSJduydork5z6cBLaVqIdFAtyvOvj38FE/+6BNdSor718ll46D6Axbu6qX/xtMEMCJwVG2eH0WcbOQenglmRVDsrN62OsVFxD5TFix+2MllucSMX1LFj5umRF89H+/c9TJXJ/7SwrlMWfvTowUdVfI0kyRNicdeftTBA8ZADStxTtxIHtfjNiEo8N4L2rt7Pq2g1ySP/uttlPH+mjOS4dk79Iqp2PcpQ+V0D+wPw6NbBTrqDznr40p5Rc/Ku1H3wlz9RbBLyNMZ6eKDii6Dqk2y7QmhrGchbdwyoeWroaXNOy1XtRSBhhEJLZx0fYmmXg7+VLMpjJuJP/nxAtjQGA8pORlnZW5TQ0ItoVQoWWGw6uUH+q8doYgQrzYhVOBgj9FQqN0Wwhj92UykKLlvPO5fUBhigq/hBg6QZiQrNAbJlSXBKLR+HU1Ru2meonGz+yM0AQChGjun3UfhSenFYxy3MUkbteN4EAueaK3ztUZvg4eEBpSX1fNIvISCuGlewE5ywBNAuF7dWg6/q1eGAZoFwWIKFcuxSnduZOheY+/lq4YuRa95KYQFgV3mPUar9kKfKw74TCIPtZUTA6dY6n91VKKViBgY1qlrNW0uj1+OQk3TzQAMWhEFICe9zwDYmOF+NP0jr8yXO9mVlBVuXZsV6CO89ZYLjT3afch7B7AKnSrAxJkg2vwpixI8elOhgDnFhsJZ2FX5OqfuhtmgWjEIZITAtWaEbkfaBlJPiShKLTF5AoJnC1oUMl5jPwh4MGq0uy1P95SrpisBibP3FrBC+DRFzW8jCN9Pypx5mk3efNARoBDfSnfunq83oQHnNuyZvC7rfrHPJ+zvGaBY+nMCb5BxWtajZMcEdPPJbvKskIjC3+b1LLLGlwLeB8HXHCDxK8fdpTzlWqzuhD07Aspg0KQ/SEgyXRBTMybZTzERHzqsiAeTzZmZLRwTyuU7b6d2Ws/BaNgxZPPvzC9YZDevq0ECWN0009/2b2H3ljutY/Ty58ItPr5pZINSL9uG35IenLc1gTNTbgDOnG4DObBpgwr1PAeaoGi6MhVvpkBx5AHlCv4szSV1HX3W02kedmQSJcer5ZiZ+a2p2zSjivL4YR1Gvwb2jcC4lBvRuLoH3fO77sv1KB5BfbeOOQqR22QbX/7lhsk9xNzJOVbM/G+VwvrYF5gk+FefqXiz0ztZ3gExYBUwir2wbYdqpu/NV0kzlJFf7+NT6S5H/g5ME0lAzy/zZFSprXpg/pBlobrYGiJHz2mkBVEq219A+kKPsGmq1XRAYtv39bRezna+UaJUlbbvGQdSbd/P6Uagy6B9COImod5Ng/qTnUDC9FodHT8WjwzRmvRWPMXTPULsIscudWfWUq6rlo2BAYno/djIhCNAZVT6dhn/kao0pvLAmLaOEPiMH2J7do1Bq/l4JvUqlKXlTyRpDUaeLt+dbpJwyv7oQdTAs1e0PQ14ipytyRSEbTdufR8I0AflWFn901okuJ4D29wJNoUg+CNqcsT6lM6Sp5NpCWgk4fmQdr0k345VJ9EVvI/Dd89o1kOkTO9xof/3+eTMcK5GL6xt4xCO73CKCX6qg6V/Ix+b4T+edHNjDdOzd70Pu3bTPP4VeTgRQE5svkJjhciZ52PjcvwEHqKDEfRQOvj2ifxgaN8/bQkXJfRCMPds/g5UkFilJS/TqfM5fPFAR0TjN7yPR05fc5u/BQ6thdreLLseAssbguhudGGivmUyLpIyVZzE/UXDai/NOJyV6Kcr9FV9SehOl651W3nCYvnSOaXuIWfMmvvwYhR8sE+lBnAIu8/P4KUwhHIYr+g16OzJ4a9KMsBAJz++W5+6oIdq4qwkNTLPJVeDMb2j6Ms53KurzYkqyREAAUE7pL4zaFpPsE3rnx/7FvMrYuZwuo8ExyIQGJjl4A0szYWeM8NtHbsZp6/+YHiC4FCPL+hJWyRPim72KEI4N7sIRRupp6x5HvZJYlm65HPVpmw582HcKXTuyNdFyDZrwQqJVe+I50uBKX0/v+8MT0b+42j8gRZFlZJYNdEYPyh+u16/SprcPiMeR+k3aZF2Y71jtIMvbSjgXujY/By8AqkwGcMtPDmfyPsiffHjbFM9tMWxYJSQv9GnHWYqLCi6/C7dQggrBzF9qJt8ZCQY4QxCFueeRqc3MSy6SRt6zCNE02GIFx7ICKfd2pcLPjKzzM3hFIoE/08Df7Zl82VNAbgoc+o8e9r0u5E7Wj4jT2bRGbaG240IR4KiDkMPHIWEf6hx3pPbcVyhEFrXElgyKh6mm5efaZBxmQdPAKlH9WiBKva/bi11OGmoed1Mv9tH07wBgmlWCpcjK/nzMvjjeILoRj3Zmt+CZSQpjnEYzzAZjLjbFTB/bDfFhbDbnVB/78S0GqPTM5rbQbFLOWKhSsK4hDdICbxdmEwJi6m8vU2urFRiu0A0zh0SKRCwMAEr8Y3ZdNPNEM5GZum6eSItrXFRAS4+LVfVOMhv3ZXj2L0SFImNyspbaAMvsNBGloPcqBxCSlrzGGQkr4vVhqJ9zQEQf02So04VogNX5oF0l5T9UGL6NQZPruB/Q+zb8deBnbMreVx3fi1EaSOaMwCzCib0NKvL9piu3uIF6RQNKupBQnsO2d3tJvDC8kvIACDIMm6EGbBJu7Zg4iNVbchjuYpYt4WUnyrbDyLDfFVE7576rgYJFvYQVS7LoxBbgGO8QDSd92dKEn5iCH4DfrUg7B3K/XwY2ZQcu2Ec3oZF2MO39MWKGvaFMebOqdhOzuZqNinYeWaIWySiuEvd4MucQ4/5mOJDVK3Su4fYM0xijQe36S1E8tFFP0RLcRxUJOqWakls2rUJq+Jnsw1Lvp1Zf1l2AzKzLa0dyTw6E2654zKz4j9/gACajd2LZA3XH+hA9zUVfqcu+EorbT21L+ss1C9NMVsmZ1/D2eL5H5c+mGZ+4x/Iw6Qrz3wDEP/N49xv7NSMibjqOA2/v8NATGqMiEMBzrhZHLh6tcrhg0pwkg74lqyMBxQCCpUXVdP0Vs5H/jtB6yLQS5lLds6BIwMwc43xN6Xhk48qs8CnPgQ22ciFymd/DZw0jEQXQiFdNSyfdUvLaXcPOIUJRaNNfe2Eb7otnFesqFcZBp40KOPUw7T0FeoMfYcX+KG7K/q5fpEZd2IQYnPpgE03qD+9kiZ4xOk0Atmz8bMdM4tQvQmQqEZmPt78P2RziENlYxd5HPQL7VA4AV2lWPfvYft92zj+Mnx2riqUlsZoFSI1feLI4Yx6cmUzoX2dxNE3p7Xl/PQqWQ93YQUHjEBfOZRShNGDwpCX6Lh552+MLZ+f13gl3BAxe82g2a/bd2hEMm0gBSzA4NBG2ghNDqEdkvUUPeZbgObBajHsjMZpTDHk52TT66UCV+ES5K7wIWAVEx5z2ccTaF6YLroZYUacZspb8ekTlVluY/USMgc8ughLThGBGqXi23kI2ShoAk1lIOuTw3lwRd/KdjXJKJ/zmT3P44bvZ0kPn9U78PldmQGVBkU/JUdah1UP/GJUAXbhw4Q6MzcRmmUfQ6bfDtyiC0Ua6V/O0+2oGz7mSQheO1LvBzS2NUF6TKbx5+f5DeABOf0TO5xYM+IQ++G6qblaHVNKmckQsR5caE6pfXRSgGmLsGdjXk0M5G5yh605Hbez8pLX46rnJvFbFDhpnFVvzTe6/Ep/Jz87n1NIiBxAka0U9NSScGL4xvn+Uos8ooGnYSIIjOXfM9+rXAK7yH6aQFjz88xmx5X/bzTeszSgcNmvgIVvtwFLlTtyO13HJqt39U8bm4NEk/gpI1Obzf3LFFGR8YuFNzfBDsBOtDEaQEd92RGXucyB+gjSBpnGYixHYQXjPTncnaHIEgVOCwI19ygCIf6GcJo2zqhDMbjEIHd53oN2AwYAqB/didLYuyMHvMI4hkLzntfvOdDvw9w+dYiW1046iq2c8j/JwG4G3ikzD/ZPeffVgi73NYNfJz+ONIprOGCMYW3DkKCqCPCX4+ARLdKsxAeG0iiMvfZP4c0lCjootw9Iw0csh2lcUT7zICMAcfaJ8yV0Y4PhMbBNrgN1wKg2+NR9tAFA0w4Mxg4P+ydq1QC/5GGeuOwY6wU6vlQ+NB208IgoCgkj1C1dhAwL8uhBSBusDB9i1n5pV5ZjZHDNf5xG04rPy895tfkmBPa3yCA2rMI7URPYrMxNK1MjXtkTQ1cKxWAOODvxSCB/c7DMgjQLj7PCTC2NZsfRfUQjolsLmmon9q7P6rIfTyr3L0ecjDQyghKLGC7spmuahRQHioGkYj1ulDayrwjAVwRZCpLjDlkWRSQYphj4Aqw8kWuB7qtVa6oNJ07S73L+xptFjsxHphlKpUN7GopYMxpIu0pXAJBhVgq6FFc1zuyud2eGPyR/hUZbE5T9MjEq5lfJx3xD47FJC2rm+wCyZp2a0L/X4yixEy+3tUbpVOSB7eO2JNwUIPDalRnlYV+iUeMEm5R2rscsT88S22Jh79+4kascW9FwIKkoiwW0GcBZD/0vxn1v2hh6pjztfRPjYcHKbAF3jFRxmlUmZrcampsywIxHPZpJzRUjFvm1dYLD1AflQ6tVFArOvQr+zsDEKs4Zc2YaA7cjNsYaYZPEmgjgN6p/nYPcU7Bgb4F5oUtc6oIDw2Z63mKEf/fkZVpUH+0EeGeCpiBORjnHD1w3miPtC/WHXircdHyqMX8pEo6tgXkWkwN3OXJ71Z6XROkixaFR3OOXPc9cV+w3B9PXGK0bK7hMit3GrRXDfr9EKEyjsduTvjGSwq4wy0M2L95axWj4jxzgztpW7KKSF3WbQczXArarPPKnikhyErni/xDVmAsdb//ppsDwDSUw2epXrzJXNXaSd9R8fccyV+YG1Yq5PSDfV3exR9EZDzRUUGP6kN1MgMbwM1Sb6+KO//r9EIGc4JzB9SbUgBmibS+j+7JHk5xxRElkZaM9Zn8KE09FHIzAvsOv56bhS9VB8GjF+1KZK7Te1cpG+tEgYEBQ5STeg4NbXGKWQmheZCnS9ixoGwQ0wCF2n0Gs+5Kkyu1y8k67C+jVm9s9Xviunxupn5YUWSnfQm3z7hixluDye7M534yx4SdvBBz/VH7spTjhfzgiqSrW9SQvO8fL34rh0DlymVArT8Ti0gnsUBm2MN9mkjBuz7jsQdbkROcblw8GdCPKPACjjPYP6cW4gcrDJEp53/pd3YiZu8CJJaMHt9zp8yYXNydDfe6ZgcQ0X83jI5YyTxQwAMkPevgggIKa71vaAOMjFK4Y5q4eF1iomWwGD+0J+meSI/JJemmRj4i3+uQMXc/aiX1lfYova+Xk1HcRg2LzPisfpMGW3857SGXIl84gzc0Ii1IhfHJ5LfueyCM0kokeMOGB2HxQoou41XZTwI2ffuFwmMZB6PUdbKYAk3WrkETVVvYedJjdXpa/XCGOWj1j5QYFUridCZqpUpZ86sdoImgLtdpn7/xYH5Qu1nTazN7PUCaEUtYJGXfJWuxlOjUeDDU+gJGtmUGT0X73nwrsNNKn3wbzp3jQ/FeHmbwgmk71lMOqNE5hiKCpw/08sm2Svh2V8nITi/uV25cSSckrGhiERnHgL3YvqRLTSEtu8iQNQkQAjbfBeiGczvPfarZYiMgJThDvvwm8rmJCl9xjEi5hVtn9EsM6A6h15mFi/yghxmay9AX2CjRRZCAVbc/GvRFo9bOgJ5wO0r49/ieQLGLG/MfSBO7E1LdSCVJCnYbLdB4wUzPai82DTyL5I9RfQUPxtFHCyiJlbelmQeNzQcK6rJa3dlhAO6VOolGeg+pUsa77UqVigiaX95GLHC3E36L+zrJ5ayPQGFuvZJods2l2Kpj2ZxkpF+KWM3U1UBHV/KY4KGrObtdryOJOyZnKatytD7Agdmr3e8Vg+zOuKLpnqcuYScpVFOWXtFKHrNAM64iDSlL2PHPTRa5mZS2ekD+WCnA3XVqqIUbH+vB83Rll0rYJ53dhYT6WVTlJrUyjzRmi2EEUw4E9xkKqgBFdGTJ4igz7QxuSiJZsJECEdECAqM2rAisrufR0F8vs0TYtrDaAk+yqKFFlrIeTNprc2pcQxJHyYt7t22l3CkhtPcYAhzX2qMgkwtQWJowj1OQRfKwmDxOVpy9pxzUnAgihx9RtQLIamipKAQpNIhENpdOph7TZcmgkTs5HGgw5QAZJrFYNcZDsqCCqnLpGvCo0Br1hSyknwrQWZAqfM1+vlE4cGCef2c40KyYc1ZS1h5yBtTfmL9v3l8T2xH+Hzoxtr576tn+q1DgwbvLEPGjgsjEZD/sKcb/Osrtt/8FwFCq3GxrHBmP/FGFva9iD8wZNIEpusD5fOvMvc9IxcQU6UQkbPZc04o3aGLWGWYAt7U60oWIMJq/mna44VHCL9eQJJ+nUuhfPN6JN7HhCWRJ2djkGF+UZ63E0KwJYpJqvvb1Qc+1vTgEkKHfBljD288M70t/Q0EuQztsJZSrDc9TqWsZCzzNhkeBA6Z6AAwPBZSg0xzU7Q8yrgXi5E8u1w+gmWsjQkslV+jY/5Yfpg6lENJki3WiKa7Fn5z42UaMUKURjTVGzNMWRC0Xxv2sCPVMh6IQkZh/sikLN9YcSOx6msnjOJhXiyW7jc505SZI3MDOOsNNIziaU0M+GJTbcHgM8ErVdJTKBIH+Qz7UPLyiLZSJ+O9z6qh1TLshGn7ZABJn+3wLmP5Qra1IbcwqR0QT2SR2y95+If9mjOJusEtbkl+FZjYI6AP2+sY4UlAOWwXbEM/hukCdx1nyQp9KQuwgk8HKQ4or8r72fkG9YJ6ArV1NgvjzdhZJB9x/bEi2Wls51sTGJtjiEJ4gsiP9NtBTfdzFTdLsXa9sodmr2qNiUtySZLf1jy2bmXgSdl+v1oIdEZXarKcuJHflu1KTpJrgXtaVO24xO+EhBdz3j88rHwAInkwBKb43Pi2EcenAalDwBO+M9g48Xx20O+g8pslz+EYMOCsmorQnKuBQSNhCXP5UlOMTvUqyaKFdh6j216XDZsoO/9nDBefx1ISO4ijezmdm4CswKk166LTOSd8ScHbpXbSrTAVYnyC1oBh/5ASNTNM1zRFUDSDqW3OFK3B1n6Oi/vBtlvnHgATl1yCFu+GaJ1aQJz4/fb06snQFuWWPRRx2ba3UPFhX1YCtFF9LiCLxPfgo9L3OxNJVpr2tD1ZeDo/cSip3oFIHZNr3FRtAJpqL/LA2RQVQiTUNtXd6X2mJM4O7imaTUe+lxWA6lkoT6lPRBNpCJzhp9U7TpdwDwIfx1VsdTldfQ8QVNpwe4m5boKh3G72ptgfFUNf0+Go8SAcsFbM/hRq9rtcfQ48tTOJ/yb7arQRxwApTAIWgD0VU0U3owvNvHzoCTjUtcQfonYI1q3hXLMQKMbM/tJ6rz8/2iIYWUvmfMqXqRc5Uxttr9Nb2kqnWfxH6sHwl014bnBo76pjRPOfuO7O/RGvMlvwq9J4aECaYdrUS1bOINDH6D6pAZF8hi4r2ncJlcKiowIdLnqH0Kdmt6OrkpJ0hDbLFvbvlXB8l7dtZyEoj62Ms6oJxu3bfhcppv4HA6ReiXt8y+1AaIGRT1tlbMCdXEhyW2eXMbxqDkFMvQW3YOgARF2l9PDcweA9PBETAplDDVAv6pfVtttRpYjGAjny0Kb2BvT1w89wqqw+cPu08+H6x+OGeS5fkhTg1vv1bArz9d/xY1bBmuBG2tImatxp41+vnSLUQC0FG3c+Kv4xBkAB/EIB7Ymln4SZ/awfZd+fTZ2SB/TKJMtbdZCBHgs9UIbi0eGQwsG0DlWNsuHABJo1yg9x3E20vzAyVaRIxA9hq0hxUxImJLxmqtJqG14z82YG5YdlLBtgq40Iqqu4knP9yLLbrqQdhx/TNNdUQXZw/1BTiYNhh+UxTJ/B95oGcoTB8gsTAn5vCHzhnNggaM9bJpQmgAXgITWIn3AvxWlmsx4vdnDcPrSSQ1QANYq59IHq2I0LlhOH0xQF7kZwnC5AvmS/lipermigB4tySih6u8pdL9gce6tlCCKiSlvRflLtyWNcWv2r2wx6cS4zxtxaKdvtp6hZa/CU82lqeFxvcpcLLoCsBKwrI61pLADvzmZR1c664Tl1hCmfz9ukteJtfQjnZaVvb7Q7gYQBjghXIAPv7/KI5bl6/hQe/P3KLtUAmIHneU3RKJjy7aDJ3SPcHLvB+VyLBDJ+0ARGnTxuFKQCyF54csnHy3j25J09m2ZW6hv1Ilo9UVdcTbn6OpyfsEv+FznwSJsFje3AX7XTiFfIsgWr1PU3Rov76SAF+av/nGf/PmtVvJ2JXGvXklRY+1XoAEMtM6vBXYH7o8EFasi5GSilcnWGJ1Aj1GHJvXaW1IED6mVTsQ31S90d0Qs6xC7RZ8x0f65xipsYidca3jho03fMyMX7eoOQs0DEnX5ZR/nas4OQydu1TxWg9tgnt4hRPerZEQb/sv45AQLNAPGTwXtRDdjVSnfB61PxnPLTasGlKALiPUgxEzzBcxdMwPGLdkt6cSL8M5Z8UPtK6N4jm5+g/e0JSa4AT24SjvBvzZvk6QR0hCzVrtGtAO2HF1OmpLwBBZk1QrE4hM2ana51kHa68TbiKWr7ubSAhO8ibtrp8OjLiJZVJ5JM3/YI1o4X7Xhs8buhkz3B5f7WyClJ58TkNT60SXsWKX3LO6rAZiBh9vS3hNPahCpGrhqZcYIxOOyuEH/5QFTnH8BGFwNc6p5mcZT1bT3vIQ2s0TwmCgiVFLvYpRBGW250RoqNR7OQDrbVfki+2XEt8JGxVprm9fI0ZqjTBGL1DiQjDVfx8rURv0snJEDgRPCiuWrsrcRdzfdVbT75RfpUg0c4SHO70Qc50NuBO9HNeaO9IVt2vm6Uv/sO2OHX0Dy/bI8Y5ln1sfiAy3VXtwaOlu/NHIRfbv9dS66LYP2o0q72F26YuCge76sXqc266vderHzp6KUskLUsiWN6e65ycF5gh07hzbX+6M79RaEeLXXZObB7Y0zpY7RgqQBB4o9JN+CQFhwXEV7+4Y90tNfNzxHB0QeK8Gz2K2Qsnx6Xc9SqX+cQVjYsExQbB1DPSu6RfyfzHI641G37YwL8vR3qRALX0H6yL+yrTEQXPXOjxPkienFGlKHqwOfBlg+enqNLB8Zlvvfrn+9k0wy1bNCL2KVe6zggtXKSNObkIX07MCGhEeKiqi8ifsy1iQOioQZ+MlWQAvUsN9c0nXf+5PqPqQygQmoV4YkFgk+sHr+P/RqlL2AAZClVM3d8ksKHtDILFwX5pyv5Q5pIN44ohQcoxpTpwxBwozP341g2AT1/HEicao72/qdYxnnUh9KDw16OCeHdCAPHuVLTCN5ewohTA3HRkmNNqWtMhzvlcUbLdVeKakbgBiMqKSh38r/fq62cdLV+FOvloRA/9vnkC3IiIDglSH/56rZqCTR7xgzg4QGk283rX9VLELvuzuZf1QnNsCuaBVDsdBMPvp9KHfHq4YdJcKrrm2qxEY8CohmHA594SH0C0hzNnS7F9QFiODvPrcvs8DR8yD//AvuTTxJdbVnaIXVHSrRX2Xi/zMXbE3PGeV5mErU8hLNYmnWulFfxs46gVzOIqQzxe1XE9/sPBk9WyP4ddD7OFrjyLlfSVkU8FLokKpvhut3Kr8GrrQH4yyB1d31QzvOSD8DKHfuiCaMgQSpTG3o7MT03GumEJ1KmIuiwuu71eiSSHH5tWQA7EHQjbdp577doyoo0Luy516qxLPmbyBxYw29Jn8BScxB98ZRweA6HzZRmiCx/mYi26h6UO+1Ex3tlHpx1NsxGCH82ojKWK6/pEV3I5zxumyXJMVp7o7iipE2bq2NIvu1DSlNngGilC1k53JsIKSjrG7JLxWoHXnN2pMiwRcA2IuWAJcd6Tzfv3wNXZWVf/jqb541p6oVJqTpBeGXN3DGJHwMDu7r4iO1reY9xGDAaxb3O4ZOrHhov4kjF3Cujn7s85uJY9suPtYLh41FKvfwjxBEygiGTfpSWrm8/oa5HOeJJP0ckC3PDEVrlJe1mkmDkYArreFfg7GB4sRpOVrpHOlGIWTFXLOL38lSY593VV+k8WBmqxafdCiyWMPUz/iGjPDqCdqcpfgrGKsVqNl+4uDtO2yT1fQu/+8kWNO90yDOD5H6B2WD6rIfOLoiiQYe+mgF3svM7p10JasZ0uvVPmoCM+U9wa1KiFc5W+v21f5U+ufDlpd8HproFOlfQH0R9UMisiyiq/53JSK2wobEcHWl6L+zHBWi/2FsuqdqfdOSYR1osv1Mz37pU6ne/dXqkL8bVUH9K+MrrR5czOc6pBPbs87zTYF6ts5Wm/RgAIsi5AJcYFpcHOtcOFiMhZw0inlgWjKfY/dLzwiBOP9STrp0OT1ICwtO5WlYIjVuHg8Q27yzhCqP4HwHmG1LQVhHA0Rb6NOxZMSjXRVCQsd5qgRtK8mxhdYIGThUlq73qZ4HCRmZ4zasDdp6XP+UsNqsUmUmciKRe6LYpnOWKw00WgJHdZEwPGNRPiCyuRWCP9IK07mYUxHpm+optxyh0qTqjpX2RalZTXSpMxp2A373aVvv8oJuIoaLSe1apQZF8O1sDV1sL3m+9wpwsZPd+ClPt1o6i1NSymyhez2etOKT3/B70pN8bae1GJmdES30YLEEU+Cp4izOhNDDT3gclKCfqd1GyjKJOZejR9fbn+9ERYw357mOoNvF31Vf7MmvGyhjPvfs8D5lBJoJydeQfLnLwM/+bM8vq9zuFwMVRxCMmueoC0E2LQpc19XvTPITeDgxlln7ffVsPeWDjoc/x0noFIjkG7v16H3nC5Vq0VHkjBAfPVG/4IMIFdExQ8waaSLisrZyKItUQj2shnkFH4MIqQjebTDjVfMA0p3i+sdxHEdg1mnJEFbnCEhU/azYR/AbfVrE/7Go23cGb98ylqdKh6GYEnXfGM0dKeeF1cHeaZCLtC3IOnHur2bmexxY2AXXp++FRwUt7hiznqG8ZKgXMHKsbAx3yx/lqReIiG2arnN8unSwRe9HZkk+Qazk4MzS2BgfCKLjhMid4d7v2yLrTiK5iT8i+14T2a+ekHtSXtv/D2ARR1N8CK8EPnfw1N2DXFopHb9qaQVq9vMeYy1TzC0D/F0mH0Vi1Lvzl7AuedXl25dZ8tuywLEPk+KoQNYrPaAgENm1bjhaz91ack0U9CsFRy4oxGnRgfOUCX/uGf9v31q5IejKZVCm2UbjU+UFrPno+EuLtuXNjsDfBBCt56k7vWtq6OwIlQT8O7IJuKCQc3E8DvwzCP8OuOF0f8EgH+GNHZjj9t8tLOg4KqLVqlvmISlC7Wa6fMpT5MYKHdi/awMTRcoVhs+7KRr9+vrNyjqiM7qmhSuIAekM7GdXCHYTX/MnHOIAXstxJQcpPlHtbZ3+VCYiQBXyPJ5ACkFc7Gtj8AkM0u9eC0KGxQna68Mem5bksTCZkJ7BZqzI/EHxZysXpY9RYsHdiKCGULpGri8urvqr8s6usQXhLc2Ifm0OJuJlvxUQOfhRoJSz/uR1pziPWeI0unFDSgThc7MZAPjOlDuqoldJeZbI1rX2XVZ1ZjttAARIsGS7Kf0qzI+XSRr8Rl79aQL7gM9oHBd+6YNofx5wQPxnsrSjxd8rM6nfftjYQrhT4seIJd4NxnTFlYfll8icwOuhxccSGfBf5k1YpSf4dSnF56LIEqFpdA/jeSpqGXSUnvuzxb6MmQWl87kHFbqLuPKTaZmZmjOgU2hOkgSbiZbNJ7f989r6PdzNHMbCLMiTrxHizwiH+3efbVxC8u7bGxFXRJu0gMQ6PefQUHlpt9ZsYgBNfnR55TSXP6guwbtsFGI6FZ7AVngE4n1UGSFFvjVskgT1tdtC7xeVM14HaXfQ8j8k4VmPigAlWIjzlgwJF+hX0LBV37kz8GiuWUcG/KoqcbmvOGMOj86eqeV8PFuP+DtiAy0TjSNYPsPziHdqjY3JUMKi7Rd1TjLvfDUrMrUSVI9XTgzY40u1Z4EjB33o5gmMwkqobQ74J3Bbda2Rj7FFREWWI4ZykOwAoqhmBEyZytgHUNqM0emYz7pIjhvOFSpgA98Xvibp6HTE1qBvQztXjGUm572lxtGH2CjRIPRmfGwm+fMk2+x9/iw/eaCwa6aKtb3WvkAZusuNud125YsAGvddoP3zbA3rjCJjTaLUjqhnKh2XcO0LNcsBGTeE609Oehh3XYxac9tcdaFZ3BP1j5/sIod3nff8cyM3eqRVvdUnhcJO2RXq4CCAZPtHq+ZXGh2cWCFXz5SYY+t2mlhpEWk9gkyhwQqM6kNYMpmZ8ogjRLZaeV1/07fPs0wS1fELwq7suHvl6D95wMJ2D1wMKV7KjhDZbpwf1UF2zNz9IEPC3p+wF5UejsVVhXADr3u2Avg4JD/U3rADhWjrJdCgkpR1YG59qcscnL1o2sPq1WJegcTnRU2OYLujxTdqvJtyj0RfL44ppS6ey92GKFBboJo9yqhpjUsrGUVpF/NzGolsjLw61MUqlZaXopMsXAPAMjzlEIXIhp2E3CtZBxDBkYKNG7oXy3p64i9FQ14YksJdV9fqWRoFRy1bNj6U3VQ/xvnwg6YW617P0oap+aBFNi2XbgFFwAugOWx67QbAaF3c2YqmqjPSRjaRBcP+UA8lgHRVa2Lo+oGcDJX4EwIg3lkn5wiTLxMGqG+u/4xX+D1vZpul8dbWLTkCLSXrgUdpY7d03HeK3pi92BtZhFIfsQl42Z6EI7NXBgHlB/3CPlcrP+2Z239tEW1sDSq7ol17FAEvoNJ2F4/MwDsNxWW5EnQv/VIdXBqKAcYdZZR580cEd/do+vyg8KboWYyRTwCFOLRu3yTSV4libqHD0Dt8bJGLFCQCI5sbAmWwqPWEikL7qgo4dZ9mNPvCETvZynSNBM3pJfwsqGTtkt81UNDJGu7o32FpBNadDTDK86mejJBJJmV6J3es1geV9rIv/vpnN8VZAtMEIlk/bmoLXbMGlCE1CvqAcE4+xAcTOOkuPXjA971cKzGMWC7RhIMwtVdCKpKMNJU2haaI8Va5yv0Hox9uPpT/lfWggLAc/U2ulXaiz8HdRFSh0TC6Qmhp4PVs2uY2DYy4D//bAMkrxAKk5u8P5guRBzVBzeC0aS/7nCoZfwm6F9DA/C0pypi/dXAFm75Moi/0JOkReCzJuFlXRD3YXmMo/nrNFl+ihWHJxfmsntkjHcvJY9x/cXd6lfFbPCWVG0apEcViHmevEMWqggQMiG1owhQ9TkQmwqDHnvOcLeJ/IeezanwiIM4BcPhYSa4QGY/WPfYIdAiyChYNgsBGr4/LFbUP73vAmNRaEJnQL+MDZiz/uXir4H9EGQ5F/D7rX/pEnOU3fpe9SRakKRZlMfzTJ7RPy9LguW6RaU9/kpohNur4+051RwtwFRYFFhaq5Ek84aQypLwSBmXBR8gq+YBtMjDgzc/I5vuiXCHmlr3ipZowXVGDd22Rg6Ky2PpViEx5RGjtxYGMB8kW9j4LBVSwbxAT/EQPhAWjbV+f26BSmzbR9RMopfRd33x2DPmwqe/UAvHDqC7/XKEddiP2tcicIW7cRAFaYaWvB0G6knNDAKO0IXSqth/cQ78l1qa/3VSL0MixRGpnau0WXQoD/8MovhazL7DieYxTdU0O+9KCtOUOfHf8hakWjLrZfb/jF7Oh5RR4RtVDV4T13uNNfJhUg3skGG7+qYm9M+2z3acoEZchj4+nIy5W/wzQUsIeQd9p8tRxWHE7ZRyceItFqElgJtcPNhbf5bn/IcHJaR0zm15L9Eh5ijiF+0G4KOv1CFkosrYrajLq4sYqbhp7eikPQmRFzvvlVL2osunGNe7TERFUdcREr+fs1yUJ++RouyeVYXhT1SsxCn7Pb2C7oazsVGciNN33tScI5DbqSlFaGVrZBmhn49ralyMLL2+LpLNUlNnQBX3fnpYp/gVTHanBSeSagJTEd5DvOeHXlViFRGrWh7h9yzeXggxiz0rAQFtILBvBkd0kgQX7XPN/tEkesAdX3AbHmL8AKbRc1aN/pb9+OW9ulWWPrrjug1xpa2qFrCdSPafCNZWQRruk+gQrPBTIfjRcOpAstQIcJfOrnNkkeZB/uoCYl3yMRg2PwbKJ5l7c3VatHtCA5Opr93mCeX3Mfuh1FxSGZDbm5VtS94tiSwXopjEp26pn18lNd/P3da1QJilZ2P5RUhjYUcqX5/YewMvkQZxUhZjeqhi5BCKweDjC8vy3MQpbX7erQnXmI5APH9e/Kii1PaJhtMbuN6G7EURjffNnooQAP183bkcTpkHJLn28ySXFctFKg2jOLkzzldO+vTi8B4djmAmZl62xTmLR/DMivnSoco8OgDzdE9pIdmcxA5hMpLvltX+SqmLfvrb4ubtTQ/etwoRfvLgV9pusf/ucWvyTN1eeenwPODOwHFO3tpwSKjTccmFVYPCMj79gbY1CwTNAOYNKB49x3RuLkUSnLLAmShl01v7cvpYddGJwgkKFFQUUYUdl2LuCNEcCkMo84uKhe/1qyKC23zP+n5ZEQ+2c0YZb//hlRuHcm+H8lKHcSQwtlsujhDobfdacBuYHsR8/0HNVmfWeRSs5dHGVFYYeB5U/qtH5joUn7CBqFdLcL9Smra4nGdAZ5uW5cEpJvCR+cxuoERmasehftjjaeTaD8hcXx52AbOzcKkptotyn29YxSAnPl2VvjSVTi/7ZiBeqKoUmnwfUe4M0GDcegjZl/xNA4loxTeSNWCqSTx+fBAEMRCFEk8BFlNYGD5FdUZbeW8ERQrSajgQHV/hcq382NrDRX7jYadB1dFFrliI2rUw5n3qXa2wKtS4hH/4mKtH+hnwHO/2Em66mDXKiNAY51JDcS4PcWA3yo0wHZZbI9GqGker8dFjP4wNMvq10mPO6zRTAsPDvBe5HOM2ld1Q5jBTP1Y9MoRV+rjzxS9EHxZ01MgbnA2RNvXub8qPqAAHLJU/CA7Kk2PPa1VzHS3nJ/2W/QTPP0SeSkRnIwJIzBxziXLRefTMMpyvMR9nigMOor+ZWmS4E/rYKA5/pj+LXFSd0QaTDrAOzzXzz8/F6rWt7sTUAYS3ouZCKEW06kdaJgWrTw3o6O+PWCNtnlKguhMKVliMpoK8diV1u6cn+RmVm7FakHCTGKYxAg7pvbYD67QRhLdsDh/Qt8OadRuDa0l4c1WL1XvW8BtjXnP+kZjw+fVBBcxZZwbddo8Dnnpo144l8KOiGqRjQrBVMkRn/ocBiNJYuXgXAx8FZI8mERmACXsVx1C8Jzww7+ge7rLp3tSHwdb/ykZObwq+1UYyYDo7AIHyjgIaGMi0MREB8+Tc4LlQcWqvnDYXovhDA2zfgNlFhN4Wex8KOw6IHvfwu8mxnV9Guq0vxwmyifbXzJcgZVI1rPxr/O5ui02+bCLmGH6s6DVpSAnStXkzP3mJUUym4DPYDmQv2Pi6WacU99z3ToD7JQ+Q8N0aGMAkMbI/gZ9Yns6QeGZJqap4nT5KLqiP7e+mGrfDK9I2Sa/zUVQ57xR9obe+uHgW9bvNuafB1LOmYc/plq6cBgtTrAzT20u//y2ub+WVg4AWZud4hM7w5qUqAFByVUTUpHkB9jahm9Dbw+7Twtu5XDUH+Vnt0C89O2EsY//lf67fFFlN7D9nBQTgEhviEpufl2ed876ntuqu0W4uX/BynxXOD4QpqiqJ+IIq5WWi/lgq3LZxDncmEGmoccE1wO6Kzn/6XqwkvzsZun+eecxBcclBSUPv4C9ONRhBtklqug0k7NeapQR/ekKH0HzaKf4TCN2YlMD2mamfLd3fwwaPnyppi6POA1gZxwDfN5MbuaC0X5CbCn1aX2UNj4znjupeAK6KVHGIHRf5eF5BnV6EwJVggWp+6xkq+E4pcgSPoZaUinAMfDvbIbxXELqtzGdhfeGqVoMVVCZMD6Yt1ZTU9rn+TNoTD6Bb1PVGX6DwXt6X4FfUvUpXPSfTNBQGxKyhHgrGnlVM6XeDNl1k579/PfApQokBTzk1zEvZdIDK22eYTjWXtYaSlz/eSXcQm36ypNg9ZOFIdm8cx+4+03STQ1YzA0eXRD8UQk1R5wAua599knoTCz4ORlJ0EEWMXF+j2qvrj5frH8+Gdc8sG8nzBQN0wJrv23SZV+W3JuFRcxLhAulZMEEQ4zWBMS/Gn1bpaCHMPkmJXhBOMOMCIk77/hf2VW2skG05t8tp0o+XwBkfvGDcil4E2Acb8bAkYnsdmPFk/7a/XZVX53bRTj0dsYxN0DxIFXdmbJIOaiRVpAn0c3ogwGBaLnbKykkbxTf9CairSkKQsn+6WvExZiH+c4ajAABBR8IqfOAYW/fF4aEzxZrL+K8ap1IKU3OvIy1Csh+sqABnIowvBV/XsEz2PlXnaS9wxK6CX8p0EBDHiE9jT84lHf9bieXhA/stomwVz9tITaC/SitwYmIUci6gTM5Du9kXlcjiAUozID7/X0SlnTje4nlp++nKQa2hiM+73K8mSb8dKT5KtO8vhkPSQ+HVD8rgk4QJuDEvTmI9YAwIYCcv9uziXXKvOQ+pqOXcAAh55x7h2mueb0TMrnCU3m3Zw85qnI/1Tp+czhXAHk1fyIUMyEl6//o6qzfGrWV4Q3NY9znPYrvuIkEqIipejhwem4SB9gavlJvB1R04IDoJ8Zd6X0cicpLuwi4JJjZu06hzeU1RebbwJmE0UvJIPzxuy1fQZ+SsqmyNYGYZUWbeUrzEqmd/DjD858vt1ziCtQdAATbFuged+kIn/jEJ9okoEvVB2gyIpc0jDi586iymi5PikAoOOuhsM1Hj59s/i22Wa6YDW5hAet2xxD4M1gLGhTwNYnNldoc0mrxBR+smNZyYOnPXUXtR/k/FeMLmoMq9XvG708p5WyLZByBEiSG3L+Jaw4653yLAfqIDeaNUgY8AIbPNmyTMP1aCSzKDtUOV7XRbHATExXcCEpL/YICtL20dUU5fb525aQPQo/jx0dh88XxehSKg4tK8UbnX8+YJ+DBNjMyzgxdAAJAZLXu6kQtsVSLyqqMDQK2sFMyyr01KVE8O//fwaeB+fGXjfYpxdRRiyo1O3hYYA0nap91USeQn67xMnFlmNUntU4Ef3eTnb5oVL8nJdcC2It53mlavMxQsdA+SX7AvXKAUPzbU6IGWauyvDTo9WlklL/8SPUPtCD8KDUWPwzTPx5r3ZiCXvsCwHmMkwuCfz7q/3JRepGYAmX2uff0UfdXW1g9sEFsOynYIDrgm5r7CaOvK3zYhlo4pdqZ5nkHi7eE5jbz9CnNk/6kH5cHa5FSggFibNtsou8KHZdyAAAAAAAA/jdE9KK8c8JuVeqKUQsNkcc9anlvLe/51kgPc5lEpW/8NOxtq+xvwn/KM7JWIL8/W2XbyRV38v+Tj7QgilUNfTaSa6lD8obZFgMhKJy5X0O4xV+gox//mMfas+ALxFKqLyPBsieSePCggNQtLo2Im6c+3UR/ghztTdgHYHYQRBZBFY4ZrLu4imEBLB1cx8MYu12DyKQFXAlDYiAbwZdF6CFIBoGspstN60cICFR3gjnwZ21onnuMa+0SFRjXCTr/ADrkFokDpy0u7XFRZ9MW2OfylDAyjWWeWDRyXrPMpWIP4EKWWPOwhxk1/4T4rmIadxMjMk16TFvJeg0mGTwNXpvcELDv39LRZ82EAGDTgAAl3/8eOO3TZqGGJtaNQCsI14+xGjFV8A1Q/RK6C4IzEx49VikTpZttohXCbJrahwzOE/z2T7nkigcpOVTM/pvFnuxaBwnahdAhoD0jhhXTpDZJeqqOdjUPPBPxuclvOEhevN/XOJpT8D8Y4iWKsl3a4tNvjwG+nC6o4eeUhyBkX7ySO5QpQlnxY7A1selvRruPL56EdDQzdgsQTA1sAQUJR1nTsnodXzwAAAA=" alt="DairyLife 360 logo"></span>
       <div><strong>DairyLife 360</strong><span>乳牛全生命週期管理平台</span></div>
     </div>
@@ -4625,6 +5178,8 @@
         <a class="nav-link active" href="#home"><span class="emoji">🏠</span>首頁總覽</a>
         <a class="nav-link" href="#lifecycle"><span class="emoji">🐮</span>生命週期</a>
         <a class="nav-link" href="#nutrition"><span class="emoji">🌾</span>營養雷達</a>
+        <a class="nav-link" href="#dhi"><span class="emoji">🧪</span>DHI 智慧判讀</a>
+        <a class="nav-link" href="#tmr"><span class="emoji">🧺</span>TMR 粒度與 peNDF</a>
         <a class="nav-link" href="#problems"><span class="emoji">🚑</span>問題中心</a>
         <a class="nav-link" href="#disease"><span class="emoji">🩺</span>疾病知識庫</a>
         <a class="nav-link" href="#diagnosis"><span class="emoji">🧭</span>現場問診</a>
@@ -4634,12 +5189,13 @@
         <a class="nav-link" href="#fieldtools"><span class="emoji">🧰</span>現場工具箱</a>
         <a class="nav-link" href="#assistant"><span class="emoji">🤖</span>AI牛隻顧問</a>
         <div class="side-label portal-sub-label">平台資訊</div>
+        <a class="nav-link" href="#niubao"><span class="emoji">🐮</span>認識牛寶</a>
         <a class="nav-link" href="#service"><span class="emoji">🤝</span>顧問服務</a>
         <a class="nav-link" href="#roadmap"><span class="emoji">🚀</span>開發藍圖</a>
       </nav>
 
       <div class="side-card portal-side-card">
-        <strong>V18.5.8 Portal Shell</strong>
+        <strong>V18.5.15｜DHI 智慧判讀＋TMR peNDF 試作版</strong>
         <p>一次開啟一個工作模組，內容完整保留，操作更聚焦。</p>
         <a href="#home">回到入口首頁</a>
       </div>
@@ -4767,10 +5323,13 @@
           <div class="portal-launchpad-head">
             <div>
               <small>DAIRYLIFE 360 PORTAL</small>
-              <h2>選擇今天要處理的工作</h2>
-              <p>首頁只負責帶你進門；進入後，右側一次只顯示一個模組。</p>
+              <h2>今天要處理哪一項工作？</h2>
+              <p>所有入口直接攤開，點一下就進入對應工作區。</p>
             </div>
-            <button type="button" class="portal-search-pill" onclick="openGlobalSearch()">🔎 搜尋全部內容</button>
+            <div class="portal-head-actions">
+              <button type="button" class="portal-search-pill" onclick="openGlobalSearch()">🔎 全站搜尋</button>
+              <button type="button" class="portal-emergency-pill" onclick="openEmergencySearch()">🚨 緊急輔導</button>
+            </div>
           </div>
           <div class="portal-card-grid">
             <button type="button" class="portal-card" data-route="lifecycle">
@@ -4787,6 +5346,12 @@
             </button>
             <button type="button" class="portal-card" data-route="nutrition">
               <span class="portal-card-icon orange">🌾</span><span><b>營養風險雷達</b><small>26 張原物料資料卡</small></span><i>→</i>
+            </button>
+            <button type="button" class="portal-card" data-route="dhi">
+              <span class="portal-card-icon cyan">🧪</span><span><b>DHI 智慧判讀</b><small>乳成分異常・五步判讀與 SOP</small></span><i>→</i>
+            </button>
+            <button type="button" class="portal-card" data-route="tmr">
+              <span class="portal-card-icon lime">🧺</span><span><b>TMR 粒度與 peNDF</b><small>Penn State 篩分・有效纖維估算</small></span><i>→</i>
             </button>
             <button type="button" class="portal-card" data-route="benchmark">
               <span class="portal-card-icon purple">👁️</span><span><b>視覺評分</b><small>糞便・跛行・BCS・衛生</small></span><i>→</i>
@@ -4806,6 +5371,38 @@
           </div>
         </div>
 
+      </section>
+
+
+
+      <section id="niubao" class="container">
+        <div class="section-title">
+          <div>
+            <span class="badge">DAIRYLIFE 360 BRAND IP</span>
+            <h2>認識牛寶</h2>
+            <p>牛寶不再占用手機入口首頁的大面積空間，而是保留為獨立品牌頁；需要時再進來認識她。</p>
+          </div>
+        </div>
+        <div class="niubao-profile-shell">
+          <div class="niubao-profile-visual">
+            <img id="niubaoProfileImage" alt="DairyLife 360 品牌 IP 牛寶">
+          </div>
+          <div class="niubao-profile-copy">
+            <span class="niubao-profile-kicker">牛寶｜牧場現場小顧問</span>
+            <h3>把複雜的牧場管理，翻成現場可以採取的下一步。</h3>
+            <p>牛寶不是裝飾角色，而是 DairyLife 360 的導覽與提醒 IP。她會在生命週期、問題排查、現場問診與 SOP 中，用短句提醒使用者先蒐證、再判斷、最後執行。</p>
+            <div class="niubao-role-grid">
+              <div><b>🧭 導覽</b><span>協助找到適合的模組入口。</span></div>
+              <div><b>🔎 蒐證</b><span>提醒先確認牛群、環境與紀錄。</span></div>
+              <div><b>📋 行動</b><span>把判斷連到 SOP 與任務卡。</span></div>
+              <div><b>🌱 品牌</b><span>讓專業平台保持親和與記憶點。</span></div>
+            </div>
+            <div class="actions niubao-profile-actions">
+              <button class="btn btn-primary" type="button" onclick="window.portalNavigate('diagnosis')">進入現場問診</button>
+              <button class="btn btn-secondary" type="button" onclick="window.portalNavigate('home')">回入口首頁</button>
+            </div>
+          </div>
+        </div>
       </section>
 
       <section id="lifecycle" class="container">
@@ -5107,6 +5704,154 @@
           <div id="sopTable" class="sop-accordion"></div>
         </div>
       </section>
+
+
+
+      <!-- ==============================
+      V18.5.15 DHI SMART INTERPRETATION MODULE
+      ============================== -->
+      <section id="dhi" class="container">
+        <div class="section-title">
+          <div>
+            <span class="badge">V18.5.15｜DHI 智慧判讀試作</span>
+            <h2>DHI 乳品質報表判讀與乳成分異常分析</h2>
+            <p>輸入單頭乳牛資料，自動計算 P/F 與 F/P，將異常數值轉成支持證據、相反證據、現場優先查核與 SOP。</p>
+          </div>
+        </div>
+        <div class="v18515-module-intro">
+          <div class="v18515-hero-card">
+            <h3>從「紅色數字」走到「可以執行的下一步」</h3>
+            <p>本模組定位為管理決策支援，不做疾病自動確診；先確認牛隻背景與資料完整度，再用交叉指標辨識異常型態。</p>
+            <div class="v18515-flow">
+              <span>資料輸入</span><span>自動計算</span><span>異常型態</span><span>支持／相反證據</span><span>現場查核</span><span>SOP</span>
+            </div>
+          </div>
+          <div class="v18515-source-card">
+            <b>五步判讀工作法</b>
+            <p>看到什麼 → 代表什麼 → 相反證據 → 先查什麼 → 接哪個 SOP</p>
+            <small>規則引擎先產生風險提示，AI 文字只負責把證據說清楚。</small>
+          </div>
+        </div>
+
+        <div class="v18515-workspace">
+          <div class="v18515-panel">
+            <div class="v18515-panel-head"><h3>單頭 DHI 快速輸入</h3><p>Phase 1 先以手動輸入測試規則與使用體驗。</p></div>
+            <div class="v18515-panel-body">
+              <div class="v18515-form-section">牛隻背景</div>
+              <div class="v18515-grid-2">
+                <div class="v18515-field"><label>牛號</label><input id="dhi15CowId" value="DHI-001"></div>
+                <div class="v18515-field"><label>採樣日期</label><input id="dhi15Date" type="date"></div>
+                <div class="v18515-field"><label>泌乳天數 DIM</label><div class="v18515-input-unit"><input id="dhi15Dim" type="number" min="0" placeholder="例如 48"><span>天</span></div></div>
+                <div class="v18515-field"><label>胎次</label><select id="dhi15Parity"><option value="">未填</option><option value="1">初產</option><option value="2">二胎</option><option value="3">三胎以上</option></select></div>
+                <div class="v18515-field"><label>品種</label><select id="dhi15Breed"><option value="">未填</option><option value="Holstein">荷蘭牛</option><option value="Jersey">娟姍牛</option><option value="Cross">雜交牛</option></select></div>
+                <div class="v18515-field"><label>飼養群</label><select id="dhi15Group"><option value="">未填</option><option value="fresh">新產群</option><option value="high">高產群</option><option value="mid">中期泌乳群</option><option value="late">泌乳後期群</option><option value="treatment">病牛／治療群</option></select></div>
+              </div>
+              <div class="v18515-form-section">核心乳品質資料</div>
+              <div class="v18515-grid-2">
+                <div class="v18515-field"><label>乳量</label><div class="v18515-input-unit"><input id="dhi15Milk" type="number" step="0.1" placeholder="32.5"><span>kg</span></div></div>
+                <div class="v18515-field"><label>乳脂</label><div class="v18515-input-unit"><input id="dhi15Fat" type="number" step="0.01" placeholder="3.65"><span>%</span></div></div>
+                <div class="v18515-field"><label>乳蛋白</label><div class="v18515-input-unit"><input id="dhi15Protein" type="number" step="0.01" placeholder="3.20"><span>%</span></div></div>
+                <div class="v18515-field"><label>乳糖</label><div class="v18515-input-unit"><input id="dhi15Lactose" type="number" step="0.01" placeholder="4.65"><span>%</span></div></div>
+                <div class="v18515-field"><label>SCC</label><div class="v18515-input-unit"><input id="dhi15Scc" type="number" step="0.1" placeholder="18"><span>萬/mL</span></div></div>
+                <div class="v18515-field"><label>MUN</label><div class="v18515-input-unit"><input id="dhi15Mun" type="number" step="0.1" placeholder="12.5"><span>mg/dL</span></div></div>
+                <div class="v18515-field"><label>乳中丙酮</label><div class="v18515-input-unit"><input id="dhi15Acetone" type="number" step="0.001" placeholder="0.04"><span>mmol/L</span></div></div>
+                <div class="v18515-field"><label>乳中 BHB</label><div class="v18515-input-unit"><input id="dhi15Bhb" type="number" step="0.001" placeholder="0.06"><span>mmol/L</span></div></div>
+                <div class="v18515-field"><label>FFA</label><div class="v18515-input-unit"><input id="dhi15Ffa" type="number" step="0.01" placeholder="0.80"><span>mmol/100g</span></div></div>
+                <div class="v18515-field"><label>前次 SCC</label><div class="v18515-input-unit"><input id="dhi15PrevScc" type="number" step="0.1" placeholder="可留白"><span>萬/mL</span></div></div>
+              </div>
+              <div class="v18515-actions">
+                <button class="btn btn-primary" type="button" onclick="dhi15Analyze()">開始五步判讀</button>
+                <button class="btn btn-soft" type="button" onclick="dhi15Reset()">重設</button>
+              </div>
+              <div class="v18515-demo-row">
+                <button class="v18515-demo-btn" type="button" onclick="dhi15LoadDemo('fat')">示範：乳脂相對偏低</button>
+                <button class="v18515-demo-btn" type="button" onclick="dhi15LoadDemo('scc')">示範：高度 SCC</button>
+              </div>
+              <div class="v18515-note">初版門檻用於規則與介面測試。正式使用時應保留「檢驗報表門檻、管理門檻、本場歷史門檻」三層設定。</div>
+            </div>
+          </div>
+          <div id="dhi15Result" class="v18515-results">
+            <div class="v18515-panel v18515-empty"><div><div class="v18515-empty-icon">📊</div><h3>等待輸入 DHI 資料</h3><p>也可以先載入兩組示範案例，查看五步判讀與跨模組 SOP 的呈現方式。</p></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==============================
+      V18.5.15 TMR PARTICLE SIZE + peNDF MODULE
+      ============================== -->
+      <section id="tmr" class="container">
+        <div class="section-title">
+          <div>
+            <span class="badge">V18.5.15｜Penn State 粒度試作</span>
+            <h2>TMR 粒度篩分、物理有效纖維與 peNDF 估算</h2>
+            <p>以 19 mm、8 mm、4 mm 與底盤四層輸入實際重量，自動換算分布、比較建議範圍、估算 pef 與 peNDF，並提供挑食與混拌排查方向。</p>
+          </div>
+        </div>
+        <div class="v18515-module-intro">
+          <div class="v18515-hero-card">
+            <h3>粒度分布與化學 NDF，要一起看</h3>
+            <p>粒度太細可能減少咀嚼與緩衝；太粗則可能降低採食或增加選食。peNDF 是估算工具，不等於瘤胃 pH 的保證書。</p>
+            <div class="v18515-flow"><span>新鮮 TMR 取樣</span><span>40 次水平搖動</span><span>四層秤重</span><span>分布比較</span><span>pef</span><span>peNDF</span><span>剩料選食</span></div>
+          </div>
+          <div class="v18515-source-card">
+            <b>估算公式</b>
+            <p>pef₍≥4mm₎＝19 mm＋8 mm＋4 mm 留存比例；peNDF＝全樣 NDF × 調整後 pef。</p>
+            <small>若 ≥4 mm 中含有穀粒、顆粒料或快速消化物，應扣除，不宜全部當作有效纖維。</small>
+          </div>
+        </div>
+
+        <div class="v18515-workspace">
+          <div class="v18515-panel">
+            <div class="v18515-panel-head"><h3>Penn State 篩分資料輸入</h3><p>輸入每層實際重量；百分比由系統自動計算。</p></div>
+            <div class="v18515-panel-body">
+              <div class="v18515-grid-2">
+                <div class="v18515-field"><label>樣本類型</label><select id="tmr15Type" onchange="tmr15RefreshGuide()"><option value="tmr">泌乳牛 TMR</option><option value="corn">玉米青貯</option><option value="haylage">牧草青貯／Haylage</option></select></div>
+                <div class="v18515-field"><label>樣本乾物率</label><div class="v18515-input-unit"><input id="tmr15Dm" type="number" step="0.1" value="48"><span>%</span></div></div>
+                <div class="v18515-field"><label>全樣 NDF（乾物基礎）</label><div class="v18515-input-unit"><input id="tmr15Ndf" type="number" step="0.1" value="31"><span>% DM</span></div></div>
+                <div class="v18515-field"><label>≥4 mm 中非纖維顆粒（占全樣）</label><div class="v18515-input-unit"><input id="tmr15Nonfiber" type="number" step="0.1" value="0"><span>%</span></div></div>
+              </div>
+              <div class="v18515-form-section">新鮮飼料四層重量</div>
+              <div class="v18515-grid-2">
+                <div class="v18515-field"><label>19 mm 上層</label><div class="v18515-input-unit"><input id="tmr15W19" type="number" step="0.1" value="30"><span>g</span></div></div>
+                <div class="v18515-field"><label>8 mm 中層</label><div class="v18515-input-unit"><input id="tmr15W8" type="number" step="0.1" value="205"><span>g</span></div></div>
+                <div class="v18515-field"><label>4 mm 下層</label><div class="v18515-input-unit"><input id="tmr15W4" type="number" step="0.1" value="80"><span>g</span></div></div>
+                <div class="v18515-field"><label>底盤細料</label><div class="v18515-input-unit"><input id="tmr15Pan" type="number" step="0.1" value="185"><span>g</span></div></div>
+              </div>
+              <div class="v18515-form-section">選填：剩料分布（直接輸入 %）</div>
+              <div class="v18515-grid-4">
+                <div class="v18515-field"><label>19 mm</label><div class="v18515-input-unit"><input id="tmr15R19" type="number" step="0.1" placeholder="%"><span>%</span></div></div>
+                <div class="v18515-field"><label>8 mm</label><div class="v18515-input-unit"><input id="tmr15R8" type="number" step="0.1" placeholder="%"><span>%</span></div></div>
+                <div class="v18515-field"><label>4 mm</label><div class="v18515-input-unit"><input id="tmr15R4" type="number" step="0.1" placeholder="%"><span>%</span></div></div>
+                <div class="v18515-field"><label>底盤</label><div class="v18515-input-unit"><input id="tmr15RPan" type="number" step="0.1" placeholder="%"><span>%</span></div></div>
+              </div>
+              <div class="v18515-actions">
+                <button class="btn btn-primary" type="button" onclick="tmr15Analyze()">計算粒度與 peNDF</button>
+                <button class="btn btn-soft" type="button" onclick="tmr15LoadDemo('fine')">載入偏細案例</button>
+              </div>
+              <div class="v18515-demo-row">
+                <button class="v18515-demo-btn" type="button" onclick="tmr15LoadDemo('target')">示範：建議分布</button>
+                <button class="v18515-demo-btn" type="button" onclick="tmr15LoadDemo('coarse')">示範：偏粗／選食風險</button>
+              </div>
+              <div class="v18515-note">非常濕的樣本（乾物率低於約 45%）可能不易準確分離。取樣應以實際餵飼狀態為主，不先烘乾或改變樣本。</div>
+            </div>
+          </div>
+          <div id="tmr15Result" class="v18515-results">
+            <div class="v18515-panel v18515-empty"><div><div class="v18515-empty-icon">🧺</div><h3>等待篩分重量</h3><p>預設資料可直接計算；也可以載入偏細或偏粗案例，查看分層建議與選食判讀。</p></div></div>
+          </div>
+        </div>
+        <div class="v18515-panel" style="margin-top:18px;">
+          <div class="v18515-panel-head"><h3>方法與來源說明</h3><p>此模組採四層 Penn State Particle Separator 現場估算法。</p></div>
+          <div class="v18515-panel-body">
+            <ul class="v18515-source-list">
+              <li>目前四層篩孔為 19 mm、8 mm、4 mm 與實心底盤；高產乳牛的物理有效粒度估算以 ≥4 mm 為現場參考。</li>
+              <li>泌乳牛 TMR 建議分布：19 mm 2–8%、8 mm 30–50%、4 mm 10–20%、底盤 30–40%；物理有效粒度比例約 60–70%。</li>
+              <li>peNDF 為「全樣 NDF × 有效粒度比例」的估算。各層 NDF 與消化率不同，且穀粒／副產物可能留在篩上，因此不能把所有 ≥4 mm 顆粒都自動視為有效纖維。</li>
+              <li>新鮮 TMR 與不同時間剩料的分布差異若超過約 3–5 個百分點，應排查選食、含水、推料、擁擠與混拌。</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
 
       <section id="tools" class="container">
         <div class="section-title">
@@ -5825,6 +6570,7 @@ const navHtml = `
   <a class="nav-link" href="#tools" onclick="toggleDrawer(false)"><span class="emoji">🧮</span>管理工具</a>
   <a class="nav-link" href="#fieldtools" onclick="toggleDrawer(false)"><span class="emoji">🧰</span>現場工具箱</a>
   <a class="nav-link" href="#assistant" onclick="toggleDrawer(false)"><span class="emoji">🤖</span>AI牛隻顧問</a>
+  <a class="nav-link" href="#niubao" onclick="toggleDrawer(false)"><span class="emoji">🐮</span>認識牛寶</a>
   <a class="nav-link" href="#service" onclick="toggleDrawer(false)"><span class="emoji">🤝</span>顧問服務</a>
   <a class="nav-link" href="#roadmap" onclick="toggleDrawer(false)"><span class="emoji">🚀</span>開發藍圖</a>
 `;
@@ -13601,7 +14347,7 @@ const v184OriginalSelectProblem = selectProblem;
 selectProblem = function(id) { v184OriginalSelectProblem(id); const p=problems.find(x=>x.id===id); renderProblemNutrition(p); };
 const v184OriginalSelectDisease = selectDisease;
 selectDisease = function(id) { v184OriginalSelectDisease(id); const d=diseaseKnowledge.find(x=>x.id===id); renderDiseaseNutrition(d); };
-document.title = 'DairyLife 360｜V18.5.8｜Portal Shell 入口平台架構版';
+document.title = 'DairyLife 360｜V18.5.15｜DHI＋TMR 試作版';
 
 setupNutritionFilters();
 renderNutritionCards();
@@ -13878,6 +14624,8 @@ function v185NiubaoAvatar(className='v185-niubao-mini-avatar') {
 const v185NiubaoSections = [
   { id:'lifecycle', role:'生命週期導覽牛寶', tip:'先確認牛在哪個階段，再決定要看 KPI、SOP 還是營養風險。階段錯了，解法通常也會歪掉。', bubble:'先看階段' },
   { id:'nutrition', role:'營養師牛寶', tip:'原料不是越貴越好，重點是用在對的階段、對的問題、對的成本位置。先查源頭，再談加料。', bubble:'成本別亂花' },
+  { id:'dhi', role:'DHI 判讀牛寶', tip:'先看 DIM、胎次、群別與趨勢，再讀乳成分。單一紅字是線索，不是診斷書。', bubble:'先看證據' },
+  { id:'tmr', role:'TMR 篩分牛寶', tip:'粒度不是越長越好，也不是越細越先進。分布、NDF、挑食與實際採食要一起看。', bubble:'篩完再判' },
   { id:'problems', role:'偵探牛寶', tip:'現場問題先分流：個別牛、同群、同批乳，還是整場趨勢。不要一看到症狀就直接跳答案。', bubble:'先分流' },
   { id:'disease', role:'醫師牛寶', tip:'疾病庫負責提醒該蒐集哪些資料，不取代獸醫診斷。嚴重警訊要升級通報，別硬撐。', bubble:'先蒐證' },
   { id:'diagnosis', role:'問診牛寶', tip:'好的問診會把症狀、時間、同群變化與管理事件串起來，根因才會浮出來。', bubble:'問對問題' },
@@ -13889,7 +14637,7 @@ const v185NiubaoSections = [
 ];
 
 function initNiubaoIPV185(){
-  document.title = 'DairyLife 360｜V18.5.8｜Portal Shell 入口平台架構版';
+  document.title = 'DairyLife 360｜V18.5.15｜DHI＋TMR 試作版';
   const homeCopy = document.querySelector('#home .hero-copy');
   if(homeCopy && !document.querySelector('.v185-home-niubao-note')){
     homeCopy.insertAdjacentHTML('afterend', `<div class="v185-niubao-section-tip v185-home-niubao-note">${v185NiubaoAvatar()}<div><b>牛寶登場｜現場小顧問模式</b><span>牛寶會在頁面各處自然出現，協助提醒階段判斷、問題分流、營養源頭與成本優化。牠很可愛，但不是來賣萌而已，牠是來盯 KPI 的。</span></div></div>`);
@@ -13957,7 +14705,7 @@ V18.5.5 CROSS-MODULE SOP LINK PATCH
 4. 找不到 SOP 時不報錯，改成一般文字或導向對應模組。
 ============================== */
 (function(){
-  document.title = 'DairyLife 360｜V18.5.8｜Portal Shell 入口平台架構版';
+  document.title = 'DairyLife 360｜V18.5.15｜DHI＋TMR 試作版';
 
   const sopAliasMap = {
     '初乳庫建立與解凍 SOP': '初乳管理 SOP',
@@ -14137,7 +14885,7 @@ V18.5.5 CROSS-MODULE SOP LINK PATCH
     `;
 
     document.getElementById('consultRelated').innerHTML = v1855RelatedListHtml(c.related) + `
-      <li class="v1855-sop-note">V18.5.8：Portal Shell 完整保留第一、二階段共 21 組問診與 SOP 一鍵預覽；找不到正式 SOP 的項目仍保留文字，不讓功能壞掉。</li>
+      <li class="v1855-sop-note">V18.5.15：Portal Shell 完整保留第一、二階段共 21 組問診與 SOP 一鍵預覽；找不到正式 SOP 的項目仍保留文字，不讓功能壞掉。</li>
     `;
     document.getElementById('consultEscalation').innerHTML = c.escalation.map(x => `<li>${escapeHtml(x)}</li>`).join('');
   };
@@ -14217,18 +14965,207 @@ V18.5.5 CROSS-MODULE SOP LINK PATCH
   </div>
 
 
+
+<script>
+/* ==============================
+   V18.5.15 DHI + TMR MODULE LOGIC
+   ============================== */
+(function(){
+  const byId = id => document.getElementById(id);
+  const val = id => {
+    const el = byId(id);
+    if(!el || el.value === '') return null;
+    const n = Number(el.value);
+    return Number.isFinite(n) ? n : null;
+  };
+  const fmt = (n,d=2) => n === null || !Number.isFinite(n) ? '—' : Number(n).toFixed(d);
+  const esc = s => (typeof escapeHtml === 'function') ? escapeHtml(String(s ?? '')) : String(s ?? '').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+  const statusLabel = level => level === 'alert' ? '異常／高優先' : level === 'watch' ? '注意／需追蹤' : '目前穩定';
+
+  function dhiMetric(key, v){
+    if(v === null) return {level:'watch', label:'未輸入', range:'資料不足'};
+    if(key === 'fat') return v < 3.2 ? {level:'alert',label:'偏低',range:'管理關注 <3.2%'} : v > 4.5 ? {level:'watch',label:'偏高',range:'需結合 DIM／酮體'} : {level:'ok',label:'範圍內',range:'示範 3.2–4.5%'};
+    if(key === 'protein') return v < 3.0 ? {level:'watch',label:'偏低',range:'管理關注 <3.0%'} : v > 3.6 ? {level:'watch',label:'偏高',range:'需結合乳量／DIM'} : {level:'ok',label:'範圍內',range:'示範 3.0–3.6%'};
+    if(key === 'lactose') return v < 4.4 ? {level:'alert',label:'偏低',range:'管理關注 <4.4%'} : v < 4.5 ? {level:'watch',label:'接近下限',range:'查 SCC 與趨勢'} : {level:'ok',label:'範圍內',range:'示範 ≥4.5%'};
+    if(key === 'scc') return v >= 50 ? {level:'alert',label:'高度警示',range:'≥50 萬/mL'} : v >= 20 ? {level:'watch',label:'早期關注',range:'20–50 萬/mL'} : {level:'ok',label:'低風險',range:'<20 萬/mL'};
+    if(key === 'mun') return v < 11 ? {level:'watch',label:'偏低',range:'報表示範 <11'} : v > 17 ? {level:'watch',label:'偏高',range:'報表示範 >17'} : {level:'ok',label:'範圍內',range:'報表示範 11–17'};
+    if(key === 'acetone') return v > .10 ? {level:'alert',label:'升高',range:'示範警示 >0.10'} : v >= .07 ? {level:'watch',label:'接近警示',range:'需交叉 BHB'} : {level:'ok',label:'未升高',range:'示範 <0.07'};
+    if(key === 'bhb') return v > .10 ? {level:'alert',label:'升高',range:'乳中示範警示'} : {level:'ok',label:'未升高',range:'乳中模型值'};
+    if(key === 'ffa') return v > 1.5 ? {level:'alert',label:'偏高',range:'示範 >1.5'} : {level:'ok',label:'範圍內',range:'示範 ≤1.5'};
+    return {level:'ok',label:'—',range:'—'};
+  }
+  function dhiMetricCard(title, value, unit, state){
+    return `<div class="v18515-metric"><div class="v18515-metric-top"><b>${title}</b><span class="v18515-dot ${state.level}"></span></div><strong>${value} <span style="font-size:11px;color:var(--muted)">${unit}</span></strong><small>${state.label}｜${state.range}</small></div>`;
+  }
+  function dhiSopButton(title, route){
+    if(route === 'tmr') return `<button class="v18515-sop-btn" type="button" onclick="window.portalNavigate('tmr')">${esc(title)}</button>`;
+    return `<button class="v18515-sop-btn" type="button" onclick="window.portalNavigate('sop',{scrollTop:false});setTimeout(()=>{if(typeof openSopPreview==='function')openSopPreview('${String(title).replace(/'/g,"\\'")}')},80)">${esc(title)}</button>`;
+  }
+  window.dhi15LoadDemo = function(type){
+    const set=(id,v)=>{const el=byId(id);if(el)el.value=v;};
+    if(type === 'fat'){
+      set('dhi15CowId','DEMO-FAT');set('dhi15Dim',82);set('dhi15Parity','2');set('dhi15Breed','Holstein');set('dhi15Group','high');set('dhi15Milk',39.8);set('dhi15Fat',2.56);set('dhi15Protein',3.21);set('dhi15Lactose',4.66);set('dhi15Scc',14.5);set('dhi15Mun',13.2);set('dhi15Acetone',.04);set('dhi15Bhb',.05);set('dhi15Ffa',.78);set('dhi15PrevScc',12.8);
+    } else {
+      set('dhi15CowId','DEMO-SCC');set('dhi15Dim',176);set('dhi15Parity','3');set('dhi15Breed','Holstein');set('dhi15Group','mid');set('dhi15Milk',22.4);set('dhi15Fat',3.82);set('dhi15Protein',3.46);set('dhi15Lactose',4.47);set('dhi15Scc',257.3);set('dhi15Mun',12.1);set('dhi15Acetone',.03);set('dhi15Bhb',.04);set('dhi15Ffa',.91);set('dhi15PrevScc',68.2);
+    }
+    window.dhi15Analyze();
+  };
+  window.dhi15Reset = function(){
+    ['dhi15Dim','dhi15Milk','dhi15Fat','dhi15Protein','dhi15Lactose','dhi15Scc','dhi15Mun','dhi15Acetone','dhi15Bhb','dhi15Ffa','dhi15PrevScc'].forEach(id=>{if(byId(id))byId(id).value='';});
+    ['dhi15Parity','dhi15Breed','dhi15Group'].forEach(id=>{if(byId(id))byId(id).value='';});
+    if(byId('dhi15CowId')) byId('dhi15CowId').value='DHI-001';
+    const box=byId('dhi15Result'); if(box) box.innerHTML='<div class="v18515-panel v18515-empty"><div><div class="v18515-empty-icon">📊</div><h3>等待輸入 DHI 資料</h3><p>也可以先載入兩組示範案例，查看五步判讀與跨模組 SOP 的呈現方式。</p></div></div>';
+  };
+  window.dhi15Analyze = function(){
+    const fat=val('dhi15Fat'), protein=val('dhi15Protein');
+    if(fat === null || protein === null || fat <= 0 || protein <= 0){ alert('至少需要輸入有效的乳脂與乳蛋白。'); return; }
+    const milk=val('dhi15Milk'), lactose=val('dhi15Lactose'), scc=val('dhi15Scc'), mun=val('dhi15Mun'), acetone=val('dhi15Acetone'), bhb=val('dhi15Bhb'), ffa=val('dhi15Ffa'), dim=val('dhi15Dim'), prevScc=val('dhi15PrevScc');
+    const pf=protein/fat, fp=fat/protein;
+    const req=['dhi15Dim','dhi15Parity','dhi15Breed','dhi15Group','dhi15Milk','dhi15Fat','dhi15Protein','dhi15Lactose','dhi15Scc','dhi15Mun'];
+    const complete=Math.round(req.filter(id=>byId(id)?.value!=='').length/req.length*100);
+    const missing=[['dhi15Dim','DIM'],['dhi15Parity','胎次'],['dhi15Breed','品種'],['dhi15Group','飼養群'],['dhi15Milk','乳量'],['dhi15Lactose','乳糖'],['dhi15Scc','SCC'],['dhi15Mun','MUN']].filter(([id])=>byId(id)?.value==='').map(x=>x[1]);
+    let title='目前未形成明顯異常型態', level='ok', pattern='一般追蹤', meaning='目前主要乳成分未形成高優先組合型警示，仍應比較同群、前次與牧場歷史趨勢。', support=[], counter=[], checks=[], sops=[], confidence=complete>=80?'中高':'中';
+    const highScc=scc!==null&&scc>=50, lowLac=lactose!==null&&lactose<4.5, lowFat=fat<3.2, highPf=pf>1.05, fresh=dim!==null&&dim<=60, highFp=fp>1.4, ketone=(acetone!==null&&acetone>.10)||(bhb!==null&&bhb>.10), highFfa=ffa!==null&&ffa>1.5, lowMun=mun!==null&&mun<11, highMun=mun!==null&&mun>17;
+    if(highScc){
+      title='高度乳房健康警示';level='alert';pattern='乳腺發炎／乳房功能下降型態';meaning='數值符合高度乳腺發炎風險型態，應先複驗、CMT、臨床乳與病原確認，不因一次 SCC 直接下治療結論。';
+      support.push(`SCC ${fmt(scc,1)} 萬/mL 達高度警示`); if(lowLac)support.push(`乳糖 ${fmt(lactose)}% 偏低，支持乳腺完整性下降`); if(prevScc!==null&&prevScc>=20)support.push(`前次 SCC ${fmt(prevScc,1)} 萬/mL，可能為持續問題`);
+      if(!lowLac)counter.push('乳糖未明顯下降，需保留採樣、泌乳階段或短期波動'); if(prevScc!==null&&prevScc<20)counter.push('前次 SCC 偏低，可能為新感染，需優先複驗');
+      checks=['查看凝塊、水樣乳與乳房腫熱痛','進行 CMT 或 SCC 複驗','核對前 2–3 次 SCC 與治療史','依策略做無菌採樣、培養或 PCR','區分新感染、慢性與治療中牛'];
+      sops=[['CMT 操作與判讀表'],['乳房炎分級 SOP'],['擠乳流程檢核表']]; confidence=complete>=80?'高':'中';
+    } else if(lowFat&&highPf){
+      title='乳脂相對偏低';level='alert';pattern='乳脂抑制／高產稀釋風險型態';meaning='乳脂相對乳蛋白偏低，較支持有效纖維不足、選食、高產稀釋、日糧油脂或熱緊迫方向；不能只靠乳脂診斷 SARA。';
+      support.push(`乳脂 ${fmt(fat)}% 低於示範管理門檻`,`P/F ${fmt(pf)}，蛋白相對乳脂偏高`); if(milk!==null&&milk>35)support.push(`乳量 ${fmt(milk,1)} kg，需考慮高產稀釋`);
+      if(acetone!==null&&acetone<=.10)counter.push(`乳中丙酮 ${fmt(acetone,3)} 未升高`); if(bhb!==null&&bhb<=.10)counter.push(`乳中 BHB ${fmt(bhb,3)} 未升高`); if(scc!==null&&scc<20)counter.push(`SCC ${fmt(scc,1)} 萬/mL，乳房炎支持度較弱`);
+      checks=['確認 DIM、胎次與飼養群','檢查 Penn State 粒度、peNDF 與 TMR 均勻度','查看挑食、反芻、糞便與剩料','核對澱粉、發酵速度與添加油脂','檢查供料、推料、飲水與熱緊迫'];
+      sops=[['前往 TMR 粒度與 peNDF','tmr'],['TMR 均勻度檢核表'],['熱緊迫設備檢核表']]; confidence=(complete>=80&&counter.length>=2)?'中高':'中';
+    } else if(fresh&&highFp&&ketone){
+      title='新產牛負能量平衡警示';level='alert';pattern='負能量平衡／酮體生成風險型態';meaning='新產牛乳脂相對蛋白偏高，且乳酮體指標升高，符合負能量平衡風險型態；仍需採食、BCS、血 BHB 與產後疾病確認。';
+      support.push(`DIM ${fmt(dim,0)} 天，屬產後早期`,`F/P ${fmt(fp)}，乳脂相對蛋白偏高`); if(acetone!==null&&acetone>.10)support.push(`乳中丙酮 ${fmt(acetone,3)} 升高`); if(bhb!==null&&bhb>.10)support.push(`乳中 BHB ${fmt(bhb,3)} 升高`);
+      checks=['確認 DMI、剩料與挑食','檢查 BCS 變化與產後疾病','量測血 BHB 或依獸醫建議複驗','檢查 Close-up 與 Fresh 日糧銜接','觀察反芻、糞便、體溫與精神食慾'];
+      sops=[['圍產牛10日觀察表'],['Fresh cow產後21日追蹤 SOP']]; confidence=complete>=80?'高':'中';
+    } else if(highFfa){
+      title='乳脂解風險';level='alert';pattern='FFA 偏高／設備與樣品需排查';meaning='FFA 偏高可能來自個體低乳量或泌乳後期，也可能與進氣、泵浦剪切、冷卻、凍融或樣品處理有關。';
+      support.push(`FFA ${fmt(ffa)} 高於示範門檻 1.5`); if(milk!==null&&milk<12)support.push(`乳量 ${fmt(milk,1)} kg 偏低`); counter.push('FFA 不是單純飼料指標，不宜只改日糧');
+      checks=['確認單頭、多頭或桶乳樣','先複驗並確認採樣與凍融','檢查真空、進氣、泵浦與管路','查看冷卻曲線與冷熱乳混合','核對擠乳頻率與泌乳後期']; sops=[['擠乳流程檢核表']];
+    } else if(lowMun||highMun){
+      const low=lowMun; title=low?'MUN 偏低':'MUN 偏高';level='watch';pattern=low?'氮供應偏低或利用效率高':'蛋白過量或能量不同步';meaning=low?'MUN 偏低可能是蛋白／RDP 供應不足，也可能是氮利用效率較好，不能因單頭一次偏低直接增加蛋白。':'MUN 偏高可能來自蛋白／RDP 過量、可發酵能量不足、不同步或挑食，不能只用減蛋白一招。';
+      support.push(`MUN ${fmt(mun,1)} mg/dL 超出示範報表範圍`); if(protein<3)support.push(`乳蛋白 ${fmt(protein)}% 偏低`); else counter.push(`乳蛋白 ${fmt(protein)}% 尚可，需保留氮效率與群組差異`);
+      checks=low?['查看乳蛋白公斤數與乳量','核對 CP、RDP、RUP 與實際乾物','確認 DMI、混料均勻與挑食','比較同群與採樣時間','查看連續 2–3 次趨勢']:['核對 CP、RDP、尿素與可溶蛋白','查看澱粉、糖與可發酵能量','確認混料、挑食與糞便','比較同群與採樣時間','檢查是否連續異常']; sops=[['TMR 均勻度檢核表'],['前往 TMR 粒度與 peNDF','tmr']];
+    } else {
+      support.push(`乳脂 ${fmt(fat)}% 與乳蛋白 ${fmt(protein)}% 未形成高優先組合警示`); if(scc!==null&&scc<20)support.push(`SCC ${fmt(scc,1)} 萬/mL 未達早期關注`); counter.push('單次正常不代表長期沒有問題，仍需比較同群與趨勢'); checks=['比較上月數值與同群百分位','確認 DIM、胎次與品種分層','持續觀察乳量、BCS、採食與反芻','下次 DHI 驗證是否穩定']; sops=[['TMR 均勻度檢核表']];
+    }
+    if(complete<60) confidence='低';
+    const states={fat:dhiMetric('fat',fat),protein:dhiMetric('protein',protein),lactose:dhiMetric('lactose',lactose),scc:dhiMetric('scc',scc),mun:dhiMetric('mun',mun),acetone:dhiMetric('acetone',acetone),bhb:dhiMetric('bhb',bhb),ffa:dhiMetric('ffa',ffa)};
+    const box=byId('dhi15Result'); if(!box)return;
+    box.innerHTML=`
+      <div class="v18515-summary-grid">
+        <div class="v18515-summary-card primary"><small>${esc(byId('dhi15CowId')?.value||'未填牛號')}｜主要判讀</small><b>${title}</b><span>${pattern}</span><em class="v18515-status ${level}">${statusLabel(level)}</em></div>
+        <div class="v18515-summary-card"><small>資料完整度</small><b>${complete}%</b><span>${missing.length?'缺少：'+missing.join('、'):'核心欄位已填齊'}</span></div>
+        <div class="v18515-summary-card"><small>判讀信心</small><b>${confidence}</b><span>依背景、交叉指標與相反證據估計</span></div>
+        <div class="v18515-summary-card"><small>自動計算</small><b>P/F ${fmt(pf)}</b><span>F/P ${fmt(fp)}｜兩者方向相反</span></div>
+      </div>
+      <div class="v18515-panel"><div class="v18515-panel-head"><h3>核心數值總覽</h3><p>單一指標與組合型態分開呈現。</p></div><div class="v18515-panel-body"><div class="v18515-metric-grid">
+        ${dhiMetricCard('乳脂',fmt(fat),'%',states.fat)}${dhiMetricCard('乳蛋白',fmt(protein),'%',states.protein)}${dhiMetricCard('乳糖',fmt(lactose),'%',states.lactose)}${dhiMetricCard('SCC',fmt(scc,1),'萬/mL',states.scc)}${dhiMetricCard('MUN',fmt(mun,1),'mg/dL',states.mun)}${dhiMetricCard('乳中丙酮',fmt(acetone,3),'mmol/L',states.acetone)}${dhiMetricCard('乳中 BHB',fmt(bhb,3),'mmol/L',states.bhb)}${dhiMetricCard('FFA',fmt(ffa),'mmol/100g',states.ffa)}
+      </div></div></div>
+      <div class="v18515-panel"><div class="v18515-panel-head"><h3>五步判讀工作法</h3><p>風險提示，不做自動確診。</p></div><div class="v18515-panel-body"><div class="v18515-step-list">
+        <div class="v18515-step"><div class="v18515-step-no">1</div><div><h4>看到什麼</h4><p>乳脂 ${fmt(fat)}%、乳蛋白 ${fmt(protein)}%、P/F ${fmt(pf)}、F/P ${fmt(fp)}${scc!==null?'、SCC '+fmt(scc,1)+' 萬/mL':''}${mun!==null?'、MUN '+fmt(mun,1)+' mg/dL':''}。</p></div></div>
+        <div class="v18515-step"><div class="v18515-step-no">2</div><div><h4>代表什麼</h4><p>${meaning}</p><div class="v18515-evidence-grid"><div class="v18515-evidence support"><b>支持證據</b><span>${support.length?support.join('；'):'目前沒有足夠支持證據'}</span></div><div class="v18515-evidence counter"><b>相反證據／限制</b><span>${counter.length?counter.join('；'):'尚未取得足以排除其他方向的資料'}</span></div></div></div></div>
+        <div class="v18515-step"><div class="v18515-step-no">3</div><div><h4>相反證據</h4><p>${counter.length?counter.join('；'):'需補齊 DIM、前次紀錄與現場觀察，才能提高排除力。'}</p></div></div>
+        <div class="v18515-step"><div class="v18515-step-no">4</div><div><h4>先查什麼</h4><div class="v18515-action-list">${checks.map((x,i)=>`<div class="v18515-action-item"><strong>${i+1}.</strong>${esc(x)}</div>`).join('')}</div></div></div>
+        <div class="v18515-step"><div class="v18515-step-no">5</div><div><h4>接哪個 SOP／工具</h4><div class="v18515-sop-row">${sops.map(x=>dhiSopButton(x[0],x[1])).join('')}</div></div></div>
+      </div></div></div>
+      <div class="v18515-warning">本結果為管理決策支援，不取代獸醫診斷、培養／PCR、血液檢測、日糧配方評估或實驗室複驗。</div>`;
+  };
+
+  const tmrGuides={
+    tmr:{name:'泌乳牛 TMR', ranges:[[2,8],[30,50],[10,20],[30,40]], labels:['2–8%','30–50%','10–20%','30–40%'], pef:[60,70]},
+    corn:{name:'玉米青貯', ranges:[[3,8],[45,65],[20,30],[0,10]], labels:['3–8%','45–65%','20–30%','<10%'], pef:null},
+    haylage:{name:'牧草青貯／Haylage', ranges:[[10,20],[45,75],[30,40],[0,10]], labels:['10–20%','45–75%','30–40%','<10%'], pef:null}
+  };
+  function tmrState(v, range, isPan=false){
+    const [lo,hi]=range;
+    if(v>=lo&&v<=hi)return {level:'ok',label:'建議範圍'};
+    if(v<lo)return {level:'watch',label:isPan?'細料偏少':'比例偏低'};
+    return {level:'alert',label:isPan?'細料偏多':'比例偏高'};
+  }
+  function tmrSieveCard(icon,title,desc,pct,guide,state){
+    const width=Math.max(2,Math.min(100,pct));
+    return `<div class="v18515-sieve"><div class="v18515-sieve-icon">${icon}</div><div><h4>${title}</h4><p>${desc}｜建議 ${guide}</p><div class="v18515-bar"><span style="width:${width}%"></span></div></div><div class="v18515-sieve-value"><b>${fmt(pct,1)}%</b><span class="v18515-status ${state.level}">${state.label}</span></div></div>`;
+  }
+  window.tmr15RefreshGuide=function(){ const type=byId('tmr15Type')?.value||'tmr'; const g=tmrGuides[type]; const note=document.querySelector('#tmr .v18515-note'); if(note&&g) note.dataset.sample=g.name; };
+  window.tmr15LoadDemo=function(type){
+    const set=(id,v)=>{if(byId(id))byId(id).value=v;}; set('tmr15Type','tmr');set('tmr15Dm',48);set('tmr15Ndf',31);set('tmr15Nonfiber',0);['tmr15R19','tmr15R8','tmr15R4','tmr15RPan'].forEach(id=>set(id,''));
+    if(type==='target'){set('tmr15W19',30);set('tmr15W8',205);set('tmr15W4',80);set('tmr15Pan',185);set('tmr15R19',7);set('tmr15R8',42);set('tmr15R4',15);set('tmr15RPan',36);}
+    if(type==='fine'){set('tmr15W19',5);set('tmr15W8',120);set('tmr15W4',45);set('tmr15Pan',330);set('tmr15Ndf',29);}
+    if(type==='coarse'){set('tmr15W19',80);set('tmr15W8',260);set('tmr15W4',90);set('tmr15Pan',70);set('tmr15R19',24);set('tmr15R8',55);set('tmr15R4',12);set('tmr15RPan',9);}
+    window.tmr15Analyze();
+  };
+  window.tmr15Analyze=function(){
+    const weights=[val('tmr15W19'),val('tmr15W8'),val('tmr15W4'),val('tmr15Pan')];
+    if(weights.some(x=>x===null||x<0)){alert('請輸入四層有效重量。');return;}
+    const total=weights.reduce((a,b)=>a+b,0); if(total<=0){alert('四層總重量必須大於 0。');return;}
+    const pct=weights.map(x=>x/total*100), type=byId('tmr15Type')?.value||'tmr', g=tmrGuides[type], dm=val('tmr15Dm'), ndf=val('tmr15Ndf'), nonfiber=Math.max(0,val('tmr15Nonfiber')||0);
+    const states=pct.map((x,i)=>tmrState(x,g.ranges[i],i===3));
+    const rawPef=pct[0]+pct[1]+pct[2], adjustedPef=Math.max(0,rawPef-nonfiber), pendf=ndf===null?null:ndf*adjustedPef/100;
+    let overall='粒度分布接近建議', level='ok', advice=[];
+    if(states.some(s=>s.level==='alert')){overall='粒度分布需優先調整';level='alert';} else if(states.some(s=>s.level==='watch')){overall='粒度分布需要追蹤';level='watch';}
+    if(pct[0]>g.ranges[0][1]) advice.push('19 mm 長料偏多：增加選食、剩料長纖維累積與採食速度下降的風險；回查切長、投料順序、混拌與含水。');
+    if(pct[0]<g.ranges[0][0]) advice.push('19 mm 長料偏少：先確認是否切得過細、過度混拌或設備造成二次切碎。');
+    if(pct[3]>g.ranges[3][1]) advice.push('底盤細料偏多：可能降低咀嚼刺激並放大快速發酵風險；同步檢查澱粉、反芻、糞便與乳脂。');
+    if(pct[3]<g.ranges[3][0]) advice.push('底盤比例偏低：整體可能偏粗，需排查採食受限與選食，而不是只把長料視為優點。');
+    if(type==='tmr'&&adjustedPef<60) advice.push('調整後 ≥4 mm 有效粒度比例低於 60%：屬物理有效粒度偏低方向，需結合 NDF、澱粉與牛群反應。');
+    if(type==='tmr'&&adjustedPef>70) advice.push('調整後 ≥4 mm 有效粒度比例高於 70%：不一定更好，應檢查長料、選食與實際 DMI。');
+    if(dm!==null&&dm<45) advice.push('樣本乾物率低於約 45%，篩分準確性可能下降；建議固定取樣與操作方式並保留方法備註。');
+    if(nonfiber>0) advice.push(`已從 ≥4 mm 留存比例扣除 ${fmt(nonfiber,1)} 個百分點的非纖維顆粒估計，避免把穀粒／顆粒料全部視為有效纖維。`);
+    if(!advice.length) advice.push('目前分布接近所選樣本建議範圍；仍應結合實際採食、反芻、糞便、乳脂與日糧化學組成追蹤。');
+
+    const refusal=[val('tmr15R19'),val('tmr15R8'),val('tmr15R4'),val('tmr15RPan')];
+    const refusalComplete=refusal.every(x=>x!==null&&x>=0), refusalSum=refusalComplete?refusal.reduce((a,b)=>a+b,0):null;
+    let sortHtml='<div class="v18515-warning">尚未輸入完整剩料分布。若要評估選食，建議比較新鮮 TMR 與餵後 4、8、12 小時及剩料。</div>';
+    if(refusalComplete){
+      const normalized=refusalSum>0?refusal.map(x=>x/refusalSum*100):refusal;
+      const diffs=normalized.map((x,i)=>x-pct[i]); const maxDiff=Math.max(...diffs.map(Math.abs)); const sortLevel=maxDiff>5?'alert':maxDiff>=3?'watch':'ok';
+      sortHtml=`<div class="v18515-summary-grid"><div class="v18515-summary-card primary"><small>選食判讀</small><b>${maxDiff>5?'分布差異明顯':maxDiff>=3?'可能開始選食':'差異暫在可接受範圍'}</b><span>最大絕對差 ${fmt(maxDiff,1)} 個百分點</span><em class="v18515-status ${sortLevel}">${maxDiff>5?'優先排查':maxDiff>=3?'注意追蹤':'目前穩定'}</em></div><div class="v18515-summary-card"><small>剩料合計</small><b>${fmt(refusalSum,1)}%</b><span>系統已自動正規化至 100%</span></div></div><div class="v18515-sort-grid">${['19 mm','8 mm','4 mm','底盤'].map((x,i)=>`<div class="v18515-sort-card"><b>${x} ${diffs[i]>=0?'+':''}${fmt(diffs[i],1)} pp</b><span>新鮮 ${fmt(pct[i],1)}% → 剩料 ${fmt(normalized[i],1)}%</span></div>`).join('')}</div>`;
+    }
+    const pefState=type!=='tmr'?{level:'watch',text:'僅顯示估算'}:adjustedPef>=60&&adjustedPef<=70?{level:'ok',text:'60–70% 建議層'}:adjustedPef<60?{level:'alert',text:'物理有效粒度偏低'}:{level:'watch',text:'偏粗／選食需查'};
+    const box=byId('tmr15Result');if(!box)return;
+    box.innerHTML=`
+      <div class="v18515-summary-grid">
+        <div class="v18515-summary-card primary"><small>${g.name}｜整體判讀</small><b>${overall}</b><span>樣本總重 ${fmt(total,1)} g</span><em class="v18515-status ${level}">${statusLabel(level)}</em></div>
+        <div class="v18515-summary-card"><small>原始 pef ≥4 mm</small><b>${fmt(rawPef,1)}%</b><span>三層留存比例總和</span></div>
+        <div class="v18515-summary-card"><small>調整後 pef</small><b>${fmt(adjustedPef,1)}%</b><span>${pefState.text}</span></div>
+        <div class="v18515-summary-card"><small>估算 peNDF</small><b>${fmt(pendf,1)}% DM</b><span>${ndf===null?'需輸入全樣 NDF':'NDF '+fmt(ndf,1)+'% × pef '+fmt(adjustedPef,1)+'%'}</span></div>
+      </div>
+      <div class="v18515-panel"><div class="v18515-panel-head"><h3>四層粒度分布</h3><p>以所選樣本類型的 Penn State 建議範圍比較。</p></div><div class="v18515-panel-body"><div class="v18515-sieve-stack">
+        ${tmrSieveCard('19 mm','上層長顆粒','形成纖維墊、刺激咀嚼，但過多易選食',pct[0],g.labels[0],states[0])}
+        ${tmrSieveCard('8 mm','中層顆粒','纖維墊主要結構與中等咀嚼需求',pct[1],g.labels[1],states[1])}
+        ${tmrSieveCard('4 mm','下層顆粒','高產牛 peNDF 現場估算的重要分界',pct[2],g.labels[2],states[2])}
+        ${tmrSieveCard('PAN','底盤細料','快速水合／發酵，通常不列入有效粒度',pct[3],g.labels[3],states[3])}
+      </div><div class="v18515-formula">pef₍≥4mm₎＝${fmt(pct[0],1)}＋${fmt(pct[1],1)}＋${fmt(pct[2],1)}－非纖維修正 ${fmt(nonfiber,1)}＝${fmt(adjustedPef,1)}%；peNDF＝${fmt(ndf,1)}% × ${fmt(adjustedPef/100,3)}＝${fmt(pendf,1)}% DM</div></div></div>
+      <div class="v18515-panel"><div class="v18515-panel-head"><h3>分層建議與現場排查</h3><p>先修正最可能的製程與採食問題，再看乳脂、糞便與反芻是否同步改善。</p></div><div class="v18515-panel-body"><div class="v18515-action-list">${advice.map((x,i)=>`<div class="v18515-action-item"><strong>${i+1}.</strong>${esc(x)}</div>`).join('')}</div><div class="v18515-sop-row"><button class="v18515-sop-btn" type="button" onclick="window.portalNavigate('sop',{scrollTop:false});setTimeout(()=>openSopPreview('TMR 均勻度檢核表'),80)">TMR 均勻度檢核表</button><button class="v18515-sop-btn" type="button" onclick="window.portalNavigate('dhi')">回 DHI 判讀</button><button class="v18515-sop-btn" type="button" onclick="window.portalNavigate('diagnosis')">現場問診</button></div></div></div>
+      <div class="v18515-panel"><div class="v18515-panel-head"><h3>新鮮 TMR × 剩料選食</h3><p>以各層百分點差異判斷；差異約 3–5 個百分點以上需注意。</p></div><div class="v18515-panel-body">${sortHtml}</div></div>
+      <div class="v18515-warning">peNDF 是估算值：各篩層 NDF 與消化率並不相同，且澱粉、總碳水、採食量與牛群狀態都會影響瘤胃 pH。請勿只靠單一 peNDF 數值直接改配方。</div>`;
+  };
+
+  document.addEventListener('DOMContentLoaded',()=>{
+    const d=byId('dhi15Date'); if(d&&!d.value)d.value=new Date().toISOString().slice(0,10);
+  });
+})();
+</script>
+
+
 <!-- DairyLife 360 V18.5.7 build note: based on V18.5.6, adds 8 phase-two consultation cases (21 total); Niubao assets and existing modules retained. -->
 <script>
 /* ==============================
-   V18.5.8 PORTAL SHELL ROUTER
+   V18.5.15 PORTAL SHELL ROUTER
    單一 HTML、單一模組工作區、保留跨模組聯動
    ============================== */
 (function(){
-  const portalPages = ['home','lifecycle','nutrition','problems','disease','diagnosis','benchmark','sop','tools','fieldtools','assistant','service','roadmap'];
+  const portalPages = ['home','lifecycle','nutrition','dhi','tmr','problems','disease','diagnosis','benchmark','sop','tools','fieldtools','assistant','niubao','service','roadmap'];
   const portalLabels = {
-    home:'入口首頁', lifecycle:'生命週期管理', nutrition:'營養風險雷達', problems:'問題解決中心',
+    home:'入口首頁', lifecycle:'生命週期管理', nutrition:'營養風險雷達', dhi:'DHI 智慧判讀', tmr:'TMR 粒度與 peNDF', problems:'問題解決中心',
     disease:'疾病知識庫', diagnosis:'現場問診', benchmark:'視覺評分', sop:'SOP 資料庫',
-    tools:'管理試算工具', fieldtools:'現場工具箱', assistant:'牛寶 AI 顧問', service:'顧問服務', roadmap:'開發藍圖'
+    tools:'管理試算工具', fieldtools:'現場工具箱', assistant:'牛寶 AI 顧問', niubao:'認識牛寶', service:'顧問服務', roadmap:'開發藍圖'
   };
   let portalCurrentPage = 'home';
   let portalInternalNavigation = false;
@@ -14283,7 +15220,7 @@ V18.5.5 CROSS-MODULE SOP LINK PATCH
       card.classList.toggle('portal-card-current', card.dataset.route === page);
     });
 
-    document.title = `DairyLife 360｜${portalLabels[page] || '入口平台'}｜V18.5.8`;
+    document.title = `DairyLife 360｜${portalLabels[page] || '入口平台'}｜V18.5.15`;
     if(updateHash){
       const next = '#' + page;
       if(location.hash !== next){
@@ -14378,12 +15315,19 @@ V18.5.5 CROSS-MODULE SOP LINK PATCH
   window.addEventListener('popstate', routeFromLocation);
   window.addEventListener('hashchange', function(){ if(!portalInternalNavigation) routeFromLocation(); });
 
+  // 牛寶獨立頁沿用既有 getNiubaoDataUri()，不重複塞入 base64。
+  try {
+    const niubaoSrc = (typeof getNiubaoDataUri === 'function') ? getNiubaoDataUri() : '';
+    const profileImage = document.getElementById('niubaoProfileImage');
+    if(profileImage && niubaoSrc) profileImage.src = niubaoSrc;
+  } catch(err) { console.warn('牛寶獨立頁圖片初始化失敗', err); }
+
   // 初始化：保留網址深連結；無網址時從入口首頁開始。
   routeFromLocation();
 })();
 </script>
 
 
-<!-- DairyLife 360 V18.5.8 build note: Portal Shell single-module workspace; V18.5.7 content, Niubao IP and cross-module SOP links retained. -->
+<!-- DairyLife 360 V18.5.15 build note: based on V18.5.13 stable portal candidate; adds DHI five-step interpretation and Penn State TMR particle-size/peNDF modules while retaining Niubao assets, 21 diagnosis flows, SOP links and mobile behavior. -->
 </body>
 </html>
