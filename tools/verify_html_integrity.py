@@ -22,7 +22,7 @@ def scan(filename):
         "traditional Chinese": "zh-Hant" in html[:1500],
         "Niubao": "牛寶" in html,
         "uterine feature": all(x in html for x in ("dl1710", "PVD", "PMN")),
-        "version title": bool(re.search(r"<title>[^<]*V18\.5\.17\.10", html, re.I)),
+        "version title": bool(re.search(r"<title>[^<]*V18\.5\.17\.11", html, re.I)),
         "static id uniqueness": not duplicates,
     }
     print(filename, "bytes:", len(data), "sha256:", hashlib.sha256(data).hexdigest())
