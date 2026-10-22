@@ -5972,6 +5972,37 @@
       <section id="problems" class="container">
         <div class="section-title"><div><span class="badge">問題解決中心</span><h2>從現場症狀快速定位解方</h2><p>依乳質、犢牛、營養、環境、繁殖、圍產、蹄病與疾病等情境分類，協助輔導人員快速找到排查方向、資料蒐集重點與對應 SOP。</p></div></div>
         <div class="accordion-note">選擇分類後展開常見現場問題；每一題都連結風險判斷、蒐證清單、初步處置與後續追蹤，讓問題從描述進到可執行的 Solution。</div>
+
+        <!-- V18.5.17.11 P1 hoof/lameness L3 SOLUTION; no persistent storage -->
+        <section class="dl1711-hoof" id="dl1711Hoof" aria-labelledby="dl1711HoofTitle" style="background:var(--card,#fff);border:1px solid #cbded1;border-radius:18px;padding:clamp(16px,3vw,28px);margin:18px 0 26px">
+          <span class="badge">V18.5.17.11｜P1 蹄病與跛行 L3 現場 SOLUTION</span>
+          <h3 id="dl1711HoofTitle" style="margin:12px 0">發現跛行 → 分級 → 檢查 → 病灶分流 → 複查</h3>
+          <p>使用 AHDB 0–3 行動能力評分。此工具提供現場優先次序，不構成疾病確診、修蹄技術訓練或獸醫處方。當牛隻不能站立、不能負重或有全身病徵時，直接啟動獸醫評估。</p>
+          <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:end;margin:14px 0">
+            <label style="flex:1;min-width:130px">牛號（選填）<input id="dl1711Cow" autocomplete="off" placeholder="例：A102" style="width:100%"></label>
+            <label style="flex:1;min-width:140px">跛行分數（AHDB）<select id="dl1711Score" style="width:100%"><option value="">請選擇</option><option value="0">0｜行走正常</option><option value="1">1｜輕微不均</option><option value="2">2｜明顯跛行</option><option value="3">3｜嚴重跛行</option></select></label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="dl1711Emergency">無法起立／負重、嚴重腫脹或全身異常</label>
+            <button type="button" class="btn btn-primary" onclick="window.dl1711AssessHoof()">產生分流建議</button>
+          </div>
+          <div id="dl1711Result" role="status" aria-live="polite" style="border-radius:12px;background:#edf5ef;padding:14px;margin:12px 0">請先選擇 AHDB 評分並檢查是否有緊急警訊。</div>
+          <details><summary><strong>① 病灶辨識與鑑別：不能只看行走分數</strong></summary>
+            <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse"><thead><tr><th>常見問題</th><th>辨識方向</th><th>現場處理原則</th></tr></thead><tbody>
+              <tr><td>數位皮膚炎（DD）</td><td>蹄跟皮膚病灶，記錄 ICAR M 分期</td><td>活動病灶須個別評估；蹄浴不是開放性病灶唯一治療</td></tr>
+              <tr><td>蹄底潰瘍（SU）</td><td>承重面角質缺損與疼痛</td><td>由受訓人員或獸醫評估卸壓、蹄塊及疼痛管理；避免削切活組織</td></tr>
+              <tr><td>白線病變（WL）</td><td>白線裂隙、分離、可能夾帶異物或膿瘍</td><td>保定檢查、評估深層傷害與安全卸壓</td></tr>
+              <tr><td>趾間蜂窩組織炎</td><td>急性疼痛、趾間或蹄上腫脹，可能伴全身症狀</td><td>及時轉獸醫診斷，不以一般修蹄處理替代</td></tr>
+              <tr><td>蹄部未見病灶</td><td>仍可能為關節、外傷或深部疾病</td><td>不可直接結案，須重新鑑別</td></tr>
+            </tbody></table></div>
+          </details>
+          <details><summary><strong>② 檢查／治療後複查與結案標準</strong></summary>
+            <p>紀錄牛號、產後天數、首次分數、患肢、病灶位置及類型、檢查者、處理日期、用藥與乳／肉停藥資訊（由獸醫及合法藥品標示核定）。依病況安排 48–72 小時疼痛／承重追蹤及 7–14 天功能複評。仍不能負重、疼痛惡化、嚴重跛行、感染惡化或缺少必要複查者<strong>不得標示結案</strong>。</p>
+          </details>
+          <details><summary><strong>③ 群體根因與 KPI</strong></summary>
+            <p>蹄底／白線問題：查牛床舒適度、站立時間、地面、轉彎與擠乳等待；DD：查蹄部衛生、糞尿暴露、病灶覆蓋率及蹄浴管理；初產牛：查轉群及牛舍適應。熱季跛行增加可進一步評估臥床時間與熱緊迫，但本次不修改 P2。</p>
+            <p>建議固定分母及評分方法追蹤：評分 ≥2 盛行率、新發跛行率、嚴重跛行比例、48 小時內完成檢查比例、14 日改善比例、復發率與追蹤完成率。</p>
+          </details>
+          <p style="font-size:.86rem;margin:12px 0 0">標準參考：AHDB Mobility Scoring；ICAR Claw Health Atlas。圖片只能輔助分類，不能取代舉蹄與獸醫診斷。資料僅在目前頁面即時計算，不會保存。</p>
+        </section>
         <div class="problem-center">
           <div class="problem-menu"><div class="problem-search"><input id="problemSearch" placeholder="搜尋：乳房炎、犢牛腹瀉、乳脂下降、熱緊迫、酮症..." oninput="filterProblems()" /><button class="btn btn-primary" onclick="filterProblems()">搜尋</button></div><div class="problem-meta"><span class="problem-count" id="problemCount">常見問題載入中</span></div><div class="category-accordion" id="problemAccordion"></div></div>
           <div class="triage"><div class="triage-header"><div><h3 id="problemTitle"></h3><p id="problemIntro" style="margin:6px 0 0;color:var(--muted);"></p><div class="problem-meta"><span class="problem-count" id="problemStage"></span><span class="problem-count" id="problemKeywords"></span></div></div><span class="risk-tag" id="problemRisk"></span></div><div class="flow-steps" id="problemFlow"></div><div id="problemNutritionRadar" class="context-nutrition-box"></div></div>
@@ -16787,6 +16818,32 @@ window.dl1710Open=function(){
   $('dl1710WorkBench')?.scrollIntoView({behavior:'smooth',block:'start'});
 };
 })();
+</script>
+
+<script>
+/* V18.5.17.11 P1 hoof L3: additive isolated tool, memory-only. */
+window.dl1711AssessHoof = function() {
+  const score = document.getElementById('dl1711Score').value;
+  const urgent = document.getElementById('dl1711Emergency').checked;
+  const result = document.getElementById('dl1711Result');
+  if (!urgent && score === '') {
+    result.textContent = '請先選擇跛行評分，或勾選緊急警訊。';
+    return;
+  }
+  let message;
+  if (urgent) {
+    message = '🔴 緊急：請立即聯絡獸醫並確保動物福利，減少移動；不得依一般修蹄流程自行結案。';
+  } else if (score === '3') {
+    message = '🔴 嚴重跛行（3）：儘快保定檢查與獸醫評估，減少步行，必須安排複查，未改善不可結案。';
+  } else if (score === '2') {
+    message = '🟠 明顯跛行（2）：儘速安排受訓人員舉蹄檢查；新發病例以48小時內接受適當檢查／處置為目標。';
+  } else if (score === '1') {
+    message = '🟡 輕微異常（1）：標記牛隻、重複觀察並視持續狀況安排舉蹄檢查；不可因未定位患肢而忽略。';
+  } else {
+    message = '🟢 正常（0）：維持例行群體評分、環境評估與預防性修蹄計畫。';
+  }
+  result.textContent = message + ' 病灶類型仍須現場檢查判定，任何用藥與停藥期請依獸醫及法規辦理。';
+};
 </script>
 </body>
 <!-- DairyLife 360 V18.5.17.3 build note: restores source-aligned disinfectant spectrum terminology (++/+\/+/–/N), synchronizes the internal content governance matrix to L0–L4 maturity, and preserves all V18.5.17.2 youngstock, milking, DHI, TMR, SOP and Niubao functions. -->
