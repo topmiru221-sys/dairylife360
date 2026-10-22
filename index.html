@@ -5510,7 +5510,7 @@
       </nav>
 
       <div class="side-card portal-side-card">
-        <strong>V18.5.17.9｜DHI與TMR深化版</strong>
+        <strong>V18.5.17.10｜產後子宮健康深化版</strong>
         <p>一次開啟一個工作模組，內容完整保留，操作更聚焦。</p>
         <a href="#home">回到入口首頁</a>
       </div>
@@ -5832,7 +5832,7 @@
                 <label class="fresh21-field">採食狀態<select id="fresh21Intake"><option value="unknown">尚未確認</option><option value="ok">正常／恢復中</option><option value="reduced">採食下降</option><option value="refused">幾乎不吃／拒食</option></select></label>
                 <label class="fresh21-field">臨床緊急警訊<select id="fresh21Danger"><option value="unknown">尚未確認</option><option value="none">未觀察到</option><option value="present">無法站立、明顯虛弱、嚴重腹脹／疼痛、出血或全身狀況急變</option></select></label>
               </div>
-              <div class="fresh21-actions"><button class="fresh21-primary" type="button" onclick="evaluateFresh21()">產生分流建議</button><button type="button" onclick="window.dl1710Open()">PVD／PMN 子宮健康分流 →</button><button type="button" onclick="window.portalNavigate('diagnosis')">前往現場問診</button><button type="button" onclick="openSopPreview('Fresh cow產後21日追蹤 SOP')">查看21日 SOP</button><button type="button" onclick="window.portalNavigate('dhi')">DHI 交叉蒐證</button></div>
+              <div class="fresh21-actions"><button class="fresh21-primary" type="button" onclick="evaluateFresh21()">產生分流建議</button><button type="button" onclick="window.dl1710Open()">🆕 V18.5.17.10｜產後子宮健康／PVD／PMN</button><button type="button" onclick="window.portalNavigate('diagnosis')">前往現場問診</button><button type="button" onclick="openSopPreview('Fresh cow產後21日追蹤 SOP')">查看21日 SOP</button><button type="button" onclick="window.portalNavigate('dhi')">DHI 交叉蒐證</button></div>
               <div class="fresh21-result" id="fresh21Result" aria-live="polite"><strong>尚未判讀</strong>請先填寫產後天數、採食及臨床警訊；血液 BHB 非必填。</div>
               <p class="fresh21-note">每個異常個案至少記錄：牛號／DIM／觀察日期與時間／採食與反芻／乳量／BHB（檢體類型）／疑似病因／處置與負責人／複驗日期／複驗結果／是否結案。本站不會儲存你輸入的資料。</p>
               <p class="fresh21-source">參考：<a href="https://www.merckvetmanual.com/metabolic-disorders/hyperketonemia-in-cattle/hyperketonemia-in-cattle" target="_blank" rel="noopener noreferrer">Merck Veterinary Manual｜Hyperketonemia in Cattle</a>；<a href="https://dairy.extension.wisc.edu/articles/fresh-cows-finding-the-off-cow/" target="_blank" rel="noopener noreferrer">UW Extension｜Finding the off cow</a>。</p>
@@ -5841,7 +5841,7 @@
         </section>
 
 <section id="dl1710WorkBench" class="dl1710-shell" aria-labelledby="dl1710Heading">
-  <span class="dl1710-tag">V18.5.17.10｜產後子宮健康 × 現場解方</span>
+  <span class="dl1710-tag">V18.5.17.10｜產後子宮健康 × 現場解方</span><p><strong>本版新功能：</strong>產後 D0–60 分流、PVD 0–3 級、PMN 結果時段提醒、獸醫檢查及複驗結案。</p>
   <h3 id="dl1710Heading">胎衣滯留、子宮炎、PVD、PMN：從症狀到下一步</h3>
   <p>適用產後 D0–60。先排急症，再依產後天數與分泌物分流，必要時由獸醫執行內診、子宮超音波或細胞學檢查。<b>此工具僅供現場輔助判讀，不提供診斷結論或用藥處方，也不儲存使用者資料。</b></p>
   <div class="dl1710-steps"><span>① 急症警訊</span><span>② DIM × 分泌物</span><span>③ PVD／PMN</span><span>④ SOP／複驗</span></div>
@@ -7227,7 +7227,7 @@
       <section id="governance" class="container">
         <div class="section-title">
           <div>
-            <span class="badge">V18.5.17.9｜內部內容控制中心</span>
+            <span class="badge">內容治理歷史紀錄｜V18.5.17.9</span>
             <h2>內容成熟度、治理狀態與下一步方向</h2>
             <p>每次新增知識、SOP 或工具後，同步調整成熟度與後續缺口；矩陣不再只是一次性的 P1 清單。</p>
           </div>
@@ -15334,7 +15334,7 @@ const v184OriginalSelectProblem = selectProblem;
 selectProblem = function(id) { v184OriginalSelectProblem(id); const p=problems.find(x=>x.id===id); renderProblemNutrition(p); };
 const v184OriginalSelectDisease = selectDisease;
 selectDisease = function(id) { v184OriginalSelectDisease(id); const d=diseaseKnowledge.find(x=>x.id===id); renderDiseaseNutrition(d); };
-document.title = 'DairyLife 360｜V18.5.17.9｜DHI與TMR深化版';
+document.title = 'DairyLife 360｜V18.5.17.10｜產後子宮健康與繁殖障礙深化版';
 
 setupNutritionFilters();
 renderNutritionCards();
@@ -15627,7 +15627,7 @@ const v185NiubaoSections = [
 ];
 
 function initNiubaoIPV185(){
-  document.title = 'DairyLife 360｜V18.5.17.9｜DHI與TMR深化版';
+  document.title = 'DairyLife 360｜V18.5.17.10｜產後子宮健康與繁殖障礙深化版';
   const homeCopy = document.querySelector('#home .hero-copy');
   if(homeCopy && !document.querySelector('.v185-home-niubao-note')){
     homeCopy.insertAdjacentHTML('afterend', `<div class="v185-niubao-section-tip v185-home-niubao-note">${v185NiubaoAvatar()}<div><b>牛寶登場｜現場小顧問模式</b><span>牛寶會在頁面各處自然出現，協助提醒階段判斷、問題分流、營養源頭與成本優化。牠很可愛，但不是來賣萌而已，牠是來盯 KPI 的。</span></div></div>`);
@@ -15695,7 +15695,7 @@ V18.5.5 CROSS-MODULE SOP LINK PATCH
 4. 找不到 SOP 時不報錯，改成一般文字或導向對應模組。
 ============================== */
 (function(){
-  document.title = 'DairyLife 360｜V18.5.17.9｜DHI與TMR深化版';
+  document.title = 'DairyLife 360｜V18.5.17.10｜產後子宮健康與繁殖障礙深化版';
 
   const sopAliasMap = {
     '初乳庫建立與解凍 SOP': '初乳管理 SOP',
