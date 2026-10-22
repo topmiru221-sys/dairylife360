@@ -5875,7 +5875,7 @@
           <label class="dl1710-field">子宮內膜採樣方法<select id="dl1710Method"><option value="none">未進行</option><option value="cytobrush">Cytobrush</option><option value="cytotape">Cytotape</option><option value="lavage">子宮低量灌洗取樣</option></select></label>
           <label class="dl1710-field">PMN（%）<input id="dl1710Pmn" type="number" min="0" max="100" step=".1" placeholder="非必填"></label>
         </div>
-        <p class="dl1710-hint">經典研究的參考判讀：D21–33 <b>PMN &gt;18%</b>；D34–47 <b>PMN &gt;10%</b>。此為特定研究與採樣框架，並非跨時間、跨方法的統一確診標準。D0–20 或 D48–60 不套用上述界線。</p>
+        <p class="dl1710-hint">經典研究的參考判讀：D21–33 <b>PMN &gt;18%</b>；D34–47 <b>PMN &gt;10%</b>。本工具僅對 <b>Cytobrush</b> 數值示範比較；Cytotape／低量灌洗僅記錄結果，由獸醫依採樣方法選擇合適的研究門檻。D0–20 或 D48–60 不套用上述界線。</p>
       </div>
       <div class="dl1710-panel">
         <h4>📋 第三站｜改善與複驗，不建立牧場資料庫</h4>
@@ -5917,6 +5917,7 @@
           <li><a href="https://www.merckvetmanual.com/reproductive-system/uterine-diseases-in-production-animals/metritis-in-production-animals" target="_blank" rel="noopener noreferrer">Merck｜Metritis in Production Animals</a></li>
           <li><a href="https://pubmed.ncbi.nlm.nih.gov/37567665/" target="_blank" rel="noopener noreferrer">LeBlanc 等（2023）｜Postpartum reproductive disease and fertility</a></li>
           <li><a href="https://pubmed.ncbi.nlm.nih.gov/16226305/" target="_blank" rel="noopener noreferrer">Sheldon 等（2006）｜Defining postpartum uterine disease</a></li>
+          <li><a href="https://pubmed.ncbi.nlm.nih.gov/19841205/" target="_blank" rel="noopener noreferrer">Metricheck 0–3 分級方法｜Journal of Dairy Science（2009）</a></li>
           <li><a href="https://www.merckvetmanual.com/reproductive-system/uterine-diseases-in-production-animals/endometritis-in-production-animals" target="_blank" rel="noopener noreferrer">Merck｜Endometritis in Production Animals</a></li>
         </ul>
         <p>本版用於現場蒐證與轉診分流。獸醫診斷、處置、用藥及牛奶／肉品停藥期以當地核准標示與獸醫判斷為準。</p>
@@ -16724,8 +16725,8 @@ function calc(){
   }
   let pmnText='未提供 PMN 檢測資料：不以分泌物外觀取代細胞學。',pmnHigh=false;
   if(pmn!==null){
-    let limit=day>=21&&day<=33?18:day>=34&&day<=47?10:null;
-    if(limit===null)pmnText='D'+day+' PMN '+pmn+'%，不在 D21–47 參考時窗內，僅供獸醫評估。';
+    let limit=method==='cytobrush'?(day>=21&&day<=33?18:day>=34&&day<=47?10:null):null;
+    if(limit===null)pmnText='D'+day+' PMN '+pmn+'%；'+(method==='cytobrush'?'不在 D21–47 參考時窗內':'採樣方法為 '+method+'，不跨方法套用 Cytobrush 界線')+'，僅供獸醫依適用研究評估。';
     else{
       pmnHigh=pmn>limit;
       pmnText='D'+day+' PMN '+pmn+'%，該時窗研究參考界線 >'+limit+'%：'+(pmnHigh?'高於參考界線，須獸醫判讀':'未高於此參考界線，不代表排除疾病')+'。';
