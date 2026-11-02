@@ -16983,6 +16983,11 @@ document.querySelector('.dlc-header .dlc-brand').href='#home';document.querySele
 })();
 </script>
 
+<style>
+#home .dlh-hero{grid-template-columns:minmax(0,1.05fr) minmax(130px,.48fr) minmax(0,1.12fr);gap:22px}.dlh-detective{display:flex;align-items:center;justify-content:center;margin:0;align-self:center}.dlh-detective img{display:block;width:100%;max-width:220px;height:auto;max-height:340px;object-fit:contain}#home .dlh-hero h1{font-size:32px}#home .dlh-hero p{font-size:14px}@media(max-width:1150px){#home .dlh-hero{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:22px}.dlh-detective{grid-column:1;grid-row:2;justify-content:flex-start;padding-left:20px;margin-top:-12px}.dlh-detective img{width:140px;max-height:175px}#home .dlh-start{grid-column:2;grid-row:1/3}}@media(max-width:760px){#home .dlh-hero{grid-template-columns:minmax(0,1fr);gap:18px}#home .dlh-hero h1{font-size:29px}.dlh-detective{grid-column:1;grid-row:2;justify-content:center;padding:0;margin:0}.dlh-detective img{width:155px;max-height:190px}#home .dlh-start{grid-column:1;grid-row:3}}
+</style>
+<script>(function(){const hero=document.querySelector('.dlh-hero'),figure=document.createElement('figure');figure.className='dlh-detective';figure.innerHTML='<img src="assets/niubao-detective.png" alt="牛寶戴著藍灰色偵探帽、披著外套，拿放大鏡協助查找線索" width="1126" height="1376" decoding="async">';hero.insertBefore(figure,hero.querySelector('.dlh-start'));})();</script>
+
 <script>portalNavigate(window.dlcInitialHash?window.dlcInitialHash.slice(1):'home',{replace:true});</script>
 </body>
 
